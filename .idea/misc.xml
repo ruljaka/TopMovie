@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.2898148148148148" />
+        <entry key="app/src/main/res/drawable/circular.xml" value="0.37538461538461537" />
+        <entry key="app/src/main/res/drawable/darkCircle.xml" value="0.37538461538461537" />
+        <entry key="app/src/main/res/drawable/dark_circle.xml" value="0.37538461538461537" />
+        <entry key="app/src/main/res/drawable/percent_0.xml" value="0.37538461538461537" />
+        <entry key="app/src/main/res/drawable/selector.xml" value="0.37538461538461537" />
+        <entry key="app/src/main/res/drawable/white_circle.xml" value="0.37538461538461537" />
+        <entry key="app/src/main/res/drawable/whitecircle.xml" value="0.37538461538461537" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.33" />
+        <entry key="app/src/main/res/layout/cast_item.xml" value="0.75" />
+        <entry key="app/src/main/res/layout/details_fragment.xml" value="0.5" />
+        <entry key="app/src/main/res/layout/home_fragment.xml" value="0.33" />
+        <entry key="app/src/main/res/layout/movie_item.xml" value="0.5" />
+        <entry key="app/src/main/res/layout/movielist_fragment.xml" value="0.3651041666666667" />
+        <entry key="app/src/main/res/layout/search_fragment.xml" value="0.3651041666666667" />
+        <entry key="app/src/main/res/layout/trending_fragment.xml" value="0.3651041666666667" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_13" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>

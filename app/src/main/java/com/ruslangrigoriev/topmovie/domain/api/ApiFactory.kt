@@ -1,4 +1,4 @@
-package com.ruslangrigoriev.topmovie.api
+package com.ruslangrigoriev.topmovie.domain.api
 
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory

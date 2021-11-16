@@ -59,6 +59,8 @@ class HomeFragment : Fragment() {
                     } else {
                         val bundle = Bundle()
                         bundle.putString(QUERY, query)
+                        binding.searchViewTrending.setQuery("", false)
+                        binding.searchViewTrending.isIconified = true
                         findNavController().navigate(
                             R.id.action_trendingFragment_to_searchFragment,
                             bundle

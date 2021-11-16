@@ -1,4 +1,4 @@
-package com.ruslangrigoriev.topmovie.api
+package com.ruslangrigoriev.topmovie.domain.api
 
 import com.ruslangrigoriev.topmovie.API
 import com.ruslangrigoriev.topmovie.pojo.Details.Details
@@ -36,6 +36,5 @@ interface ApiService {
     fun searchMovie(
         @Query("api_key") apiKey: String = API,
         @Query("query") query: String
-    // заменить на search
     ): Observable<Result>
 }

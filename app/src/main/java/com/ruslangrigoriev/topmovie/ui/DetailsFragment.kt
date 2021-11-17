@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -72,11 +73,16 @@ class DetailsFragment : Fragment() {
         viewModel.castLD.observe(viewLifecycleOwner, {
             castAdapter.updateList(it)
         })
+        viewModel.errorLD.observe(viewLifecycleOwner, {
+            Toast.makeText(activity,it,Toast.LENGTH_SHORT).show()
+        })
+
     }
 
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
     }
+
 
 }

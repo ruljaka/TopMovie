@@ -11,7 +11,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.ruslangrigoriev.topmovie.IMAGE_URL
 import com.ruslangrigoriev.topmovie.R
-import com.ruslangrigoriev.topmovie.pojo.credits.Cast
+import com.ruslangrigoriev.topmovie.data.model.credits.Cast
 
 class CastAdapter(private var castList: List<Cast>) :
     RecyclerView.Adapter<CastAdapter.ViewHolder>() {

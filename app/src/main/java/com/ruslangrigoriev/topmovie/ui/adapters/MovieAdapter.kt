@@ -9,7 +9,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.ruslangrigoriev.topmovie.R
 import com.ruslangrigoriev.topmovie.downloadImageLarge
-import com.ruslangrigoriev.topmovie.pojo.Movie
+import com.ruslangrigoriev.topmovie.data.model.Movie
 
 class MovieAdapter(
     private val onItemClicked: (position: Int) -> Unit,

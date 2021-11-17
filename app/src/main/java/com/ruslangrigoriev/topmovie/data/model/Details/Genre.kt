@@ -1,13 +1,13 @@
-package com.ruslangrigoriev.topmovie.pojo.Details
+package com.ruslangrigoriev.topmovie.data.model.Details
 
 
 import com.google.gson.annotations.SerializedName
 import com.google.gson.annotations.Expose
 
-data class ProductionCountry(
-    @SerializedName("iso_3166_1")
+data class Genre(
+    @SerializedName("id")
     @Expose
-    val iso31661: String,
+    val id: Int,
     @SerializedName("name")
     @Expose
     val name: String

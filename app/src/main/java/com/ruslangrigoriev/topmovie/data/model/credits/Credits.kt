@@ -1,4 +1,4 @@
-package com.ruslangrigoriev.topmovie.pojo.credits
+package com.ruslangrigoriev.topmovie.data.model.credits
 
 
 import com.google.gson.annotations.SerializedName

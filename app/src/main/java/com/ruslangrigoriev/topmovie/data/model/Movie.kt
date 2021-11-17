@@ -1,4 +1,4 @@
-package com.ruslangrigoriev.topmovie.pojo
+package com.ruslangrigoriev.topmovie.data.model
 
 
 import com.google.gson.annotations.Expose

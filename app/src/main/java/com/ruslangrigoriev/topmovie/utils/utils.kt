@@ -7,7 +7,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
-import com.ruslangrigoriev.topmovie.pojo.Details.Genre
+import com.ruslangrigoriev.topmovie.data.model.Details.Genre
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.*

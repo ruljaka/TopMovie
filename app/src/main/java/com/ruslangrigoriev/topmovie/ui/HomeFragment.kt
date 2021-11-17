@@ -35,7 +35,8 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProvider(this)[MainViewModel::class.java]
-        viewModel.getMovies()
+        //viewModel.getMovies()
+        viewModel.getTrendingMovies()
 
         //set trending in Recyclerview
         val gridLM = GridLayoutManager(

@@ -8,25 +8,29 @@ import android.view.ViewGroup
 import android.widget.SearchView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.ruslangrigoriev.topmovie.ID
 import com.ruslangrigoriev.topmovie.QUERY
 import com.ruslangrigoriev.topmovie.R
 import com.ruslangrigoriev.topmovie.databinding.HomeFragmentBinding
-import com.ruslangrigoriev.topmovie.ui.adapters.MovieAdapter
+import com.ruslangrigoriev.topmovie.ui.adapters.MoviePagerAdapter
 import com.ruslangrigoriev.topmovie.viewmodel.MainViewModel
+import com.ruslangrigoriev.topmovie.viewmodel.MyViewModelFactory
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 class HomeFragment : Fragment() {
     private var _binding: HomeFragmentBinding? = null
     private val binding get() = _binding!!
-    private lateinit var viewModel: MainViewModel
+    private val viewModel: MainViewModel by viewModels { MyViewModelFactory() }
+    private lateinit var pagerAdapter: MoviePagerAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View? {
         _binding = HomeFragmentBinding.inflate(inflater, container, false)
         return binding.root
@@ -34,20 +38,16 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = ViewModelProvider(this)[MainViewModel::class.java]
-        //viewModel.getMovies()
-        viewModel.getTrendingMovies()
 
-        //set trending in Recyclerview
-        val gridLM = GridLayoutManager(
-            activity, 2, GridLayoutManager.VERTICAL, false
+        //set pagedRV
+        pagerAdapter = MoviePagerAdapter { id -> onListItemClick(id) }
+        val gridLM = GridLayoutManager(activity,
+            2, GridLayoutManager.VERTICAL, false
         )
         binding.recyclerView.layoutManager = gridLM
-        val adapter = MovieAdapter({ position -> onListItemClick(position) }, emptyList())
-        binding.recyclerView.adapter = adapter
-        viewModel.trendingMoviesLD.observe(viewLifecycleOwner, Observer {
-            adapter.updateList(it)
-        })
+        binding.recyclerView.adapter = pagerAdapter
+        binding.recyclerView.setHasFixedSize(true)
+        loadData()
 
         //search
         binding.searchViewTrending.setOnQueryTextListener(
@@ -73,13 +73,20 @@ class HomeFragment : Fragment() {
                 override fun onQueryTextChange(newText: String?): Boolean {
                     return false
                 }
-
             })
     }
 
-    private fun onListItemClick(position: Int) {
+    private fun loadData() {
+        lifecycleScope.launch {
+            viewModel.trendingFlowData.collect { pagingData ->
+                pagerAdapter.submitData(pagingData)
+            }
+        }
+    }
+
+    private fun onListItemClick(id: Int) {
         val bundle = Bundle()
-        viewModel.trendingMoviesLD.value?.get(position)?.let { bundle.putInt(ID, it.id) }
+        bundle.putInt(ID, id)
         findNavController().navigate(R.id.action_homeFragment_to_detailsFragment, bundle)
     }
 

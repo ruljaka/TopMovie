@@ -27,9 +27,13 @@ fun getNamesFromGenre(genres: List<Genre>): String {
 @RequiresApi(Build.VERSION_CODES.O)
 fun formatDate(incomingDate: String): String {
     val firstFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH)
-    val localDate = LocalDate.parse(incomingDate, firstFormatter)
-    val secondFormatter = DateTimeFormatter.ofPattern("dd MMM yyyy", Locale.ENGLISH)
-    return localDate.format(secondFormatter)
+    if(incomingDate.isNotEmpty()){
+        val localDate = LocalDate.parse(incomingDate, firstFormatter)
+        val secondFormatter = DateTimeFormatter.ofPattern("dd MMM yyyy", Locale.ENGLISH)
+        return localDate.format(secondFormatter)
+    }
+    return "not found"
+
 }
 
 fun downloadImageSmall(path: String?, imageView: ImageView) {
@@ -51,11 +55,12 @@ fun downloadImageLarge(path: String?, imageView: ImageView) {
     Glide.with(imageView.context)
         .load(IMAGE_URL + path)
         .apply(requestOptions)
-        .thumbnail(0.25f)
         .apply(RequestOptions().override(360, 540))
         .apply(RequestOptions.bitmapTransform(RoundedCorners(25)))
         .placeholder(R.drawable.placeholder)
+        .thumbnail(0.25f)
         .into(imageView)
 }
+
 
 

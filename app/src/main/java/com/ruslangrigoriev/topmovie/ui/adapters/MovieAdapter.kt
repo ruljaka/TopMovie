@@ -8,14 +8,13 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.ruslangrigoriev.topmovie.R
-import com.ruslangrigoriev.topmovie.downloadImageLarge
 import com.ruslangrigoriev.topmovie.data.model.Movie
+import com.ruslangrigoriev.topmovie.downloadImageLarge
 
 class MovieAdapter(
     private val onItemClicked: (position: Int) -> Unit,
-    private var moviesList: List<Movie>
+    private var moviesList: List<Movie>,
 ) : RecyclerView.Adapter<MovieAdapter.ViewHolder>() {
-
 
     class ViewHolder(
         itemView: View,
@@ -26,7 +25,6 @@ class MovieAdapter(
         val date: TextView = itemView.findViewById(R.id.text_view_date)
         val score: TextView = itemView.findViewById(R.id.textView_progressbar)
         val progressBar: ProgressBar = itemView.findViewById(R.id.main_circularProgressbar)
-
 
         init {
             itemView.setOnClickListener(this)
@@ -62,6 +60,5 @@ class MovieAdapter(
         this.moviesList = moviesList
         notifyDataSetChanged()
     }
-
 
 }

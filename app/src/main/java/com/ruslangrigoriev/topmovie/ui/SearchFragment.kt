@@ -8,25 +8,30 @@ import android.view.ViewGroup
 import android.widget.SearchView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.ruslangrigoriev.topmovie.ID
 import com.ruslangrigoriev.topmovie.QUERY
 import com.ruslangrigoriev.topmovie.R
 import com.ruslangrigoriev.topmovie.databinding.SearchFragmentBinding
-import com.ruslangrigoriev.topmovie.ui.adapters.MovieAdapter
-import com.ruslangrigoriev.topmovie.viewmodel.MainViewModel
+import com.ruslangrigoriev.topmovie.ui.adapters.MoviePagerAdapter
+import com.ruslangrigoriev.topmovie.viewmodel.MyViewModelFactory
+import com.ruslangrigoriev.topmovie.viewmodel.SearchViewModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 class SearchFragment : Fragment() {
     private var _binding: SearchFragmentBinding? = null
     private val binding get() = _binding!!
-    private lateinit var viewModel: MainViewModel
+    private lateinit var viewModel: SearchViewModel
+    private lateinit var pagerAdapter: MoviePagerAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View? {
         _binding = SearchFragmentBinding.inflate(inflater, container, false)
         return binding.root
@@ -34,27 +39,25 @@ class SearchFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = ViewModelProvider(this)[MainViewModel::class.java]
+
         val query = arguments?.getString(QUERY)
         if (query != null) {
-            viewModel.getSearchResult(query)
-
+            viewModel = ViewModelProvider(this,
+                MyViewModelFactory(query = query))[SearchViewModel::class.java]
         }
 
         //set Header
         binding.textViewSearchQuery.text = "for <${query}>"
 
-
         //set Recyclerview
-        val gridLM = GridLayoutManager(
-            activity, 2, GridLayoutManager.VERTICAL, false
+        pagerAdapter = MoviePagerAdapter { id -> onListItemClick(id) }
+        val gridLM = GridLayoutManager(activity,
+            2, GridLayoutManager.VERTICAL, false
         )
         binding.recyclerView.layoutManager = gridLM
-        val adapter = MovieAdapter({ position -> onListItemClick(position) }, emptyList())
-        binding.recyclerView.adapter = adapter
-        viewModel.searchMoviesLD.observe(viewLifecycleOwner, Observer {
-            adapter.updateList(it)
-        })
+        binding.recyclerView.adapter = pagerAdapter
+        binding.recyclerView.setHasFixedSize(true)
+        loadData()
 
         //search
         binding.searchViewTrending.setOnQueryTextListener(
@@ -67,7 +70,7 @@ class SearchFragment : Fragment() {
                         val bundle = Bundle()
                         bundle.putString(QUERY, query)
                         binding.textViewSearchQuery.text = "for <${query}>"
-                        viewModel.getSearchResult(query!!)
+                        viewModel.queryFlow.value = query!!
                     }
                     return false
                 }
@@ -79,9 +82,19 @@ class SearchFragment : Fragment() {
             })
     }
 
-    private fun onListItemClick(position: Int) {
+    @ExperimentalCoroutinesApi
+    private fun loadData() {
+        lifecycleScope.launch {
+            viewModel.searchMoviesFlowData.collectLatest { pagingData ->
+                pagerAdapter.submitData(pagingData)
+            }
+        }
+    }
+
+    private fun onListItemClick(id: Int) {
         val bundle = Bundle()
-        viewModel.searchMoviesLD.value?.get(position)?.let { bundle.putInt(ID, it.id) }
+        //viewModel.searchMoviesLD.value?.get(position)?.let { bundle.putInt(ID, it.id) }
+        bundle.putInt(ID, id)
         findNavController().navigate(R.id.action_searchFragment_to_detailsFragment, bundle)
     }
 

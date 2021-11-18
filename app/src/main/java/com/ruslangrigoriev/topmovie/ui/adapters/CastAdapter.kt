@@ -16,14 +16,11 @@ import com.ruslangrigoriev.topmovie.data.model.credits.Cast
 class CastAdapter(private var castList: List<Cast>) :
     RecyclerView.Adapter<CastAdapter.ViewHolder>() {
 
-
     class ViewHolder(itemView: View) :
         RecyclerView.ViewHolder(itemView) {
         val image: ImageView = itemView.findViewById(R.id.imageView_cast)
         val name: TextView = itemView.findViewById(R.id.textView_cast_name)
         val character: TextView = itemView.findViewById(R.id.textView_cast_character)
-
-
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

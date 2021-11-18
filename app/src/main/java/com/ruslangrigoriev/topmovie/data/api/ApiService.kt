@@ -4,7 +4,6 @@ import com.ruslangrigoriev.topmovie.API
 import com.ruslangrigoriev.topmovie.data.model.Details.Details
 import com.ruslangrigoriev.topmovie.data.model.Result
 import com.ruslangrigoriev.topmovie.data.model.credits.Credits
-import io.reactivex.Observable
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -14,9 +13,11 @@ interface ApiService {
 
     //trending/all/day?api_key=...
     @GET("trending/all/day?")
-    suspend fun getTrending(
+    suspend fun getPagedTrending(
         @Query("api_key") apiKey: String = API,
+        @Query("page") page: Int,
     ): Response<Result>
+
 
     //movie/630004?api_key=...
     @GET("movie/{id}")
@@ -34,8 +35,9 @@ interface ApiService {
 
     //search/movie?api_key=...&query=query
     @GET("search/movie?")
-    suspend fun searchMovie(
+    suspend fun searchPagedMovie(
         @Query("api_key") apiKey: String = API,
         @Query("query") query: String,
+        @Query("page") page: Int,
     ): Response<Result>
 }

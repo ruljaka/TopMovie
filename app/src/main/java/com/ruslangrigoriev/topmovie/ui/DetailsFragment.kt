@@ -12,23 +12,20 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.ruslangrigoriev.topmovie.*
-import com.ruslangrigoriev.topmovie.ui.adapters.CastAdapter
 import com.ruslangrigoriev.topmovie.databinding.DetailsFragmentBinding
+import com.ruslangrigoriev.topmovie.ui.adapters.CastAdapter
+import com.ruslangrigoriev.topmovie.viewmodel.DetailsViewModel
 import com.ruslangrigoriev.topmovie.viewmodel.MainViewModel
+import com.ruslangrigoriev.topmovie.viewmodel.MyViewModelFactory
 
 class DetailsFragment : Fragment() {
     private var _binding: DetailsFragmentBinding? = null
     private val binding get() = _binding!!
-
-    companion object {
-        fun newInstance() = DetailsFragment()
-    }
-
-    private lateinit var viewModel: MainViewModel
+    private lateinit var viewModel: DetailsViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View? {
         _binding = DetailsFragmentBinding.inflate(inflater, container, false)
 
@@ -40,9 +37,10 @@ class DetailsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         //get Data
-        viewModel = ViewModelProvider(this)[MainViewModel::class.java]
         val id = arguments?.getInt(ID)
         if (id != null) {
+            viewModel =
+                ViewModelProvider(this, MyViewModelFactory(id = id))[DetailsViewModel::class.java]
             viewModel.getDetails(id)
             viewModel.getCast(id)
         }
@@ -74,9 +72,8 @@ class DetailsFragment : Fragment() {
             castAdapter.updateList(it)
         })
         viewModel.errorLD.observe(viewLifecycleOwner, {
-            Toast.makeText(activity,it,Toast.LENGTH_SHORT).show()
+            Toast.makeText(activity, it, Toast.LENGTH_SHORT).show()
         })
-
     }
 
     override fun onDestroy() {

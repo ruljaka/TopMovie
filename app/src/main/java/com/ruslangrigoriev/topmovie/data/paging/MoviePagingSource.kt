@@ -2,16 +2,16 @@ package com.ruslangrigoriev.topmovie.data.paging
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.ruslangrigoriev.topmovie.data.model.Movie
-import com.ruslangrigoriev.topmovie.data.model.Result
+import com.ruslangrigoriev.topmovie.data.model.movies.Movie
 import com.ruslangrigoriev.topmovie.data.repository.Repository
-import retrofit2.Response
 
 class MoviePagingSource(
     private val query: String = "",
     private val repository: Repository,
 ) : PagingSource<Int, Movie>() {
+
     private lateinit var responseData: MutableList<Movie>
+
     override fun getRefreshKey(state: PagingState<Int, Movie>): Int? {
         return null
     }

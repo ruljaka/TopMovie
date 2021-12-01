@@ -1,9 +1,10 @@
 package com.ruslangrigoriev.topmovie.data.api
 
 import com.ruslangrigoriev.topmovie.API
-import com.ruslangrigoriev.topmovie.data.model.Details.Details
-import com.ruslangrigoriev.topmovie.data.model.Result
 import com.ruslangrigoriev.topmovie.data.model.credits.Credits
+import com.ruslangrigoriev.topmovie.data.model.details.Details
+import com.ruslangrigoriev.topmovie.data.model.movies.Result
+import com.ruslangrigoriev.topmovie.data.model.person.Person
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -12,7 +13,7 @@ import retrofit2.http.Query
 interface ApiService {
 
     //trending/all/day?api_key=...
-    @GET("trending/all/day?")
+    @GET("trending/movie/day?")
     suspend fun getPagedTrending(
         @Query("api_key") apiKey: String = API,
         @Query("page") page: Int,
@@ -40,4 +41,13 @@ interface ApiService {
         @Query("query") query: String,
         @Query("page") page: Int,
     ): Response<Result>
+
+    //person/1136406?api_key=...
+    @GET("person/{person_id}")
+    suspend fun getPerson(
+        @Path("person_id") person_id: Int,
+        @Query("api_key") apiKey: String = API,
+    ): Response<Person>
+
+
 }

@@ -9,13 +9,13 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.ruslangrigoriev.topmovie.*
 import com.ruslangrigoriev.topmovie.databinding.DetailsFragmentBinding
 import com.ruslangrigoriev.topmovie.ui.adapters.CastAdapter
 import com.ruslangrigoriev.topmovie.viewmodel.DetailsViewModel
-import com.ruslangrigoriev.topmovie.viewmodel.MainViewModel
 import com.ruslangrigoriev.topmovie.viewmodel.MyViewModelFactory
 
 class DetailsFragment : Fragment() {
@@ -28,7 +28,6 @@ class DetailsFragment : Fragment() {
         savedInstanceState: Bundle?,
     ): View? {
         _binding = DetailsFragmentBinding.inflate(inflater, container, false)
-
         return binding.root
     }
 
@@ -40,13 +39,15 @@ class DetailsFragment : Fragment() {
         val id = arguments?.getInt(ID)
         if (id != null) {
             viewModel =
-                ViewModelProvider(this, MyViewModelFactory(id = id))[DetailsViewModel::class.java]
+                ViewModelProvider(
+                    this, MyViewModelFactory()
+                )[DetailsViewModel::class.java]
             viewModel.getDetails(id)
             viewModel.getCast(id)
         }
 
         //set castAdapter
-        val castAdapter = CastAdapter(emptyList())
+        val castAdapter = CastAdapter(emptyList()) { personID -> onListItemClick(personID) }
         binding.recyclerViewDetails.layoutManager =
             LinearLayoutManager(view.context, LinearLayoutManager.HORIZONTAL, false)
         binding.recyclerViewDetails.adapter = castAdapter
@@ -57,7 +58,7 @@ class DetailsFragment : Fragment() {
             binding.textViewDetailsData.text = ("Released: " + formatDate(it.releaseDate))
             binding.textViewDetailsRuntime.text = fromMinutesToHHmm(it.runtime)
             binding.textViewDetailsGenre.text = getNamesFromGenre(it.genres)
-            binding.textViewDetailsScore.text = (it.voteAverage.toString() + " User Score")
+            binding.textViewDetailsScore.text = ("User Score")
             binding.textViewDetailsOverview.text = it.overview
             val score = it.voteAverage.toString()
                 .replace(".", "")
@@ -74,6 +75,12 @@ class DetailsFragment : Fragment() {
         viewModel.errorLD.observe(viewLifecycleOwner, {
             Toast.makeText(activity, it, Toast.LENGTH_SHORT).show()
         })
+    }
+
+    private fun onListItemClick(personID: Int) {
+        val bundle = Bundle()
+        bundle.putInt(PERSON_ID, personID)
+        findNavController().navigate(R.id.action_detailsFragment_to_personFragment, bundle)
     }
 
     override fun onDestroy() {

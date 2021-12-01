@@ -5,16 +5,15 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.ruslangrigoriev.topmovie.data.model.Details.Details
 import com.ruslangrigoriev.topmovie.data.model.credits.Cast
+import com.ruslangrigoriev.topmovie.data.model.details.Details
 import com.ruslangrigoriev.topmovie.data.repository.RepositoryImpl
 import kotlinx.coroutines.launch
 
-class DetailsViewModel(
-    private val id: Int,
-) : ViewModel() {
+class DetailsViewModel : ViewModel() {
 
     private val repository = RepositoryImpl
+
     private val _detailsLD = MutableLiveData<Details>()
     val detailsLD: MutableLiveData<Details> get() = _detailsLD
     private val _castLD = MutableLiveData<List<Cast>>()

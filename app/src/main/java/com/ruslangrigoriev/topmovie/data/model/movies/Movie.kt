@@ -1,4 +1,4 @@
-package com.ruslangrigoriev.topmovie.data.model
+package com.ruslangrigoriev.topmovie.data.model.movies
 
 
 import com.google.gson.annotations.Expose

@@ -4,8 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 
 class MyViewModelFactory(
-    private val query:String = "",
-    private val id: Int = 0
+    private val query: String = "",
 ) : ViewModelProvider.Factory {
 
 
@@ -17,11 +16,15 @@ class MyViewModelFactory(
             }
             modelClass.isAssignableFrom(DetailsViewModel::class.java) -> {
                 @Suppress("UNCHECKED_CAST")
-                return DetailsViewModel(id = id) as T
+                return DetailsViewModel() as T
             }
             modelClass.isAssignableFrom(MainViewModel::class.java) -> {
                 @Suppress("UNCHECKED_CAST")
                 return MainViewModel() as T
+            }
+            modelClass.isAssignableFrom(PersonViewModel::class.java) -> {
+                @Suppress("UNCHECKED_CAST")
+                return PersonViewModel() as T
             }
         }
         throw IllegalArgumentException("Unable to construct viewModel")

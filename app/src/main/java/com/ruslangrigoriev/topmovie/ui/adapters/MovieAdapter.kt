@@ -8,9 +8,12 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.ruslangrigoriev.topmovie.R
-import com.ruslangrigoriev.topmovie.data.model.Movie
+import com.ruslangrigoriev.topmovie.data.model.movies.Movie
 import com.ruslangrigoriev.topmovie.downloadImageLarge
+import com.ruslangrigoriev.topmovie.loadImageLarge
 
+
+//UnUsed
 class MovieAdapter(
     private val onItemClicked: (position: Int) -> Unit,
     private var moviesList: List<Movie>,
@@ -20,14 +23,19 @@ class MovieAdapter(
         itemView: View,
         private val onItemClicked: (position: Int) -> Unit
     ) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
-        val image: ImageView = itemView.findViewById(R.id.imageView_poster)
-        val title: TextView = itemView.findViewById(R.id.textView_title)
-        val date: TextView = itemView.findViewById(R.id.text_view_date)
-        val score: TextView = itemView.findViewById(R.id.textView_progressbar)
-        val progressBar: ProgressBar = itemView.findViewById(R.id.main_circularProgressbar)
+        private val image: ImageView = itemView.findViewById(R.id.imageView_poster)
+        private val title: TextView = itemView.findViewById(R.id.textView_title)
+        private val date: TextView = itemView.findViewById(R.id.text_view_date)
+        private val score: TextView = itemView.findViewById(R.id.textView_progressbar)
+        private val progressBar: ProgressBar = itemView.findViewById(R.id.main_circularProgressbar)
 
-        init {
+        fun bind(movie:Movie){
             itemView.setOnClickListener(this)
+            title.text = movie.originalTitle ?: movie.name
+            date.text = movie.firstAirDate ?: movie.releaseDate
+            score.text = movie.voteAverage.toString().replace(".", "")
+            progressBar.progress = movie.voteAverage.toInt()
+            image.run{movie.posterPath.loadImageLarge(this)}
         }
 
         override fun onClick(v: View?) {
@@ -43,13 +51,7 @@ class MovieAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.title.text = moviesList[position].originalTitle ?: moviesList[position].name
-        holder.date.text = moviesList[position].firstAirDate ?: moviesList[position].releaseDate
-        val score = moviesList[position].voteAverage
-            .toString().replace(".", "")
-        holder.score.text = score
-        holder.progressBar.progress = score.toInt()
-        downloadImageLarge(moviesList[position].posterPath, holder.image)
+        holder.bind(moviesList[position])
     }
 
     override fun getItemCount(): Int {

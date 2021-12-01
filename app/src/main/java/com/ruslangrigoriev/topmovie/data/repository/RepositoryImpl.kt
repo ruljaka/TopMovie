@@ -1,7 +1,8 @@
 package com.ruslangrigoriev.topmovie.data.repository
 
 import com.ruslangrigoriev.topmovie.data.api.ApiFactory
-import com.ruslangrigoriev.topmovie.data.model.Result
+import com.ruslangrigoriev.topmovie.data.model.movies.Result
+import com.ruslangrigoriev.topmovie.data.model.person.Person
 import retrofit2.Response
 
 object RepositoryImpl : Repository {
@@ -16,4 +17,7 @@ object RepositoryImpl : Repository {
 
     override suspend fun getSearchPagedResult(query: String, page: Int): Response<Result> =
         apiService.searchPagedMovie(query = query, page = page)
+
+    override suspend fun getPerson(person_id: Int): Response<Person> =
+        apiService.getPerson(person_id)
 }

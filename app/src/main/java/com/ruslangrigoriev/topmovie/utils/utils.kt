@@ -3,11 +3,14 @@ package com.ruslangrigoriev.topmovie
 import android.os.Build
 import android.widget.ImageView
 import androidx.annotation.RequiresApi
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
-import com.ruslangrigoriev.topmovie.data.model.Details.Genre
+import com.ruslangrigoriev.topmovie.data.model.details.Genre
+import jp.wasabeef.glide.transformations.CropTransformation
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.*
@@ -56,11 +59,26 @@ fun downloadImageLarge(path: String?, imageView: ImageView) {
         .load(IMAGE_URL + path)
         .apply(requestOptions)
         .apply(RequestOptions().override(360, 540))
-        .apply(RequestOptions.bitmapTransform(RoundedCorners(25)))
+        .apply(RequestOptions.bitmapTransform(RoundedCorners(24)))
         .placeholder(R.drawable.placeholder)
         .thumbnail(0.25f)
         .into(imageView)
 }
+
+fun String.loadImageLarge(imageView: ImageView){
+    val requestOptions = RequestOptions()
+        .diskCacheStrategy(DiskCacheStrategy.ALL)
+    Glide.with(imageView.context)
+        .load(IMAGE_URL + this)
+        //.apply(requestOptions)
+        .apply(RequestOptions().override(360, 540))
+        .centerCrop()
+        .apply(RequestOptions.bitmapTransform(RoundedCorners(24)))
+        .placeholder(R.drawable.placeholder)
+        .thumbnail(0.25f)
+        .into(imageView)
+}
+
 
 
 

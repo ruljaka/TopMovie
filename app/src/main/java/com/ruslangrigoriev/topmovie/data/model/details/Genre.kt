@@ -1,4 +1,4 @@
-package com.ruslangrigoriev.topmovie.data.model.Details
+package com.ruslangrigoriev.topmovie.data.model.details
 
 
 import com.google.gson.annotations.SerializedName

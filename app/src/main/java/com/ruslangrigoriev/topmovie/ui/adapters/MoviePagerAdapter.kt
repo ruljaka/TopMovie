@@ -10,8 +10,8 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.ruslangrigoriev.topmovie.R
-import com.ruslangrigoriev.topmovie.data.model.Movie
-import com.ruslangrigoriev.topmovie.downloadImageLarge
+import com.ruslangrigoriev.topmovie.data.model.movies.Movie
+import com.ruslangrigoriev.topmovie.loadImageLarge
 
 class MoviePagerAdapter(
     private val onItemClicked: (id: Int) -> Unit,
@@ -33,34 +33,33 @@ class MoviePagerAdapter(
         itemView: View,
         private val onItemClicked: (id: Int) -> Unit,
     ) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
-        val image: ImageView = itemView.findViewById(R.id.imageView_poster)
-        val title: TextView = itemView.findViewById(R.id.textView_title)
-        val date: TextView = itemView.findViewById(R.id.text_view_date)
-        val score: TextView = itemView.findViewById(R.id.textView_progressbar)
-        val progressBar: ProgressBar = itemView.findViewById(R.id.main_circularProgressbar)
+        private val image: ImageView = itemView.findViewById(R.id.imageView_poster)
+        private val title: TextView = itemView.findViewById(R.id.textView_title)
+        private val date: TextView = itemView.findViewById(R.id.text_view_date)
+        private val score: TextView = itemView.findViewById(R.id.textView_progressbar)
+        private val progressBar: ProgressBar = itemView.findViewById(R.id.main_circularProgressbar)
         var id: Int = 0
 
-        init {
+        fun bind(movie: Movie) {
+            id = movie.id
             itemView.setOnClickListener(this)
+            title.text = movie.originalTitle ?: movie.name
+            date.text = movie.firstAirDate ?: movie.releaseDate
+            score.text = movie.voteAverage.toString().replace(".", "")
+            progressBar.progress = movie.voteAverage.toString().replace(".", "").toInt()
+            image.run { movie.posterPath.loadImageLarge(this) }
         }
 
         override fun onClick(v: View?) {
-            //val position = absoluteAdapterPosition
             onItemClicked(id)
         }
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val currentItem = getItem(position) // method from PagerAdapter
-
-        holder.id = currentItem?.id!!
-        holder.title.text = currentItem.originalTitle ?: currentItem.name
-        holder.date.text = currentItem.firstAirDate ?: currentItem.releaseDate
-        val score = currentItem.voteAverage
-            .toString().replace(".", "")
-        holder.score.text = score
-        holder.progressBar.progress = score.toInt()
-        downloadImageLarge(currentItem.posterPath, holder.image)
+        if (currentItem != null) {
+            holder.bind(currentItem)
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

@@ -41,12 +41,15 @@ class HomeFragment : Fragment() {
 
         //set pagedRV
         pagerAdapter = MoviePagerAdapter { id -> onListItemClick(id) }
-        val gridLM = GridLayoutManager(activity,
+        val gridLM = GridLayoutManager(
+            activity,
             2, GridLayoutManager.VERTICAL, false
         )
         binding.recyclerView.layoutManager = gridLM
         binding.recyclerView.adapter = pagerAdapter
         binding.recyclerView.setHasFixedSize(true)
+
+
         loadData()
 
         //search
@@ -55,8 +58,10 @@ class HomeFragment : Fragment() {
                 override fun onQueryTextSubmit(query: String?): Boolean {
                     binding.searchViewTrending.clearFocus()
                     if (TextUtils.isEmpty(query)) {
-                        Toast.makeText(activity, "Enter your request",
-                            Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            activity, "Enter your request",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     } else {
                         val bundle = Bundle()
                         bundle.putString(QUERY, query)

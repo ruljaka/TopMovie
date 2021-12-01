@@ -1,16 +1,15 @@
-package com.ruslangrigoriev.topmovie
+package com.ruslangrigoriev.topmovie.utils
 
 import android.os.Build
 import android.widget.ImageView
 import androidx.annotation.RequiresApi
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
+import com.ruslangrigoriev.topmovie.R
 import com.ruslangrigoriev.topmovie.data.model.details.Genre
-import jp.wasabeef.glide.transformations.CropTransformation
+import com.ruslangrigoriev.topmovie.data.model.movies.Movie
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.*
@@ -28,55 +27,50 @@ fun getNamesFromGenre(genres: List<Genre>): String {
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
-fun formatDate(incomingDate: String): String {
+fun String.formatDate(): String {
     val firstFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH)
-    if(incomingDate.isNotEmpty()){
-        val localDate = LocalDate.parse(incomingDate, firstFormatter)
+    if (this.isNotEmpty()) {
+        val localDate = LocalDate.parse(this, firstFormatter)
         val secondFormatter = DateTimeFormatter.ofPattern("dd MMM yyyy", Locale.ENGLISH)
         return localDate.format(secondFormatter)
     }
     return "not found"
-
 }
 
-fun downloadImageSmall(path: String?, imageView: ImageView) {
-    val requestOptions = RequestOptions()
-        .diskCacheStrategy(DiskCacheStrategy.ALL)
-    Glide.with(imageView.context)
-        .load(IMAGE_URL + path)
-        .apply(requestOptions)
-        .thumbnail(0.25f)
-        .apply(RequestOptions().override(300, 450))
-        .apply(RequestOptions.bitmapTransform(RoundedCorners(15)))
-        .placeholder(R.drawable.placeholder)
-        .into(imageView)
-}
-
-fun downloadImageLarge(path: String?, imageView: ImageView) {
-    val requestOptions = RequestOptions()
-        .diskCacheStrategy(DiskCacheStrategy.ALL)
-    Glide.with(imageView.context)
-        .load(IMAGE_URL + path)
-        .apply(requestOptions)
-        .apply(RequestOptions().override(360, 540))
-        .apply(RequestOptions.bitmapTransform(RoundedCorners(24)))
-        .placeholder(R.drawable.placeholder)
-        .thumbnail(0.25f)
-        .into(imageView)
-}
-
-fun String.loadImageLarge(imageView: ImageView){
+fun String.loadImageLarge(imageView: ImageView) {
     val requestOptions = RequestOptions()
         .diskCacheStrategy(DiskCacheStrategy.ALL)
     Glide.with(imageView.context)
         .load(IMAGE_URL + this)
-        //.apply(requestOptions)
+        .apply(requestOptions)
         .apply(RequestOptions().override(360, 540))
-        .centerCrop()
         .apply(RequestOptions.bitmapTransform(RoundedCorners(24)))
         .placeholder(R.drawable.placeholder)
         .thumbnail(0.25f)
         .into(imageView)
+}
+
+fun String.loadImageSmall(imageView: ImageView) {
+    val requestOptions = RequestOptions()
+        .diskCacheStrategy(DiskCacheStrategy.ALL)
+    Glide.with(imageView.context)
+        .load(IMAGE_URL + this)
+        .apply(requestOptions)
+        .thumbnail(0.25f)
+        .apply(RequestOptions().override(300, 450))
+        .apply(RequestOptions.bitmapTransform(RoundedCorners(14)))
+        .placeholder(R.drawable.placeholder)
+        .into(imageView)
+}
+
+fun List<Movie>.getTopPersonCasts(): List<Movie> {
+    val sortedList = this.toMutableList().sortedByDescending { it.voteCount }
+    return if (sortedList.size > 15) {
+        sortedList.subList(0, 15)
+    } else {
+        sortedList
+    }
+
 }
 
 

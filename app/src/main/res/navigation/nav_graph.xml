@@ -39,5 +39,9 @@
         android:id="@+id/personFragment"
         android:name="com.ruslangrigoriev.topmovie.ui.PersonFragment"
         android:label="person"
-        tools:layout="@layout/person_fragment" />
+        tools:layout="@layout/person_fragment" >
+        <action
+            android:id="@+id/action_personFragment_to_detailsFragment"
+            app:destination="@id/detailsFragment" />
+    </fragment>
 </navigation>

@@ -12,11 +12,11 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
-import com.ruslangrigoriev.topmovie.ID
-import com.ruslangrigoriev.topmovie.QUERY
 import com.ruslangrigoriev.topmovie.R
 import com.ruslangrigoriev.topmovie.databinding.SearchFragmentBinding
 import com.ruslangrigoriev.topmovie.ui.adapters.MoviePagerAdapter
+import com.ruslangrigoriev.topmovie.utils.MOVIE_ID
+import com.ruslangrigoriev.topmovie.utils.QUERY
 import com.ruslangrigoriev.topmovie.viewmodel.MyViewModelFactory
 import com.ruslangrigoriev.topmovie.viewmodel.SearchViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -42,8 +42,10 @@ class SearchFragment : Fragment() {
 
         val query = arguments?.getString(QUERY)
         if (query != null) {
-            viewModel = ViewModelProvider(this,
-                MyViewModelFactory(query = query))[SearchViewModel::class.java]
+            viewModel = ViewModelProvider(
+                this,
+                MyViewModelFactory(query = query)
+            )[SearchViewModel::class.java]
         }
 
         //set Header
@@ -51,7 +53,8 @@ class SearchFragment : Fragment() {
 
         //set Recyclerview
         pagerAdapter = MoviePagerAdapter { id -> onListItemClick(id) }
-        val gridLM = GridLayoutManager(activity,
+        val gridLM = GridLayoutManager(
+            activity,
             2, GridLayoutManager.VERTICAL, false
         )
         binding.recyclerView.layoutManager = gridLM
@@ -93,8 +96,7 @@ class SearchFragment : Fragment() {
 
     private fun onListItemClick(id: Int) {
         val bundle = Bundle()
-        //viewModel.searchMoviesLD.value?.get(position)?.let { bundle.putInt(ID, it.id) }
-        bundle.putInt(ID, id)
+        bundle.putInt(MOVIE_ID, id)
         findNavController().navigate(R.id.action_searchFragment_to_detailsFragment, bundle)
     }
 

@@ -6,15 +6,19 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ruslangrigoriev.topmovie.data.model.person.Person
+import com.ruslangrigoriev.topmovie.data.model.person.PersonCredits
 import com.ruslangrigoriev.topmovie.data.repository.RepositoryImpl
 import kotlinx.coroutines.launch
 
-class PersonViewModel: ViewModel() {
+class PersonViewModel : ViewModel() {
 
     private val repository = RepositoryImpl
 
     private val _personLD = MutableLiveData<Person>()
     val personLD: MutableLiveData<Person> get() = _personLD
+    private val _personCastLD = MutableLiveData<PersonCredits>()
+    val personCastLD: MutableLiveData<PersonCredits> get() = _personCastLD
+
     private val _errorLD = MutableLiveData<String>()
     val errorLD: LiveData<String> get() = _errorLD
 
@@ -29,4 +33,14 @@ class PersonViewModel: ViewModel() {
         }
     }
 
+    fun getPersonCredits(person_id: Int) = viewModelScope.launch {
+        Log.d("TAG", "getPersonCredits -> Person ID: $person_id")
+        repository.getPersonCredits(person_id).let { response ->
+            if (response.isSuccessful) {
+                _personCastLD.postValue(response.body())
+            } else {
+                _errorLD.postValue(response.code().toString())
+            }
+        }
+    }
 }

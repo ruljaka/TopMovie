@@ -6,11 +6,11 @@
     android:layout_height="wrap_content"
     android:layout_margin="8dp">
 
-
     <ImageView
         android:id="@+id/imageView_poster"
         android:layout_width="160dp"
         android:layout_height="240dp"
+        android:contentDescription="@string/movie_poster_desc"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -21,31 +21,32 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="TextView"
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="@+id/imageView_poster"
         app:layout_constraintStart_toStartOf="@+id/imageView_poster"
-        app:layout_constraintTop_toBottomOf="@+id/imageView_poster" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView_poster"
+        tools:text="Armour of God" />
 
     <TextView
         android:id="@+id/text_view_date"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="19 dec 2020"
         android:textColor="#5E5E5E"
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="@+id/textView_title"
         app:layout_constraintStart_toStartOf="@+id/textView_title"
-        app:layout_constraintTop_toBottomOf="@id/textView_title" />
+        app:layout_constraintTop_toBottomOf="@id/textView_title"
+        tools:text="19 dec 2020" />
 
     <ImageView
         android:layout_width="35dp"
         android:layout_height="35dp"
         android:layout_centerInParent="true"
         android:background="@drawable/dark_circle"
+        android:contentDescription="@string/image_popularity_desc"
         app:layout_constraintBottom_toBottomOf="@+id/main_circularProgressbar"
         app:layout_constraintEnd_toEndOf="@id/main_circularProgressbar"
         app:layout_constraintStart_toStartOf="@+id/main_circularProgressbar"
@@ -67,7 +68,6 @@
         app:layout_constraintTop_toBottomOf="@+id/imageView_poster"
         app:layout_constraintVertical_bias="0.2"
         tools:progress="50" />
-
 
     <TextView
         android:id="@+id/textView_progressbar"

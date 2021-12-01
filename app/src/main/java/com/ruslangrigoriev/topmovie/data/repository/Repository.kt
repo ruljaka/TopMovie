@@ -1,9 +1,10 @@
 package com.ruslangrigoriev.topmovie.data.repository
 
+import com.ruslangrigoriev.topmovie.data.model.credits.Credits
 import com.ruslangrigoriev.topmovie.data.model.details.Details
 import com.ruslangrigoriev.topmovie.data.model.movies.Result
-import com.ruslangrigoriev.topmovie.data.model.credits.Credits
 import com.ruslangrigoriev.topmovie.data.model.person.Person
+import com.ruslangrigoriev.topmovie.data.model.person.PersonCredits
 import retrofit2.Response
 
 interface Repository {
@@ -11,5 +12,6 @@ interface Repository {
     suspend fun getDetails(id: Int): Response<Details>
     suspend fun getCast(id: Int): Response<Credits>
     suspend fun getSearchPagedResult(query: String, page: Int): Response<Result>
-    suspend fun getPerson(person_id:Int) : Response<Person>
+    suspend fun getPerson(person_id: Int): Response<Person>
+    suspend fun getPersonCredits(person_id: Int): Response<PersonCredits>
 }

@@ -7,7 +7,6 @@ class MyViewModelFactory(
     private val query: String = "",
 ) : ViewModelProvider.Factory {
 
-
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         when {
             modelClass.isAssignableFrom(SearchViewModel::class.java) -> {

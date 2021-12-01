@@ -9,9 +9,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
-import com.ruslangrigoriev.topmovie.IMAGE_URL
 import com.ruslangrigoriev.topmovie.R
 import com.ruslangrigoriev.topmovie.data.model.credits.Cast
+import com.ruslangrigoriev.topmovie.utils.IMAGE_URL
 
 class CastAdapter(
     private var castList: List<Cast>,
@@ -41,7 +41,6 @@ class CastAdapter(
                 .apply(RequestOptions().override(300, 450))
                 .placeholder(R.drawable.placeholder)
                 .into(image)
-            //downloadImageSmall(castList[position].profilePath,holder.image)
         }
 
         override fun onClick(v: View?) {

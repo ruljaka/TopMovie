@@ -12,11 +12,11 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
-import com.ruslangrigoriev.topmovie.ID
-import com.ruslangrigoriev.topmovie.QUERY
 import com.ruslangrigoriev.topmovie.R
 import com.ruslangrigoriev.topmovie.databinding.HomeFragmentBinding
 import com.ruslangrigoriev.topmovie.ui.adapters.MoviePagerAdapter
+import com.ruslangrigoriev.topmovie.utils.MOVIE_ID
+import com.ruslangrigoriev.topmovie.utils.QUERY
 import com.ruslangrigoriev.topmovie.viewmodel.MainViewModel
 import com.ruslangrigoriev.topmovie.viewmodel.MyViewModelFactory
 import kotlinx.coroutines.flow.collect
@@ -48,7 +48,6 @@ class HomeFragment : Fragment() {
         binding.recyclerView.layoutManager = gridLM
         binding.recyclerView.adapter = pagerAdapter
         binding.recyclerView.setHasFixedSize(true)
-
 
         loadData()
 
@@ -91,7 +90,7 @@ class HomeFragment : Fragment() {
 
     private fun onListItemClick(id: Int) {
         val bundle = Bundle()
-        bundle.putInt(ID, id)
+        bundle.putInt(MOVIE_ID, id)
         findNavController().navigate(R.id.action_homeFragment_to_detailsFragment, bundle)
     }
 

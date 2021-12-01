@@ -12,9 +12,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
-import com.ruslangrigoriev.topmovie.*
+import com.ruslangrigoriev.topmovie.R
 import com.ruslangrigoriev.topmovie.databinding.DetailsFragmentBinding
 import com.ruslangrigoriev.topmovie.ui.adapters.CastAdapter
+import com.ruslangrigoriev.topmovie.utils.*
 import com.ruslangrigoriev.topmovie.viewmodel.DetailsViewModel
 import com.ruslangrigoriev.topmovie.viewmodel.MyViewModelFactory
 
@@ -36,7 +37,7 @@ class DetailsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         //get Data
-        val id = arguments?.getInt(ID)
+        val id = arguments?.getInt(MOVIE_ID)
         if (id != null) {
             viewModel =
                 ViewModelProvider(
@@ -55,7 +56,7 @@ class DetailsFragment : Fragment() {
         //update UI
         viewModel.detailsLD.observe(viewLifecycleOwner, {
             binding.textViewDetailsTitle.text = it.title
-            binding.textViewDetailsData.text = ("Released: " + formatDate(it.releaseDate))
+            binding.textViewDetailsData.text = it.releaseDate.formatDate()
             binding.textViewDetailsRuntime.text = fromMinutesToHHmm(it.runtime)
             binding.textViewDetailsGenre.text = getNamesFromGenre(it.genres)
             binding.textViewDetailsScore.text = ("User Score")
@@ -64,7 +65,7 @@ class DetailsFragment : Fragment() {
                 .replace(".", "")
             binding.textViewDetailsProgressbar.text = score
             binding.detailsCircularProgressbar.progress = score.toInt()
-            downloadImageSmall(it.posterPath, binding.imageViewDetailsPoster)
+            it.posterPath?.loadImageSmall(binding.imageViewDetailsPoster)
             Glide.with(view.context)
                 .load(IMAGE_URL + (it.backdropPath))
                 .into(binding.imageViewDetailsBackPoster)

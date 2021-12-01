@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.ruslangrigoriev.topmovie.R
 import com.ruslangrigoriev.topmovie.data.model.movies.Movie
-import com.ruslangrigoriev.topmovie.loadImageLarge
+import com.ruslangrigoriev.topmovie.utils.loadImageLarge
 
 class MoviePagerAdapter(
     private val onItemClicked: (id: Int) -> Unit,
@@ -47,7 +47,7 @@ class MoviePagerAdapter(
             date.text = movie.firstAirDate ?: movie.releaseDate
             score.text = movie.voteAverage.toString().replace(".", "")
             progressBar.progress = movie.voteAverage.toString().replace(".", "").toInt()
-            image.run { movie.posterPath.loadImageLarge(this) }
+            movie.posterPath?.loadImageLarge(image)
         }
 
         override fun onClick(v: View?) {

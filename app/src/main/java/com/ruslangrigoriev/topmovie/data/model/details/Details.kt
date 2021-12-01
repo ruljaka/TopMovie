@@ -43,7 +43,7 @@ data class Details(
     val popularity: Double,
     @SerializedName("poster_path")
     @Expose
-    val posterPath: String,
+    val posterPath: String?,
     @SerializedName("production_companies")
     @Expose
     val productionCompanies: List<ProductionCompany>,

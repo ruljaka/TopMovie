@@ -22,7 +22,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:src="@drawable/cast" />
+            tools:src="@drawable/cast"
+            android:contentDescription="@string/cast_poster_desc" />
 
         <TextView
             android:id="@+id/textView_cast_name"

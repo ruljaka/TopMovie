@@ -1,10 +1,11 @@
 package com.ruslangrigoriev.topmovie.data.api
 
-import com.ruslangrigoriev.topmovie.API
 import com.ruslangrigoriev.topmovie.data.model.credits.Credits
 import com.ruslangrigoriev.topmovie.data.model.details.Details
 import com.ruslangrigoriev.topmovie.data.model.movies.Result
 import com.ruslangrigoriev.topmovie.data.model.person.Person
+import com.ruslangrigoriev.topmovie.data.model.person.PersonCredits
+import com.ruslangrigoriev.topmovie.utils.API
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -49,5 +50,11 @@ interface ApiService {
         @Query("api_key") apiKey: String = API,
     ): Response<Person>
 
+    //person/1136406/movie_credits?api_key=...
+    @GET("person/{person_id}/movie_credits")
+    suspend fun getPersonCredits(
+        @Path("person_id") person_id: Int,
+        @Query("api_key") apiKey: String = API,
+    ): Response<PersonCredits>
 
 }

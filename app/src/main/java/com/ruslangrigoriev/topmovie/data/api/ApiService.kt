@@ -1,11 +1,11 @@
 package com.ruslangrigoriev.topmovie.data.api
 
-import com.ruslangrigoriev.topmovie.data.model.credits.Credits
-import com.ruslangrigoriev.topmovie.data.model.details.Details
-import com.ruslangrigoriev.topmovie.data.model.movies.Result
-import com.ruslangrigoriev.topmovie.data.model.person.Person
-import com.ruslangrigoriev.topmovie.data.model.person.PersonCredits
-import com.ruslangrigoriev.topmovie.utils.API
+import com.ruslangrigoriev.topmovie.domain.model.credits.Credits
+import com.ruslangrigoriev.topmovie.domain.model.details.Details
+import com.ruslangrigoriev.topmovie.domain.model.movies.Result
+import com.ruslangrigoriev.topmovie.domain.model.person.Person
+import com.ruslangrigoriev.topmovie.domain.model.person.PersonCredits
+import com.ruslangrigoriev.topmovie.domain.utils.API
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path

@@ -1,14 +1,12 @@
 package com.ruslangrigoriev.topmovie.data.repository
 
-import com.ruslangrigoriev.topmovie.data.api.ApiFactory
-import com.ruslangrigoriev.topmovie.data.model.movies.Result
-import com.ruslangrigoriev.topmovie.data.model.person.Person
-import com.ruslangrigoriev.topmovie.data.model.person.PersonCredits
+import com.ruslangrigoriev.topmovie.data.api.ApiService
+import com.ruslangrigoriev.topmovie.domain.model.movies.Result
+import com.ruslangrigoriev.topmovie.domain.model.person.Person
+import com.ruslangrigoriev.topmovie.domain.model.person.PersonCredits
 import retrofit2.Response
 
-object RepositoryImpl : Repository {
-
-    private val apiService = ApiFactory.getApiService
+class RepositoryImpl(private var apiService: ApiService) : Repository {
 
     override suspend fun getPagedTrending(page: Int): Response<Result> =
         apiService.getPagedTrending(page = page)
@@ -25,5 +23,4 @@ object RepositoryImpl : Repository {
 
     override suspend fun getPersonCredits(person_id: Int): Response<PersonCredits> =
         apiService.getPersonCredits(person_id)
-
 }

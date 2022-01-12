@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.ruslangrigoriev.topmovie">
+
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -12,14 +13,21 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TopMovie">
         <activity
-            android:name=".MainActivity"
-            android:theme="@style/Theme.TopMovie.NoActionBar"
-            android:exported="true">
+            android:name=".presentation.onboarding.SplashScreenActivity"
+            android:exported="true"
+            android:label="@string/title_activity_splash_screen"
+            android:theme="@style/Theme.TopMovie.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".MainActivity"
+            android:exported="false"
+            android:theme="@style/Theme.TopMovie.NoActionBar">
+
         </activity>
     </application>
 

@@ -1,8 +1,7 @@
 package com.ruslangrigoriev.topmovie
 
 import android.app.Application
-import com.ruslangrigoriev.topmovie.dependencies.AppComponent
-import com.ruslangrigoriev.topmovie.dependencies.DaggerAppComponent
+import com.ruslangrigoriev.topmovie.di.*
 
 class App : Application() {
 
@@ -11,7 +10,11 @@ class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        appComponent = DaggerAppComponent.create()
-
+        //appComponent = DaggerAppComponent.create()
+        appComponent = DaggerAppComponent.builder()
+            .appModule(AppModule(this))
+            .networkModule(NetworkModule())
+            .dataBaseModule(DataBaseModule(this))
+            .build()
     }
 }

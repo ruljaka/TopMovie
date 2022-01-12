@@ -21,4 +21,18 @@
     <string name="biography_label">Biography</string>
     <string name="person_bio_tools">Thomas Stanley Holland is an English actor and dancer. He is best known for playing the title role in Billy Elliot the Musical at the Victoria Palace Theatre, London, as well as for starring in the 2012 film The Impossible. In 2015, Holland was cast as Peter Parker / Spider-Man in the Marvel Cinematic Universe and has appeared as the character in five films: Captain America: Civil War (2016), Spider-Man: Homecoming (2017), Avengers: Infinity War (2018), Avengers: Endgame (2019), and Spider-Man: Far From Home (2019).</string>
     <string name="search_header_label">Search Results</string>
+    <string name="add_to_favorite_btn">Favorite</string>
+
+    <string name="home_text">Home</string>
+    <string name="tv_text">TV</string>
+    <string name="profile_text">Profile</string>
+    <string name="title_activity_splash_screen">SplashScreenActivity</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
 </resources>

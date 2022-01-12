@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/movies"
+    android:label="movies"
+    app:startDestination="@id/movies_fragment">
+
+    <fragment
+        android:id="@+id/movies_fragment"
+        android:name="com.ruslangrigoriev.topmovie.presentation.movie.MovieFragment"
+        android:label="movies"
+        tools:layout="@layout/fragment_movies">
+        <action
+            android:id="@+id/action_movie_to_detailsFragment"
+            app:destination="@id/details" />
+    </fragment>
+    <fragment
+        android:id="@+id/details"
+        android:name="com.ruslangrigoriev.topmovie.presentation.details.DetailsFragment"
+        android:label="details"
+        tools:layout="@layout/fragment_details">
+        <action
+            android:id="@+id/action_details_to_personFragment"
+            app:destination="@id/person" />
+    </fragment>
+    <fragment
+        android:id="@+id/person"
+        android:name="com.ruslangrigoriev.topmovie.presentation.person.PersonFragment"
+        android:label="person"
+        tools:layout="@layout/fragment_person">
+        <action
+            android:id="@+id/action_person_to_details"
+            app:destination="@id/details" />
+    </fragment>
+</navigation>

@@ -2,6 +2,7 @@ package com.ruslangrigoriev.topmovie.domain.utils
 
 import android.content.Context
 import android.os.Build
+import android.util.Log
 import android.widget.ImageView
 import androidx.annotation.RequiresApi
 import com.bumptech.glide.Glide
@@ -10,7 +11,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.ruslangrigoriev.topmovie.App
 import com.ruslangrigoriev.topmovie.R
-import com.ruslangrigoriev.topmovie.dependencies.AppComponent
+import com.ruslangrigoriev.topmovie.di.AppComponent
 import com.ruslangrigoriev.topmovie.domain.model.details.Genre
 import com.ruslangrigoriev.topmovie.domain.model.movies.Movie
 import java.time.LocalDate
@@ -80,8 +81,63 @@ fun List<Movie>.getTopPersonCasts(): List<Movie> {
     } else {
         sortedList
     }
-
 }
+
+
+fun Context.saveToFavorites(moveID: Int) {
+    val sharedPref = this.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE)
+    val oldList = getFavorites()
+    if (!oldList.contains(moveID)) {
+        oldList.add(moveID)
+        with(sharedPref.edit()) {
+            putString(FAVORITES, oldList.joinToString())
+            apply()
+        }
+        Log.d("TAG", "saveToFavorite :: ${oldList.joinToString()}")
+    }
+}
+
+fun Context.removeFromFavorites(moveID: Int) {
+    val sharedPref = this.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE)
+    val oldList = getFavorites()
+    oldList.remove(moveID)
+    with(sharedPref.edit()) {
+        putString(FAVORITES, oldList.joinToString())
+        apply()
+    }
+    Log.d("TAG", "removeFromFavorites :: ${oldList.joinToString()}")
+}
+
+fun Context.getFavorites(): MutableList<Int> {
+    val sharedPref = this.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE)
+    val favoriteMovies = sharedPref.getString(FAVORITES, "") ?: ""
+    val favoriteList = favoriteMovies.splitToSequence(", ")
+        .filter { it.isNotEmpty() }
+        .map { it.toInt() }
+        .toMutableList()
+    Log.d("TAG", "getFavorites :: $favoriteList")
+    return favoriteList
+}
+
+
+fun checkFavorites(savedFavorites: List<Int>, movieID: Int): Boolean {
+    return savedFavorites.contains(movieID)
+}
+
+ fun Context.onBoardingFinished(){
+     val sharedPref = this.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE)
+     val editor = sharedPref.edit()
+     editor.putBoolean(OB_FINISHED,true)
+     editor.apply()
+}
+
+fun Context.onBoardingIsFinished(): Boolean{
+    val sharedPref = this.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE)
+    return sharedPref.getBoolean(OB_FINISHED,false)
+}
+
+
+
 
 
 

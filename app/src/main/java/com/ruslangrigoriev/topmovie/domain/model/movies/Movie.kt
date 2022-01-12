@@ -1,10 +1,15 @@
 package com.ruslangrigoriev.topmovie.domain.model.movies
 
 
+import androidx.room.PrimaryKey
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
 data class Movie(
+    @PrimaryKey
+    @SerializedName("id")
+    @Expose
+    val id: Int,
     @SerializedName("adult")
     @Expose
     val adult: Boolean,
@@ -14,21 +19,12 @@ data class Movie(
     @SerializedName("first_air_date")
     @Expose
     val firstAirDate: String?,
-    @SerializedName("genre_ids")
-    @Expose
-    val genreIds: List<Int>,
-    @SerializedName("id")
-    @Expose
-    val id: Int,
     @SerializedName("media_type")
     @Expose
     val mediaType: String,
     @SerializedName("name")
     @Expose
     val name: String,
-    @SerializedName("origin_country")
-    @Expose
-    val originCountry: List<String>,
     @SerializedName("original_language")
     @Expose
     val originalLanguage: String,

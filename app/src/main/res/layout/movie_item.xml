@@ -86,4 +86,16 @@
         tools:layout_editor_absoluteY="233dp"
         tools:text="50" />
 
+    <ImageView
+        android:id="@+id/imageView_favorite"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="8dp"
+        android:adjustViewBounds="true"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="@id/imageView_poster"
+        app:srcCompat="@drawable/ic_favorite" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

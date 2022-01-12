@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/movies"
+        android:orderInCategory="1"
+        android:icon="@drawable/movie_selector"
+        android:title="Movies" />
+    <item
+        android:id="@+id/tv"
+        android:title="Tv"
+        android:icon="@drawable/tv_selector"
+        android:orderInCategory="2" />
+    <item
+        android:id="@+id/profile"
+        android:orderInCategory="3"
+        android:icon="@drawable/profile_selector"
+        android:title="Profile" />
+
+</menu>

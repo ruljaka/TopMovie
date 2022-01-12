@@ -1,9 +1,11 @@
 package com.ruslangrigoriev.topmovie.domain.paging
 
+import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.ruslangrigoriev.topmovie.domain.model.movies.Movie
 import com.ruslangrigoriev.topmovie.data.repository.Repository
+import com.ruslangrigoriev.topmovie.domain.model.movies.Movie
+import com.ruslangrigoriev.topmovie.domain.utils.TAG
 
 class MoviePagingSource(
     private val query: String = "",
@@ -20,13 +22,12 @@ class MoviePagingSource(
         return try {
             val currentPage = params.key ?: 1
             if (query.isEmpty()) {
-                val response = repository.getPagedTrending(currentPage)
-                val data = response.body()?.movies ?: emptyList()
+                val data = repository.getPagedTrending(currentPage)?.movies ?: emptyList()
                 responseData = mutableListOf<Movie>()
                 responseData.addAll(data)
             } else {
-                val response = repository.getSearchPagedResult(query = query, page = currentPage)
-                val data = response.body()?.movies ?: emptyList()
+                val data = repository.getSearchPagedResult(query = query, page = currentPage)
+                    ?.movies ?: emptyList()
                 responseData = mutableListOf<Movie>()
                 responseData.addAll(data)
             }
@@ -37,6 +38,8 @@ class MoviePagingSource(
                 nextKey = currentPage.plus(1)
             )
         } catch (e: Exception) {
+            //TODO обработать ошибку
+            //e.message?.let { Log.d(TAG, it) }
             LoadResult.Error(e)
         }
     }

@@ -5,11 +5,13 @@ import android.util.Log
 import com.ruslangrigoriev.topmovie.data.api.ApiService
 import com.ruslangrigoriev.topmovie.data.database.FavoriteDAO
 import com.ruslangrigoriev.topmovie.domain.model.credits.Credits
-import com.ruslangrigoriev.topmovie.domain.model.details.Details
 import com.ruslangrigoriev.topmovie.domain.model.favorite.Favorite
-import com.ruslangrigoriev.topmovie.domain.model.movies.Result
+import com.ruslangrigoriev.topmovie.domain.model.movies.Movie
+import com.ruslangrigoriev.topmovie.domain.model.movies.ResultMovies
 import com.ruslangrigoriev.topmovie.domain.model.person.Person
 import com.ruslangrigoriev.topmovie.domain.model.person.PersonCredits
+import com.ruslangrigoriev.topmovie.domain.model.tv.ResultTv
+import com.ruslangrigoriev.topmovie.domain.model.tv.TvShow
 import com.ruslangrigoriev.topmovie.domain.utils.TAG
 import com.ruslangrigoriev.topmovie.domain.utils.appComponent
 import kotlinx.coroutines.flow.Flow
@@ -20,6 +22,7 @@ class RepositoryImpl(private val application: Application) : Repository {
 
     @Inject
     lateinit var apiService: ApiService
+
     @Inject
     lateinit var favoriteDAO: FavoriteDAO
 
@@ -27,23 +30,58 @@ class RepositoryImpl(private val application: Application) : Repository {
         application.appComponent.inject(this)
     }
 
-    override suspend fun getPagedTrending(page: Int): Result? {
-        val response = apiService.getPagedTrending(page = page)
+    override suspend fun getMoviesTrending(page: Int): ResultMovies? {
+        val response = apiService.getTrending(page = page)
         return getResultOrError(response)
     }
 
-    override suspend fun getDetails(id: Int): Details? {
-        val response = apiService.getDetails(id)
+    override suspend fun getMoviesNow(): ResultMovies? {
+        val response = apiService.getMoviesNow()
         return getResultOrError(response)
     }
 
-    override suspend fun getCast(id: Int): Credits? {
-        val response = apiService.getCast(id)
+    override suspend fun getMoviesPopular(): ResultMovies? {
+        val response = apiService.getMoviesPopular()
         return getResultOrError(response)
     }
 
-    override suspend fun getSearchPagedResult(query: String, page: Int): Result? {
+    override suspend fun getMovieDetails(id: Int): Movie? {
+        val response = apiService.getMovieDetails(id)
+        return getResultOrError(response)
+    }
+
+    override suspend fun getMovieCredits(id: Int): Credits? {
+        val response = apiService.getMovieCredits(id)
+        return getResultOrError(response)
+    }
+
+    override suspend fun getSearchMoviesPagedResult(query: String, page: Int): ResultMovies? {
         val response = apiService.searchPagedMovie(query = query, page = page)
+        return getResultOrError(response)
+    }
+
+    override suspend fun getTvNow(): ResultTv? {
+        val response = apiService.getTVNow()
+        return getResultOrError(response)
+    }
+
+    override suspend fun getTvPopular(): ResultTv? {
+        val response = apiService.getTvPopular()
+        return getResultOrError(response)
+    }
+
+    override suspend fun getTvDetails(id: Int): TvShow? {
+        val response = apiService.getTvDetails(id)
+        return getResultOrError(response)
+    }
+
+    override suspend fun getTvCredits(id: Int): Credits? {
+        val response = apiService.getTvCredits(id)
+        return getResultOrError(response)
+    }
+
+    override suspend fun getSearchTvPagedResult(query: String, page: Int): ResultTv? {
+        val response = apiService.searchPagedTvShow(query = query, page = page)
         return getResultOrError(response)
     }
 

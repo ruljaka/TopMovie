@@ -4,10 +4,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.ruslangrigoriev.topmovie.data.repository.Repository
 import com.ruslangrigoriev.topmovie.presentation.profile.ProfileViewModel
-import com.ruslangrigoriev.topmovie.presentation.movie.MovieViewModel
+import com.ruslangrigoriev.topmovie.presentation.movies.MovieViewModel
 import com.ruslangrigoriev.topmovie.presentation.search.SearchViewModel
 import com.ruslangrigoriev.topmovie.presentation.details.DetailsViewModel
 import com.ruslangrigoriev.topmovie.presentation.person.PersonViewModel
+import com.ruslangrigoriev.topmovie.presentation.tv.TvViewModel
 import javax.inject.Inject
 
 class MyViewModelFactory @Inject constructor(
@@ -27,6 +28,10 @@ class MyViewModelFactory @Inject constructor(
             modelClass.isAssignableFrom(MovieViewModel::class.java) -> {
                 @Suppress("UNCHECKED_CAST")
                 return MovieViewModel(repository = repository) as T
+            }
+            modelClass.isAssignableFrom(TvViewModel::class.java) -> {
+                @Suppress("UNCHECKED_CAST")
+                return TvViewModel(repository = repository) as T
             }
             modelClass.isAssignableFrom(PersonViewModel::class.java) -> {
                 @Suppress("UNCHECKED_CAST")

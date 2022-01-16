@@ -39,16 +39,16 @@ android {
 dependencies {
 
     //Room
-    implementation("androidx.room:room-runtime:2.4.0")
-    annotationProcessor("androidx.room:room-compiler:2.4.0")
+    implementation("androidx.room:room-runtime:2.4.1")
+    annotationProcessor("androidx.room:room-compiler:2.4.1")
     // To use Kotlin annotation processing tool (kapt)
-    kapt("androidx.room:room-compiler:2.4.0")
+    kapt("androidx.room:room-compiler:2.4.1")
     // optional - Kotlin Extensions and Coroutines support for Room
-    implementation("androidx.room:room-ktx:2.4.0")
+    implementation("androidx.room:room-ktx:2.4.1")
     // optional - RxJava2 support for Room
-    implementation("androidx.room:room-rxjava2:2.4.0")
+    implementation("androidx.room:room-rxjava2:2.4.1")
     // optional - Paging 3 Integration
-    implementation("androidx.room:room-paging:2.4.0")
+    implementation("androidx.room:room-paging:2.4.1")
 
     //ViewBindingPropertyDelegate
     implementation 'com.github.kirich1409:viewbindingpropertydelegate:1.5.3'
@@ -68,6 +68,7 @@ dependencies {
 
     //Navigation
     implementation("androidx.navigation:navigation-fragment-ktx:2.4.0-rc01")
+
     implementation("androidx.navigation:navigation-ui-ktx:2.4.0-rc01")
 
     //RX
@@ -99,7 +100,7 @@ dependencies {
     implementation "io.coil-kt:coil:1.4.0"
 
     implementation 'androidx.core:core-ktx:1.7.0'
-    implementation 'androidx.appcompat:appcompat:1.4.0'
+    implementation 'androidx.appcompat:appcompat:1.4.1'
     implementation 'com.google.android.material:material:1.4.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.2'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'

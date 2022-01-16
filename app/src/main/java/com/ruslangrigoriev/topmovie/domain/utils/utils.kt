@@ -12,7 +12,8 @@ import com.bumptech.glide.request.RequestOptions
 import com.ruslangrigoriev.topmovie.App
 import com.ruslangrigoriev.topmovie.R
 import com.ruslangrigoriev.topmovie.di.AppComponent
-import com.ruslangrigoriev.topmovie.domain.model.details.Genre
+import com.ruslangrigoriev.topmovie.domain.model.credits.Cast
+import com.ruslangrigoriev.topmovie.domain.model.Genre
 import com.ruslangrigoriev.topmovie.domain.model.movies.Movie
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -25,13 +26,6 @@ val Context.appComponent: AppComponent
         else -> applicationContext.appComponent
     }
 
-
-fun fromMinutesToHHmm(minutes: Int): String {
-    val hours = TimeUnit.MINUTES.toHours(minutes.toLong())
-    val remainMinutes = minutes - TimeUnit.HOURS.toMinutes(hours)
-    return String.format("%01dh %02dm", hours, remainMinutes)
-}
-
 fun getNamesFromGenre(genres: List<Genre>): String {
     val listGenreNames: List<String> = genres.map { it.name }
     return listGenreNames.joinToString(", ")
@@ -42,34 +36,41 @@ fun String.formatDate(): String {
     val firstFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH)
     if (this.isNotEmpty()) {
         val localDate = LocalDate.parse(this, firstFormatter)
-        val secondFormatter = DateTimeFormatter.ofPattern("dd MMM yyyy", Locale.ENGLISH)
+        val secondFormatter = DateTimeFormatter.ofPattern("yyyy", Locale.ENGLISH)
         return localDate.format(secondFormatter)
     }
     return "not found"
 }
 
-fun String.loadImageLarge(imageView: ImageView) {
-    val requestOptions = RequestOptions()
-        .diskCacheStrategy(DiskCacheStrategy.ALL)
+fun String.loadPosterLarge(imageView: ImageView) {
     Glide.with(imageView.context)
-        .load(IMAGE_URL + this)
-        .apply(requestOptions)
-        .apply(RequestOptions().override(360, 540))
-        .apply(RequestOptions.bitmapTransform(RoundedCorners(24)))
+        .load(IMAGE_URL_W500 + this)
+        .apply(RequestOptions().override(400, 600))
+        .centerCrop()
+        .apply(RequestOptions.bitmapTransform(RoundedCorners(30)))
+        .apply(RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL))
         .placeholder(R.drawable.placeholder)
         .thumbnail(0.25f)
         .into(imageView)
 }
 
-fun String.loadImageSmall(imageView: ImageView) {
-    val requestOptions = RequestOptions()
-        .diskCacheStrategy(DiskCacheStrategy.ALL)
+fun String.loadPosterSmall(imageView: ImageView) {
     Glide.with(imageView.context)
-        .load(IMAGE_URL + this)
-        .apply(requestOptions)
+        .load(IMAGE_URL_W500 + this)
         .thumbnail(0.25f)
         .apply(RequestOptions().override(300, 450))
         .apply(RequestOptions.bitmapTransform(RoundedCorners(14)))
+        .apply(RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL))
+        .placeholder(R.drawable.placeholder)
+        .into(imageView)
+}
+
+fun String.loadBackDropImage(imageView: ImageView) {
+    Glide.with(imageView.context)
+        .load(IMAGE_URL_W1280 + this)
+        .thumbnail(0.25f)
+        .apply(RequestOptions.bitmapTransform(RoundedCorners(30)))
+        .apply(RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL))
         .placeholder(R.drawable.placeholder)
         .into(imageView)
 }
@@ -83,6 +84,14 @@ fun List<Movie>.getTopPersonCasts(): List<Movie> {
     }
 }
 
+fun List<Cast>.getTopCast(): List<Cast> {
+    val sortedList = this.toMutableList().sortedByDescending { it.popularity }
+    return if (sortedList.size > 15) {
+        sortedList.subList(0, 15)
+    } else {
+        sortedList
+    }
+}
 
 fun Context.saveToFavorites(moveID: Int) {
     val sharedPref = this.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE)
@@ -119,21 +128,20 @@ fun Context.getFavorites(): MutableList<Int> {
     return favoriteList
 }
 
-
 fun checkFavorites(savedFavorites: List<Int>, movieID: Int): Boolean {
     return savedFavorites.contains(movieID)
 }
 
- fun Context.onBoardingFinished(){
-     val sharedPref = this.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE)
-     val editor = sharedPref.edit()
-     editor.putBoolean(OB_FINISHED,true)
-     editor.apply()
+fun Context.onBoardingFinished() {
+    val sharedPref = this.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE)
+    val editor = sharedPref.edit()
+    editor.putBoolean(OB_FINISHED, true)
+    editor.apply()
 }
 
-fun Context.onBoardingIsFinished(): Boolean{
+fun Context.onBoardingIsFinished(): Boolean {
     val sharedPref = this.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE)
-    return sharedPref.getBoolean(OB_FINISHED,false)
+    return sharedPref.getBoolean(OB_FINISHED, false)
 }
 
 

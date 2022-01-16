@@ -1,36 +1,48 @@
 package com.ruslangrigoriev.topmovie.domain.paging
 
-import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.ruslangrigoriev.topmovie.data.repository.Repository
-import com.ruslangrigoriev.topmovie.domain.model.movies.Movie
-import com.ruslangrigoriev.topmovie.domain.utils.TAG
+import com.ruslangrigoriev.topmovie.domain.model.QueryType
+import com.ruslangrigoriev.topmovie.domain.model.QueryType.*
 
-class MoviePagingSource(
+class MoviePagingSource<T : Any>(
     private val query: String = "",
+    private val type: QueryType = EMPTY,
     private val repository: Repository,
-) : PagingSource<Int, Movie>() {
+) : PagingSource<Int, T>() {
 
-    private lateinit var responseData: MutableList<Movie>
+    private lateinit var responseData: MutableList<T>
 
-    override fun getRefreshKey(state: PagingState<Int, Movie>): Int? {
+    override fun getRefreshKey(state: PagingState<Int, T>): Int? {
         return null
     }
 
-    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Movie> {
+    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, T> {
         return try {
             val currentPage = params.key ?: 1
-            if (query.isEmpty()) {
-                val data = repository.getPagedTrending(currentPage)?.movies ?: emptyList()
-                responseData = mutableListOf<Movie>()
-                responseData.addAll(data)
-            } else {
-                val data = repository.getSearchPagedResult(query = query, page = currentPage)
-                    ?.movies ?: emptyList()
-                responseData = mutableListOf<Movie>()
-                responseData.addAll(data)
+            when (type) {
+                (MOVIE) -> {
+                    val data =
+                        (repository.getSearchMoviesPagedResult(query = query, page = currentPage)
+                            ?.movies ?: emptyList()) as List<T>
+                    responseData = mutableListOf<T>()
+                    responseData.addAll(data)
+                }
+                (TV) -> {
+                    val data = (repository.getSearchTvPagedResult(query = query, page = currentPage)
+                        ?.tvShows ?: emptyList()) as List<T>
+                    responseData = mutableListOf<T>()
+                    responseData.addAll(data)
+                }
+                else -> {
+                    val data = (repository.getMoviesTrending(currentPage)?.movies
+                        ?: emptyList()) as List<T>
+                    responseData = mutableListOf<T>()
+                    responseData.addAll(data)
+                }
             }
+
 
             LoadResult.Page(
                 data = responseData,
@@ -38,8 +50,6 @@ class MoviePagingSource(
                 nextKey = currentPage.plus(1)
             )
         } catch (e: Exception) {
-            //TODO обработать ошибку
-            //e.message?.let { Log.d(TAG, it) }
             LoadResult.Error(e)
         }
     }

@@ -6,7 +6,7 @@
     <string name="details_back_poster_desc">details_back_poster</string>
     <string name="details_poster_desc">details_poster</string>
     <string name="dark_circle_desc">dark_circle</string>
-    <string name="top_billed_cast_label">Top Billed Cast</string>
+    <string name="top_cast_label">Top Cast</string>
     <string name="overview_label">Overview</string>
     <string name="header_label">Top Movies</string>
     <string name="movie_poster_desc">movie_poster</string>
@@ -32,7 +32,14 @@
     <string name="second_fragment_label">Second Fragment</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
+    <string name="movies_header">Movies</string>
+    <string name="item_gradient">item_graient</string>
+    <string name="item_popular_rate_background">item_popular_rate_background</string>
+    <string name="back">Back</string>
+    <string name="imageButton_details_share">imageButton_details_share</string>
+    <string name="tv_header">TV</string>
+    <string name="popular_label">Popular</string>
+    <string name="now_label">Now</string>
 
-    <string name="hello_first_fragment">Hello first fragment</string>
-    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+
 </resources>

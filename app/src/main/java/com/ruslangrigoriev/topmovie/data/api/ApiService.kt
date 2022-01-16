@@ -1,10 +1,12 @@
 package com.ruslangrigoriev.topmovie.data.api
 
 import com.ruslangrigoriev.topmovie.domain.model.credits.Credits
-import com.ruslangrigoriev.topmovie.domain.model.details.Details
-import com.ruslangrigoriev.topmovie.domain.model.movies.Result
+import com.ruslangrigoriev.topmovie.domain.model.movies.Movie
+import com.ruslangrigoriev.topmovie.domain.model.movies.ResultMovies
 import com.ruslangrigoriev.topmovie.domain.model.person.Person
 import com.ruslangrigoriev.topmovie.domain.model.person.PersonCredits
+import com.ruslangrigoriev.topmovie.domain.model.tv.ResultTv
+import com.ruslangrigoriev.topmovie.domain.model.tv.TvShow
 import com.ruslangrigoriev.topmovie.domain.utils.API
 import retrofit2.Response
 import retrofit2.http.GET
@@ -13,44 +15,80 @@ import retrofit2.http.Query
 
 interface ApiService {
 
-    //trending/all/day?api_key=...
     @GET("trending/movie/day?")
-    suspend fun getPagedTrending(
+    suspend fun getTrending(
         @Query("api_key") apiKey: String = API,
         @Query("page") page: Int,
-    ): Response<Result>
+    ): Response<ResultMovies>
 
+    @GET("movie/now_playing?")
+    suspend fun getMoviesNow(
+        @Query("api_key") apiKey: String = API,
+        @Query("page") page: Int = 1,
+    ): Response<ResultMovies>
 
-    //movie/630004?api_key=...
+    @GET("movie/popular?")
+    suspend fun getMoviesPopular(
+        @Query("api_key") apiKey: String = API,
+        @Query("page") page: Int = 1,
+    ): Response<ResultMovies>
+
     @GET("movie/{id}")
-    suspend fun getDetails(
+    suspend fun getMovieDetails(
         @Path("id") id: Int,
         @Query("api_key") apiKey: String = API,
-    ): Response<Details>
+    ): Response<Movie>
 
-    //movie/93740/credits?api_key=
     @GET("movie/{id}/credits?")
-    suspend fun getCast(
+    suspend fun getMovieCredits(
         @Path("id") id: Int,
         @Query("api_key") apiKey: String = API,
     ): Response<Credits>
 
-    //search/movie?api_key=...&query=query
     @GET("search/movie?")
     suspend fun searchPagedMovie(
         @Query("api_key") apiKey: String = API,
         @Query("query") query: String,
         @Query("page") page: Int,
-    ): Response<Result>
+    ): Response<ResultMovies>
 
-    //person/1136406?api_key=...
+    @GET("tv/on_the_air?")
+    suspend fun getTVNow(
+        @Query("api_key") apiKey: String = API,
+        @Query("page") page: Int = 1,
+    ): Response<ResultTv>
+
+    @GET("tv/popular?")
+    suspend fun getTvPopular(
+        @Query("api_key") apiKey: String = API,
+        @Query("page") page: Int = 1,
+    ): Response<ResultTv>
+
+    @GET("tv/{id}")
+    suspend fun getTvDetails(
+        @Path("id") id: Int,
+        @Query("api_key") apiKey: String = API,
+    ): Response<TvShow>
+
+    @GET("tv/{id}/credits?")
+    suspend fun getTvCredits(
+        @Path("id") id: Int,
+        @Query("api_key") apiKey: String = API,
+    ): Response<Credits>
+
+    @GET("search/tv?")
+    suspend fun searchPagedTvShow(
+        @Query("api_key") apiKey: String = API,
+        @Query("query") query: String,
+        @Query("page") page: Int,
+    ): Response<ResultTv>
+
     @GET("person/{person_id}")
     suspend fun getPerson(
         @Path("person_id") person_id: Int,
         @Query("api_key") apiKey: String = API,
     ): Response<Person>
 
-    //person/1136406/movie_credits?api_key=...
     @GET("person/{person_id}/movie_credits")
     suspend fun getPersonCredits(
         @Path("person_id") person_id: Int,

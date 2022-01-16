@@ -1,12 +1,10 @@
 package com.ruslangrigoriev.topmovie.data.database
 
-import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import com.ruslangrigoriev.topmovie.domain.model.favorite.Favorite
-import com.ruslangrigoriev.topmovie.domain.model.movies.Movie
 import kotlinx.coroutines.flow.Flow
 
 @Dao

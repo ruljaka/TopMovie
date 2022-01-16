@@ -52,7 +52,7 @@ class PersonFragment : Fragment(R.layout.fragment_person) {
             binding.textViewPersonBirthday.text = it.birthday
             binding.textViewPersonPlaceOfBirth.text = it.placeOfBirth
             binding.textViewPersonBiography.text = it.biography
-            it.profilePath?.loadImageLarge(binding.imageviewPersonPoster)
+            it.profilePath?.loadPosterLarge(binding.imageviewPersonPoster)
         })
         viewModel.personCastLD.observe(viewLifecycleOwner, {
             personCastAdapter.updateList(it.cast.getTopPersonCasts())

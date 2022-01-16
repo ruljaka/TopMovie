@@ -7,20 +7,28 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ruslangrigoriev.topmovie.data.repository.Repository
 import com.ruslangrigoriev.topmovie.domain.model.credits.Cast
-import com.ruslangrigoriev.topmovie.domain.model.details.Details
-import com.ruslangrigoriev.topmovie.domain.model.favorite.Favorite
+import com.ruslangrigoriev.topmovie.domain.model.movies.Movie
+import com.ruslangrigoriev.topmovie.domain.model.tv.TvShow
 import com.ruslangrigoriev.topmovie.domain.utils.TAG
 import kotlinx.coroutines.launch
 
 class DetailsViewModel(val repository: Repository) : ViewModel() {
 
-    private val _detailsLD = MutableLiveData<Details>()
-    val detailsLD: LiveData<Details>
-        get() = _detailsLD
+    private val _movieDetailsLD = MutableLiveData<Movie>()
+    val movieDetailsLD: LiveData<Movie>
+        get() = _movieDetailsLD
 
-    private val _castLD = MutableLiveData<List<Cast>>()
-    val castLD: LiveData<List<Cast>>
-        get() = _castLD
+    private val _movieCastLD = MutableLiveData<List<Cast>>()
+    val movieCastLD: LiveData<List<Cast>>
+        get() = _movieCastLD
+
+    private val _tvDetailsLD = MutableLiveData<TvShow>()
+    val tvDetailsLD: LiveData<TvShow>
+        get() = _tvDetailsLD
+
+    private val _tvCastLD = MutableLiveData<List<Cast>>()
+    val tvCastLD: LiveData<List<Cast>>
+        get() = _tvCastLD
 
     private val _errorLD = MutableLiveData<String>()
     val errorLD: LiveData<String>
@@ -30,86 +38,31 @@ class DetailsViewModel(val repository: Repository) : ViewModel() {
     val isLoadingLiveData: LiveData<Boolean>
         get() = _isLoadingLiveData
 
-    private var isDetailsLoading: Boolean = false
-    private var isCastLoading: Boolean = false
-
-    fun getDetails(id: Int) =
+    fun fetchMovieDetailsData(id: Int) =
         viewModelScope.launch {
             _isLoadingLiveData.value = true
-            Log.d(TAG, "getDetails -> Movie ID: $id")
-            isDetailsLoading = true
+            Log.d(TAG, "fetchMovieDetailsData ID: $id -> DetailsViewModel")
             try {
-                _detailsLD.postValue(repository.getDetails(id))
-                isDetailsLoading = false
-                if (!isCastLoading) {
-                    _isLoadingLiveData.value = false
-                }
+                _movieDetailsLD.postValue(repository.getMovieDetails(id))
+                _movieCastLD.postValue(repository.getMovieCredits(id)?.cast)
+                _isLoadingLiveData.value = false
             } catch (e: Exception) {
                 _errorLD.postValue(e.message)
-                isDetailsLoading = false
-                if (!isCastLoading) {
-                    _isLoadingLiveData.value = false
-                }
+                _isLoadingLiveData.value = false
             }
         }
 
-    fun getCast(id: Int) =
+    fun fetchTvDetailsData(id: Int) =
         viewModelScope.launch {
-            Log.d(TAG, "getCast -> Movie ID: $id")
-            isCastLoading = true
+            _isLoadingLiveData.value = true
+            Log.d(TAG, "fetchTvDetailsData ID: $id -> DetailsViewModel")
             try {
-                _castLD.postValue(repository.getCast(id)?.cast)
-                isCastLoading = false
-                if (!isDetailsLoading) {
-                    _isLoadingLiveData.value = false
-                }
+                _tvDetailsLD.postValue(repository.getTvDetails(id))
+                _tvCastLD.postValue(repository.getTvCredits(id)?.cast)
+                _isLoadingLiveData.value = false
             } catch (e: Exception) {
                 _errorLD.postValue(e.message)
-                isCastLoading = false
-                if (!isDetailsLoading) {
-                    _isLoadingLiveData.value = false
-                }
+                _isLoadingLiveData.value = false
             }
         }
-
-    fun saveToFavorite() {
-        detailsLD.value?.let {
-            val favorite = Favorite(
-                id = it.id,
-                originalTitle = it.originalTitle,
-                posterPath = it.posterPath,
-                releaseDate = it.releaseDate,
-                voteAverage = it.voteAverage
-            )
-            viewModelScope.launch {
-                try {
-                    repository.insertFavorite(favorite)
-
-                } catch (e: Exception) {
-                    // handler error
-                }
-            }
-        }
-    }
-
-    fun deleteFavorite() {
-        detailsLD.value?.let {
-            val favorite = Favorite(
-                id = it.id,
-                originalTitle = it.originalTitle,
-                posterPath = it.posterPath,
-                releaseDate = it.releaseDate,
-                voteAverage = it.voteAverage
-            )
-            viewModelScope.launch {
-                try {
-                    repository.deleteFavorite(favorite)
-
-                } catch (e: Exception) {
-                    // handler error
-                }
-            }
-        }
-    }
-
 }

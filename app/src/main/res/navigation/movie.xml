@@ -8,12 +8,15 @@
 
     <fragment
         android:id="@+id/movies_fragment"
-        android:name="com.ruslangrigoriev.topmovie.presentation.movie.MovieFragment"
+        android:name="com.ruslangrigoriev.topmovie.presentation.movies.MoviesFragment"
         android:label="movies"
         tools:layout="@layout/fragment_movies">
         <action
             android:id="@+id/action_movie_to_detailsFragment"
             app:destination="@id/details" />
+        <action
+            android:id="@+id/action_movies_fragment_to_searchFragment"
+            app:destination="@id/searchFragment" />
     </fragment>
     <fragment
         android:id="@+id/details"
@@ -31,6 +34,15 @@
         tools:layout="@layout/fragment_person">
         <action
             android:id="@+id/action_person_to_details"
+            app:destination="@id/details" />
+    </fragment>
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.ruslangrigoriev.topmovie.presentation.search.SearchFragment"
+        android:label="fragment_search"
+        tools:layout="@layout/fragment_search" >
+        <action
+            android:id="@+id/action_searchFragment_to_details"
             app:destination="@id/details" />
     </fragment>
 </navigation>

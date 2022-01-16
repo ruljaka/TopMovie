@@ -11,7 +11,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.ruslangrigoriev.topmovie.R
 import com.ruslangrigoriev.topmovie.domain.model.credits.Cast
-import com.ruslangrigoriev.topmovie.domain.utils.IMAGE_URL
+import com.ruslangrigoriev.topmovie.domain.utils.IMAGE_URL_W500
 
 class CastAdapter(
     private var castList: List<Cast>,
@@ -23,6 +23,7 @@ class CastAdapter(
         private val onItemClicked: (personID: Int) -> Unit,
     ) :
         RecyclerView.ViewHolder(itemView), View.OnClickListener {
+
         private val image: ImageView = itemView.findViewById(R.id.imageView_cast)
         private val name: TextView = itemView.findViewById(R.id.textView_cast_name)
         private val character: TextView = itemView.findViewById(R.id.textView_cast_character)
@@ -35,7 +36,7 @@ class CastAdapter(
             character.text = cast.character
             val requestOptions = RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL)
             Glide.with(itemView.context)
-                .load(IMAGE_URL + (cast.profilePath))
+                .load(IMAGE_URL_W500 + (cast.profilePath))
                 .apply(requestOptions)
                 .thumbnail(0.1f)
                 .apply(RequestOptions().override(300, 450))
@@ -50,7 +51,7 @@ class CastAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.cast_item, parent, false)
+            .inflate(R.layout.item_cast, parent, false)
         return ViewHolder(view, onItemClicked)
     }
 

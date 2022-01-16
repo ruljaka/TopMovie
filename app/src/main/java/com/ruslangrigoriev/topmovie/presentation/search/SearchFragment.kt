@@ -3,7 +3,6 @@ package com.ruslangrigoriev.topmovie.presentation.search
 import android.content.Context
 import android.os.Bundle
 import android.text.TextUtils
-import android.util.Log
 import android.view.View
 import android.widget.SearchView
 import android.widget.Toast
@@ -15,12 +14,10 @@ import androidx.recyclerview.widget.GridLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.ruslangrigoriev.topmovie.R
 import com.ruslangrigoriev.topmovie.databinding.FragmentSearchBinding
-import com.ruslangrigoriev.topmovie.domain.utils.MOVIE_ID
-import com.ruslangrigoriev.topmovie.domain.utils.TAG
-import com.ruslangrigoriev.topmovie.domain.utils.appComponent
-import com.ruslangrigoriev.topmovie.domain.utils.getFavorites
-import com.ruslangrigoriev.topmovie.presentation.adapters.MoviePagingAdapter
+import com.ruslangrigoriev.topmovie.domain.utils.*
 import com.ruslangrigoriev.topmovie.presentation.MyViewModelFactory
+import com.ruslangrigoriev.topmovie.presentation.adapters.MoviePagingAdapter
+import com.ruslangrigoriev.topmovie.presentation.adapters.TvPagingAdapter
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collectLatest
 import javax.inject.Inject
@@ -31,7 +28,11 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
     @Inject
     lateinit var factory: MyViewModelFactory
     private val viewModel: SearchViewModel by viewModels { factory }
-    private lateinit var pagingAdapter: MoviePagingAdapter
+    private lateinit var moviePagingAdapter: MoviePagingAdapter
+    private lateinit var tvPagingAdapter: TvPagingAdapter
+
+    private var movieQuery: String? = null
+    private var tvQuery: String? = null
 
     override fun onAttach(context: Context) {
         context.appComponent.inject(this)
@@ -41,36 +42,64 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setRecView(view)
         setupSearch()
-        loadData()
+        subscribeQuerySearch()
 
+        movieQuery = arguments?.getString(MOVIE_QUERY)
+        movieQuery?.let {
+            if (viewModel.queryFlow.value == "") {
+                viewModel.queryFlow.value = it
+            }
+            subscribeMovieSearch()
+        }
+        tvQuery = arguments?.getString(TV_QUERY)
+        tvQuery?.let {
+            if (viewModel.queryFlow.value == "") {
+                viewModel.queryFlow.value = it
+            }
+            subscribeTvSearch()
+        }
     }
 
-    private fun setRecView(view: View) {
-        val favoriteList = view.context.getFavorites()
-        pagingAdapter = MoviePagingAdapter({ id -> onListItemClick(id) }, favoriteList)
+    private fun setMovieRecView() {
+        moviePagingAdapter = MoviePagingAdapter { id -> onListItemClick(id) }
         val gridLM = GridLayoutManager(
             activity,
             2,
             GridLayoutManager.VERTICAL,
             false
         )
-        binding.recyclerView.layoutManager = gridLM
-        binding.recyclerView.adapter = pagingAdapter
-        binding.recyclerView.setHasFixedSize(true)
+        binding.recyclerView.apply {
+            layoutManager = gridLM
+            adapter = moviePagingAdapter
+            setHasFixedSize(true)
+        }
+    }
+
+    private fun setTvRecView() {
+        tvPagingAdapter = TvPagingAdapter { id -> onListItemClick(id) }
+        val gridLM = GridLayoutManager(
+            activity,
+            2,
+            GridLayoutManager.VERTICAL,
+            false
+        )
+        binding.recyclerView.apply {
+            layoutManager = gridLM
+            adapter = tvPagingAdapter
+            setHasFixedSize(true)
+        }
     }
 
     private fun setupSearch() {
-        binding.searchViewTrending.setOnQueryTextListener(
+        binding.searchViewSearch.setOnQueryTextListener(
             object : SearchView.OnQueryTextListener {
-                override fun onQueryTextSubmit(query: String?): Boolean {
-                    binding.searchViewTrending.clearFocus()
+                override fun onQueryTextSubmit(query: String): Boolean {
+                    binding.searchViewSearch.clearFocus()
                     if (TextUtils.isEmpty(query)) {
                         Toast.makeText(activity, "Enter your request", Toast.LENGTH_SHORT).show()
                     } else {
-                        binding.textViewSearchQuery.text = "for <${query}>"
-                        viewModel.queryFlow.value = query!!
+                        viewModel.queryFlow.value = query
                     }
                     return false
                 }
@@ -78,27 +107,49 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                 override fun onQueryTextChange(newText: String?): Boolean {
                     return false
                 }
-
             })
     }
 
     @ExperimentalCoroutinesApi
-    private fun loadData() {
+    private fun subscribeMovieSearch() {
         lifecycleScope.launchWhenStarted {
             viewModel.searchMoviesFlowData.collectLatest { pagingData ->
-                if (viewModel.queryFlow.value != "") {
-                    pagingAdapter.submitData(pagingData)
-                    binding.textViewSearchQuery.text = "for <${viewModel.queryFlow.value}>"
-                }
-
+                setMovieRecView()
+                moviePagingAdapter.submitData(pagingData)
             }
         }
-        Log.d(TAG, "SearchFragment :: loadData")
+    }
+
+    @ExperimentalCoroutinesApi
+    private fun subscribeTvSearch() {
+        lifecycleScope.launchWhenStarted {
+            viewModel.searchTvFlowData.collectLatest { pagingData ->
+                setTvRecView()
+                tvPagingAdapter.submitData(pagingData)
+            }
+        }
+    }
+
+    private fun subscribeQuerySearch() {
+        lifecycleScope.launchWhenStarted {
+            viewModel.queryFlow.collectLatest {
+                binding.textViewSearchQuery.text = "for  '${it}'"
+            }
+        }
     }
 
     private fun onListItemClick(id: Int) {
-        val bundle = Bundle()
-        bundle.putInt(MOVIE_ID, id)
-        //findNavController().navigate(R.id.action_searchFragment_to_detailsFragment, bundle)
+        movieQuery?.let {
+            val bundle = Bundle()
+            bundle.putInt(MOVIE_ID, id)
+            bundle.putInt(TV_ID, 0)
+            findNavController().navigate(R.id.action_searchFragment_to_details, bundle)
+        }
+        tvQuery?.let {
+            val bundle = Bundle()
+            bundle.putInt(MOVIE_ID, 0)
+            bundle.putInt(TV_ID, id)
+            findNavController().navigate(R.id.action_searchTvFragment_to_detailsTvFragment, bundle)
+        }
     }
 }

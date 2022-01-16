@@ -8,7 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.ruslangrigoriev.topmovie.R
 import com.ruslangrigoriev.topmovie.domain.model.movies.Movie
-import com.ruslangrigoriev.topmovie.domain.utils.loadImageSmall
+import com.ruslangrigoriev.topmovie.domain.utils.loadPosterSmall
 
 class PersonCastAdapter(
     private var personCastList: List<Movie>,
@@ -28,7 +28,7 @@ class PersonCastAdapter(
             itemView.setOnClickListener(this)
             movieID = movie.id
             name.text = movie.originalTitle ?: movie.title
-            movie.posterPath?.loadImageSmall(image)
+            movie.posterPath?.loadPosterSmall(image)
         }
 
         override fun onClick(v: View?) {
@@ -38,7 +38,7 @@ class PersonCastAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.person_cast_item, parent, false)
+            .inflate(R.layout.item_person_cast, parent, false)
         return ViewHolder(view, onItemClicked)
     }
 

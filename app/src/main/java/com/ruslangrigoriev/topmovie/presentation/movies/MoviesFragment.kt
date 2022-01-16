@@ -1,4 +1,4 @@
-package com.ruslangrigoriev.topmovie.presentation.tv
+package com.ruslangrigoriev.topmovie.presentation.movies
 
 import android.content.Context
 import android.os.Bundle
@@ -12,26 +12,29 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.ruslangrigoriev.topmovie.R
-import com.ruslangrigoriev.topmovie.databinding.FragmentTvBinding
-import com.ruslangrigoriev.topmovie.domain.model.tv.TvShow
+import com.ruslangrigoriev.topmovie.databinding.FragmentMoviesBinding
+import com.ruslangrigoriev.topmovie.domain.model.movies.Movie
 import com.ruslangrigoriev.topmovie.domain.utils.*
 import com.ruslangrigoriev.topmovie.presentation.MyViewModelFactory
 import com.ruslangrigoriev.topmovie.presentation.adapters.BaseRecyclerAdapter
 import com.ruslangrigoriev.topmovie.presentation.adapters.BindingInterface
+import com.ruslangrigoriev.topmovie.presentation.adapters.MoviePagingAdapter
 import javax.inject.Inject
 
-class TvFragment : Fragment(R.layout.fragment_tv) {
-    private val binding by viewBinding(FragmentTvBinding::bind)
+class MoviesFragment : Fragment(R.layout.fragment_movies) {
+    private val binding by viewBinding(FragmentMoviesBinding::bind)
 
     @Inject
     lateinit var factory: MyViewModelFactory
-    private val viewModel: TvViewModel by viewModels { factory }
+    private val viewModel: MovieViewModel by viewModels { factory }
 
-    private lateinit var nowRecyclerAdapter: BaseRecyclerAdapter<TvShow>
-    private lateinit var popularRecyclerAdapter: BaseRecyclerAdapter<TvShow>
+    private lateinit var pagingAdapter: MoviePagingAdapter
+    private lateinit var nowRecyclerAdapter: BaseRecyclerAdapter<Movie>
+    private lateinit var popularRecyclerAdapter: BaseRecyclerAdapter<Movie>
 
     override fun onAttach(context: Context) {
         context.appComponent.inject(this)
@@ -45,14 +48,13 @@ class TvFragment : Fragment(R.layout.fragment_tv) {
         setPopularRecView()
         setupSearch()
         subscribeUi()
-
     }
 
     private fun setNowRecView() {
-        val bindingInterface = object : BindingInterface<TvShow> {
-            override fun bindData(item: TvShow, view: View) {
+        val bindingInterface = object : BindingInterface<Movie> {
+            override fun bindData(item: Movie, view: View) {
                 val title: TextView = view.findViewById(R.id.textView_now_title)
-                title.text = item.originalName
+                title.text = item.title
                 val poster: ImageView = view.findViewById(R.id.imageView_now_poster)
                 item.posterPath?.loadPosterLarge(poster)
                 view.setOnClickListener {
@@ -66,30 +68,26 @@ class TvFragment : Fragment(R.layout.fragment_tv) {
                 R.layout.item_movie_now,
                 bindingInterface
             )
-        binding.recyclerViewTvNow.apply {
-            layoutManager =
-                LinearLayoutManager(
-                    activity,
-                    LinearLayoutManager.HORIZONTAL,
-                    false
-                )
-            adapter = nowRecyclerAdapter
-            setHasFixedSize(true)
-        }
+        binding.recyclerViewNow.layoutManager =
+            LinearLayoutManager(
+                activity,
+                LinearLayoutManager.HORIZONTAL,
+                false
+            )
+        binding.recyclerViewNow.adapter = nowRecyclerAdapter
     }
 
     private fun setPopularRecView() {
-        val bindingInterface = object : BindingInterface<TvShow> {
-            override fun bindData(item: TvShow, view: View) {
-                val name: TextView = view.findViewById(R.id.textView_tv_popular_name)
-                name.text = item.originalName
-                val date: TextView = view.findViewById(R.id.textView_tv_popular_date)
-                date.text = item.firstAirDate.formatDate()
-                val vote: TextView = view.findViewById(R.id.textView_tv_popular_score)
+        val bindingInterface = object : BindingInterface<Movie> {
+            override fun bindData(item: Movie, view: View) {
+                val title: TextView = view.findViewById(R.id.textView_popular_title)
+                title.text = item.title
+                val date: TextView = view.findViewById(R.id.textView_popular_date)
+                date.text = item.releaseDate.formatDate()
+                val vote: TextView = view.findViewById(R.id.textView_popular_score)
                 vote.text = item.voteAverage.toString()
-                val poster: ImageView = view.findViewById(R.id.imageView_tv_popular_poster)
-                item.backdropPath?.loadBackDropImage(poster)
-                //item.posterPath?.loadTvPosterLarge(poster)
+                val poster: ImageView = view.findViewById(R.id.imageView_popular_poster)
+                item.posterPath?.loadPosterLarge(poster)
                 view.setOnClickListener {
                     onListItemClick(item.id)
                 }
@@ -97,33 +95,32 @@ class TvFragment : Fragment(R.layout.fragment_tv) {
         }
         popularRecyclerAdapter = BaseRecyclerAdapter(
             emptyList(),
-            R.layout.item_tv_popular,
+            R.layout.item_movie_popular,
             bindingInterface,
         )
-        binding.recyclerViewTvPopular.apply {
-            layoutManager =
-                LinearLayoutManager(
-                    activity,
-                    LinearLayoutManager.VERTICAL,
-                    false
-                )
-            adapter = popularRecyclerAdapter
-            setHasFixedSize(true)
-        }
+        binding.recyclerViewPopular.layoutManager =
+            GridLayoutManager(
+                activity,
+                2,
+                GridLayoutManager.HORIZONTAL,
+                false
+            )
+        binding.recyclerViewPopular.adapter = popularRecyclerAdapter
+        binding.recyclerViewPopular.setHasFixedSize(true)
     }
 
     private fun setupSearch() {
-        binding.searchViewTV.setOnQueryTextListener(object : SearchView.OnQueryTextListener,
+        binding.searchViewMovies.setOnQueryTextListener(object : SearchView.OnQueryTextListener,
             androidx.appcompat.widget.SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 if (TextUtils.isEmpty(query)) {
                     showToast("Enter your request")
                 } else {
                     val bundle = Bundle()
-                    bundle.putString(TV_QUERY, query)
-                    bundle.putString(MOVIE_QUERY, null)
+                    bundle.putString(MOVIE_QUERY, query)
+                    bundle.putString(TV_QUERY, null)
                     findNavController().navigate(
-                        R.id.action_tv_fragment_to_searchTvFragment,
+                        R.id.action_movies_fragment_to_searchFragment,
                         bundle
                     )
                 }
@@ -150,9 +147,9 @@ class TvFragment : Fragment(R.layout.fragment_tv) {
             viewModel.isLoadingLiveData.observe(viewLifecycleOwner) {
                 binding.apply {
                     if (it == true) {
-                        progressBarTv.visibility = View.VISIBLE
+                        progressBarMovies.visibility = View.VISIBLE
                     } else {
-                        progressBarTv.visibility = View.GONE
+                        progressBarMovies.visibility = View.GONE
                     }
                 }
             }
@@ -161,9 +158,9 @@ class TvFragment : Fragment(R.layout.fragment_tv) {
 
     private fun onListItemClick(id: Int) {
         val bundle = Bundle()
-        bundle.putInt(TV_ID, id)
-        bundle.putInt(MOVIE_ID, 0)
-        findNavController().navigate(R.id.action_tv_fragment_to_detailsTvFragment, bundle)
+        bundle.putInt(MOVIE_ID, id)
+        bundle.putInt(TV_ID, 0)
+        findNavController().navigate(R.id.action_movie_to_detailsFragment, bundle)
     }
 
     private fun showToast(message: String?) {
@@ -172,4 +169,30 @@ class TvFragment : Fragment(R.layout.fragment_tv) {
         ).show()
     }
 
+
+    /*private fun setPagedRecView(view: View) {
+    val favoriteList = view.context.getFavorites()
+    pagingAdapter = MoviePagingAdapter({ id -> onListItemClick(id) }, favoriteList)
+    val gridLM = GridLayoutManager(
+        activity,
+        2, GridLayoutManager.VERTICAL, false
+    )
+    binding.recyclerView.layoutManager = gridLM
+    binding.recyclerView.adapter = pagingAdapter
+    binding.recyclerView.setHasFixedSize(true)
+
+    pagingAdapter.addLoadStateListener {
+        if (it.refresh is LoadState.Error) {
+            showToast((it.refresh as? LoadState.Error)?.error?.message)
+        }
+    }
+}*/
+
+    /*private fun subscribeUI() {
+        lifecycleScope.launchWhenStarted {
+            viewModel.trendingFlowData.collect { pagingData ->
+                pagingAdapter.submitData(pagingData)
+            }
+        }
+    }*/
 }

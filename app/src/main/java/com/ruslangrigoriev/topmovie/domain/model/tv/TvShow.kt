@@ -1,23 +1,29 @@
-package com.ruslangrigoriev.topmovie.domain.model.movies
+package com.ruslangrigoriev.topmovie.domain.model.tv
 
 
-import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
+import com.google.gson.annotations.Expose
 import com.ruslangrigoriev.topmovie.domain.model.Genre
 
-data class Movie(
-    @SerializedName("id")
-    @Expose
-    val id: Int,
+data class TvShow(
     @SerializedName("backdrop_path")
     @Expose
     val backdropPath: String?,
+    @SerializedName("first_air_date")
+    @Expose
+    val firstAirDate: String,
     @SerializedName("genres")
     @Expose
     val genres: List<Genre>,
-    @SerializedName("original_title")
+    @SerializedName("id")
     @Expose
-    val originalTitle: String,
+    val id: Int,
+    @SerializedName("name")
+    @Expose
+    val name: String,
+    @SerializedName("original_name")
+    @Expose
+    val originalName: String,
     @SerializedName("overview")
     @Expose
     val overview: String,
@@ -27,15 +33,6 @@ data class Movie(
     @SerializedName("poster_path")
     @Expose
     val posterPath: String?,
-    @SerializedName("release_date")
-    @Expose
-    val releaseDate: String,
-    @SerializedName("title")
-    @Expose
-    val title: String,
-    @SerializedName("video")
-    @Expose
-    val video: Boolean,
     @SerializedName("vote_average")
     @Expose
     val voteAverage: Double,

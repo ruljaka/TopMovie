@@ -3,6 +3,8 @@ package com.ruslangrigoriev.topmovie.presentation.details
 import android.content.Context
 import android.os.Bundle
 import android.view.View
+import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -10,18 +12,22 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.request.RequestOptions
 import com.ruslangrigoriev.topmovie.R
 import com.ruslangrigoriev.topmovie.databinding.FragmentDetailsBinding
-import com.ruslangrigoriev.topmovie.domain.model.movies.Movie
+import com.ruslangrigoriev.topmovie.domain.model.credits.Cast
 import com.ruslangrigoriev.topmovie.domain.utils.*
 import com.ruslangrigoriev.topmovie.presentation.MyViewModelFactory
-import com.ruslangrigoriev.topmovie.presentation.adapters.CastAdapter
+import com.ruslangrigoriev.topmovie.presentation.adapters.BaseRecyclerAdapter
+import com.ruslangrigoriev.topmovie.presentation.adapters.BindingInterface
 import javax.inject.Inject
 
 class DetailsFragment : Fragment(R.layout.fragment_details) {
     private val binding by viewBinding(FragmentDetailsBinding::bind)
-    private lateinit var castAdapter: CastAdapter
-    private lateinit var movie: Movie
+    private lateinit var castRecAdapter: BaseRecyclerAdapter<Cast>
+    private var movieID = 0
+    private var tvID = 0
 
     @Inject
     lateinit var factory: MyViewModelFactory
@@ -35,54 +41,81 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val id = arguments?.getInt(MOVIE_ID)
+        setCastRecView()
+        setupBackButton()
+        subscribeUI()
+        loadData()
 
-        setAdapter(view)
-        setSwitchFavorite(id)
-        subscribeUI(view, castAdapter)
-        loadData(id)
     }
 
-    private fun setAdapter(view: View) {
-        castAdapter = CastAdapter(emptyList()) { personID -> onListItemClick(personID) }
-        binding.recyclerViewDetails.layoutManager =
-            LinearLayoutManager(view.context, LinearLayoutManager.HORIZONTAL, false)
-        binding.recyclerViewDetails.adapter = castAdapter
-    }
-
-    private fun setSwitchFavorite(id: Int?) {
-        //binding.switchFavorite.isChecked = checkFavorites(requireContext().getFavorites(), id!!)
-        binding.switchFavorite.setOnCheckedChangeListener { buttonView, isChecked ->
-            if (isChecked) {
-                viewModel.saveToFavorite()
-            } else {
-                viewModel.deleteFavorite()
+    private fun setCastRecView() {
+        val bindingInterface = object : BindingInterface<Cast> {
+            override fun bindData(item: Cast, view: View) {
+                val name: TextView = view.findViewById(R.id.textView_cast_name)
+                name.text = item.originalName
+                val character: TextView = view.findViewById(R.id.textView_cast_character)
+                character.text = item.character
+                val requestOptions = RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL)
+                val castPhoto: ImageView = view.findViewById(R.id.imageView_cast)
+                Glide.with(requireContext())
+                    .load(IMAGE_URL_W500 + (item.profilePath))
+                    .apply(requestOptions)
+                    .thumbnail(0.1f)
+                    .apply(RequestOptions().override(300, 450))
+                    .placeholder(R.drawable.placeholder)
+                    .into(castPhoto)
+                view.setOnClickListener {
+                    onListItemClick(item.id)
+                }
             }
+        }
+        castRecAdapter = BaseRecyclerAdapter(
+            emptyList(),
+            R.layout.item_cast,
+            bindingInterface
+        )
+        binding.recyclerViewDetails.apply {
+            layoutManager = LinearLayoutManager(
+                requireContext(),
+                LinearLayoutManager.HORIZONTAL,
+                false
+            )
+            adapter = castRecAdapter
+            setHasFixedSize(true)
         }
     }
 
-    private fun subscribeUI(
-        view: View,
-        castAdapter: CastAdapter
-    ) {
-        viewModel.detailsLD.observe(viewLifecycleOwner, {
-            binding.textViewDetailsTitle.text = it.title
-            binding.textViewDetailsData.text = it.releaseDate.formatDate()
-            binding.textViewDetailsRuntime.text = fromMinutesToHHmm(it.runtime)
-            binding.textViewDetailsGenre.text = getNamesFromGenre(it.genres)
-            binding.textViewDetailsScore.text = ("User Score")
-            binding.textViewDetailsOverview.text = it.overview
-            val score = it.voteAverage.toString()
-                .replace(".", "")
-            binding.textViewDetailsProgressbar.text = score
-            binding.detailsCircularProgressbar.progress = score.toInt()
-            it.posterPath?.loadImageSmall(binding.imageViewDetailsPoster)
-            Glide.with(view.context)
-                .load(IMAGE_URL + (it.backdropPath))
-                .into(binding.imageViewDetailsBackPoster)
+    private fun subscribeUI() {
+        viewModel.movieDetailsLD.observe(viewLifecycleOwner, {
+            binding.apply {
+                textViewDetailsTitle.text = it.title
+                textViewDetailsGenre.text = getNamesFromGenre(it.genres)
+                textViewDetailsOverview.text = it.overview
+                textViewDetailsVoteCount.text = "${it.voteCount}  People watched"
+                textViewDetailsVoteAverage.text = it.voteAverage.toString()
+                it.posterPath?.loadPosterSmall(imageViewDetailsPoster)
+                it.backdropPath?.loadBackDropImage(imageViewDetailsBackPoster)
+                    ?: it.posterPath?.loadPosterLarge(imageViewDetailsBackPoster)
+            }
         })
-        viewModel.castLD.observe(viewLifecycleOwner, {
-            castAdapter.updateList(it)
+
+        viewModel.tvDetailsLD.observe(viewLifecycleOwner, {
+            binding.apply {
+                textViewDetailsTitle.text = it.originalName
+                textViewDetailsGenre.text = getNamesFromGenre(it.genres)
+                textViewDetailsOverview.text = it.overview
+                textViewDetailsVoteCount.text = "${it.voteCount}  People watched"
+                textViewDetailsVoteAverage.text = it.voteAverage.toString()
+                it.posterPath?.loadPosterSmall(imageViewDetailsPoster)
+                it.backdropPath?.loadBackDropImage(imageViewDetailsBackPoster)
+            }
+        })
+
+        viewModel.movieCastLD.observe(viewLifecycleOwner, {
+            castRecAdapter.updateList(it.getTopCast())
+        })
+        viewModel.tvCastLD.observe(viewLifecycleOwner, {
+            castRecAdapter.updateList(it.getTopCast())
         })
         viewModel.errorLD.observe(viewLifecycleOwner, {
             Toast.makeText(activity, it, Toast.LENGTH_SHORT).show()
@@ -98,11 +131,17 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
         }
     }
 
-    private fun loadData(id: Int?) {
-        id?.let {
-            if(viewModel.detailsLD.value == null){
-                viewModel.getDetails(id)
-                viewModel.getCast(id)
+    private fun loadData() {
+        movieID = arguments?.getInt(MOVIE_ID) ?: 0
+        tvID = arguments?.getInt(TV_ID) ?: 0
+        if (movieID != 0) {
+            if (viewModel.movieDetailsLD.value == null) {
+                viewModel.fetchMovieDetailsData(movieID)
+            }
+        }
+        if (tvID != 0) {
+            if (viewModel.tvDetailsLD.value == null) {
+                viewModel.fetchTvDetailsData(tvID)
             }
         }
     }
@@ -110,6 +149,18 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
     private fun onListItemClick(personID: Int) {
         val bundle = Bundle()
         bundle.putInt(PERSON_ID, personID)
-        findNavController().navigate(R.id.action_details_to_personFragment, bundle)
+        if (movieID != 0) {
+            findNavController().navigate(R.id.action_details_to_personFragment, bundle)
+        }
+        if (tvID != 0) {
+            findNavController().navigate(R.id.action_detailsTvFragment_to_personTvFragment, bundle)
+        }
+
+    }
+
+    private fun setupBackButton() {
+        binding.buttonDetailsBack.setOnClickListener {
+            findNavController().popBackStack()
+        }
     }
 }

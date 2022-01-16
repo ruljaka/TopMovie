@@ -1,21 +1,29 @@
 package com.ruslangrigoriev.topmovie.data.repository
 
-import com.ruslangrigoriev.topmovie.data.api.ApiService
 import com.ruslangrigoriev.topmovie.domain.model.credits.Credits
-import com.ruslangrigoriev.topmovie.domain.model.details.Details
 import com.ruslangrigoriev.topmovie.domain.model.favorite.Favorite
 import com.ruslangrigoriev.topmovie.domain.model.movies.Movie
-import com.ruslangrigoriev.topmovie.domain.model.movies.Result
+import com.ruslangrigoriev.topmovie.domain.model.movies.ResultMovies
 import com.ruslangrigoriev.topmovie.domain.model.person.Person
 import com.ruslangrigoriev.topmovie.domain.model.person.PersonCredits
+import com.ruslangrigoriev.topmovie.domain.model.tv.ResultTv
+import com.ruslangrigoriev.topmovie.domain.model.tv.TvShow
 import kotlinx.coroutines.flow.Flow
-import retrofit2.Response
 
 interface Repository {
-    suspend fun getPagedTrending(page: Int): Result?
-    suspend fun getDetails(id: Int): Details?
-    suspend fun getCast(id: Int): Credits?
-    suspend fun getSearchPagedResult(query: String, page: Int): Result?
+    suspend fun getMoviesTrending(page: Int): ResultMovies?
+    suspend fun getMoviesNow(): ResultMovies?
+    suspend fun getMoviesPopular(): ResultMovies?
+    suspend fun getMovieDetails(id: Int): Movie?
+    suspend fun getMovieCredits(id: Int): Credits?
+    suspend fun getSearchMoviesPagedResult(query: String, page: Int): ResultMovies?
+
+    suspend fun getTvNow(): ResultTv?
+    suspend fun getTvPopular(): ResultTv?
+    suspend fun getTvDetails(id: Int): TvShow?
+    suspend fun getTvCredits(id: Int): Credits?
+    suspend fun getSearchTvPagedResult(query: String, page: Int): ResultTv?
+
     suspend fun getPerson(person_id: Int): Person?
     suspend fun getPersonCredits(person_id: Int): PersonCredits?
 

@@ -1,14 +1,13 @@
-package com.ruslangrigoriev.topmovie.domain.model.person
+package com.ruslangrigoriev.topmovie.domain.model.credits
 
 
 import com.google.gson.annotations.SerializedName
 import com.google.gson.annotations.Expose
-import com.ruslangrigoriev.topmovie.domain.model.movies.Movie
 
-data class PersonCredits(
+data class CreditsResponse(
     @SerializedName("cast")
     @Expose
-    val cast: List<Movie>,
+    val cast: List<Cast>,
     @SerializedName("crew")
     @Expose
     val crew: List<Crew>,

@@ -38,10 +38,10 @@ class DetailsViewModel(val repository: Repository) : ViewModel() {
     val isLoadingLiveData: LiveData<Boolean>
         get() = _isLoadingLiveData
 
-    fun fetchMovieDetailsData(id: Int) =
+    fun fetchMovieDetailsData(id: Int) {
+        Log.d(TAG, "fetchMovieDetailsData ID: $id -> DetailsViewModel")
         viewModelScope.launch {
             _isLoadingLiveData.value = true
-            Log.d(TAG, "fetchMovieDetailsData ID: $id -> DetailsViewModel")
             try {
                 _movieDetailsLD.postValue(repository.getMovieDetails(id))
                 _movieCastLD.postValue(repository.getMovieCredits(id)?.cast)
@@ -51,6 +51,7 @@ class DetailsViewModel(val repository: Repository) : ViewModel() {
                 _isLoadingLiveData.value = false
             }
         }
+    }
 
     fun fetchTvDetailsData(id: Int) =
         viewModelScope.launch {

@@ -9,6 +9,7 @@ import com.ruslangrigoriev.topmovie.presentation.search.SearchViewModel
 import com.ruslangrigoriev.topmovie.presentation.details.DetailsViewModel
 import com.ruslangrigoriev.topmovie.presentation.person.PersonViewModel
 import com.ruslangrigoriev.topmovie.presentation.tv.TvViewModel
+import com.ruslangrigoriev.topmovie.presentation.video.VideoViewModel
 import javax.inject.Inject
 
 class MyViewModelFactory @Inject constructor(
@@ -40,6 +41,10 @@ class MyViewModelFactory @Inject constructor(
             modelClass.isAssignableFrom(ProfileViewModel::class.java) -> {
                 @Suppress("UNCHECKED_CAST")
                 return ProfileViewModel(repository = repository) as T
+            }
+            modelClass.isAssignableFrom(VideoViewModel::class.java) -> {
+                @Suppress("UNCHECKED_CAST")
+                return VideoViewModel(repository = repository) as T
             }
 
         }

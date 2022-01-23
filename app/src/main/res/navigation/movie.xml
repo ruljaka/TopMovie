@@ -26,6 +26,9 @@
         <action
             android:id="@+id/action_details_to_personFragment"
             app:destination="@id/person" />
+        <action
+            android:id="@+id/action_details_to_videoActivity"
+            app:destination="@id/videoActivity" />
     </fragment>
     <fragment
         android:id="@+id/person"
@@ -45,4 +48,9 @@
             android:id="@+id/action_searchFragment_to_details"
             app:destination="@id/details" />
     </fragment>
+    <activity
+        android:id="@+id/videoActivity"
+        android:name="com.ruslangrigoriev.topmovie.presentation.video.VideoActivity"
+        android:label="activity_video"
+        tools:layout="@layout/activity_video" />
 </navigation>

@@ -6,8 +6,8 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.cachedIn
 import com.ruslangrigoriev.topmovie.data.repository.Repository
-import com.ruslangrigoriev.topmovie.domain.model.QueryType.MOVIE
-import com.ruslangrigoriev.topmovie.domain.model.QueryType.TV
+import com.ruslangrigoriev.topmovie.domain.utils.QueryType.MOVIE
+import com.ruslangrigoriev.topmovie.domain.utils.QueryType.TV
 import com.ruslangrigoriev.topmovie.domain.model.movies.Movie
 import com.ruslangrigoriev.topmovie.domain.model.tv.TvShow
 import com.ruslangrigoriev.topmovie.domain.paging.MoviePagingSource

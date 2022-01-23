@@ -1,4 +1,4 @@
-package com.ruslangrigoriev.topmovie.data.database
+package com.ruslangrigoriev.topmovie.data.local
 
 import androidx.room.Dao
 import androidx.room.Delete

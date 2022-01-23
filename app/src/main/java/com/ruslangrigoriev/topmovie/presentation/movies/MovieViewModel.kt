@@ -13,6 +13,7 @@ import com.ruslangrigoriev.topmovie.data.repository.Repository
 import com.ruslangrigoriev.topmovie.domain.model.movies.Movie
 import com.ruslangrigoriev.topmovie.domain.paging.MoviePagingSource
 import com.ruslangrigoriev.topmovie.domain.utils.TAG
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
@@ -40,7 +41,9 @@ class MovieViewModel(val repository: Repository) : ViewModel() {
         get() = _isLoadingLiveData
 
     init {
-        if (_popularLD.value == null) {
+        if ((_nowLD.value == null)
+            || (_popularLD.value == null)
+        ) {
             fetchMoviesData()
         }
     }
@@ -53,17 +56,18 @@ class MovieViewModel(val repository: Repository) : ViewModel() {
     }
 
     private fun fetchMoviesData() {
-        viewModelScope.launch {
-            Log.d(TAG, "fetchMoviesData -> MovieViewModel")
-            _isLoadingLiveData.value = true
+        Log.d(TAG, "fetchMoviesData -> MovieViewModel")
+        viewModelScope.launch(Dispatchers.IO) {
+            _isLoadingLiveData.postValue(true)
             try {
                 _nowLD.postValue(repository.getMoviesNow()?.movies)
                 _popularLD.postValue(repository.getMoviesPopular()?.movies)
-                _isLoadingLiveData.value = false
+                _isLoadingLiveData.postValue(false)
             } catch (e: Exception) {
                 _errorLD.postValue(e.message)
-                _isLoadingLiveData.value = false
+                _isLoadingLiveData.postValue(false)
             }
         }
     }
+
 }

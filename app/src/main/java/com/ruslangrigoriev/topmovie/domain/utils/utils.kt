@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Build
 import android.util.Log
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -12,13 +13,12 @@ import com.bumptech.glide.request.RequestOptions
 import com.ruslangrigoriev.topmovie.App
 import com.ruslangrigoriev.topmovie.R
 import com.ruslangrigoriev.topmovie.di.AppComponent
-import com.ruslangrigoriev.topmovie.domain.model.credits.Cast
 import com.ruslangrigoriev.topmovie.domain.model.Genre
+import com.ruslangrigoriev.topmovie.domain.model.credits.Cast
 import com.ruslangrigoriev.topmovie.domain.model.movies.Movie
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.*
-import java.util.concurrent.TimeUnit
 
 val Context.appComponent: AppComponent
     get() = when (this) {
@@ -29,6 +29,10 @@ val Context.appComponent: AppComponent
 fun getNamesFromGenre(genres: List<Genre>): String {
     val listGenreNames: List<String> = genres.map { it.name }
     return listGenreNames.joinToString(", ")
+}
+
+fun String.showToast(context: Context) {
+    Toast.makeText(context, this, Toast.LENGTH_SHORT).show()
 }
 
 @RequiresApi(Build.VERSION_CODES.O)

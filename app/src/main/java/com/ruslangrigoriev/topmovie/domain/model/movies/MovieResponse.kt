@@ -1,16 +1,16 @@
-package com.ruslangrigoriev.topmovie.domain.model.tv
+package com.ruslangrigoriev.topmovie.domain.model.movies
 
 
 import com.google.gson.annotations.SerializedName
 import com.google.gson.annotations.Expose
 
-data class ResultTv(
+data class MovieResponse(
     @SerializedName("page")
     @Expose
     val page: Int,
     @SerializedName("results")
     @Expose
-    val tvShows: List<TvShow>,
+    val movies: List<Movie>,
     @SerializedName("total_pages")
     @Expose
     val totalPages: Int,

@@ -32,12 +32,12 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
 
 
         //viewModel.getFavoriteList()
-        viewModel.favoriteLD.observe(viewLifecycleOwner, {
-            Log.d(
-                TAG,
-                "FavoriteFragment -> observe ${it.map(Favorite::originalTitle)}"
-            )
-        })
+//        viewModel.favoriteLD.observe(viewLifecycleOwner, {
+//            Log.d(
+//                TAG,
+//                "FavoriteFragment -> observe ${it.map(Favorite::originalTitle)}"
+//            )
+//        })
 
     }
 

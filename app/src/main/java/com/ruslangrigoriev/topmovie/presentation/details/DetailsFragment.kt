@@ -1,6 +1,7 @@
 package com.ruslangrigoriev.topmovie.presentation.details
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
@@ -17,10 +18,13 @@ import com.bumptech.glide.request.RequestOptions
 import com.ruslangrigoriev.topmovie.R
 import com.ruslangrigoriev.topmovie.databinding.FragmentDetailsBinding
 import com.ruslangrigoriev.topmovie.domain.model.credits.Cast
+import com.ruslangrigoriev.topmovie.domain.model.movies.Movie
+import com.ruslangrigoriev.topmovie.domain.model.tv.TvShow
 import com.ruslangrigoriev.topmovie.domain.utils.*
 import com.ruslangrigoriev.topmovie.presentation.MyViewModelFactory
 import com.ruslangrigoriev.topmovie.presentation.adapters.BaseRecyclerAdapter
 import com.ruslangrigoriev.topmovie.presentation.adapters.BindingInterface
+import com.ruslangrigoriev.topmovie.presentation.video.VideoActivity
 import javax.inject.Inject
 
 class DetailsFragment : Fragment(R.layout.fragment_details) {
@@ -45,6 +49,7 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
         setupBackButton()
         subscribeUI()
         loadData()
+        setupPlayBtn()
 
     }
 
@@ -86,30 +91,8 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
     }
 
     private fun subscribeUI() {
-        viewModel.movieDetailsLD.observe(viewLifecycleOwner, {
-            binding.apply {
-                textViewDetailsTitle.text = it.title
-                textViewDetailsGenre.text = getNamesFromGenre(it.genres)
-                textViewDetailsOverview.text = it.overview
-                textViewDetailsVoteCount.text = "${it.voteCount}  People watched"
-                textViewDetailsVoteAverage.text = it.voteAverage.toString()
-                it.posterPath?.loadPosterSmall(imageViewDetailsPoster)
-                it.backdropPath?.loadBackDropImage(imageViewDetailsBackPoster)
-                    ?: it.posterPath?.loadPosterLarge(imageViewDetailsBackPoster)
-            }
-        })
-
-        viewModel.tvDetailsLD.observe(viewLifecycleOwner, {
-            binding.apply {
-                textViewDetailsTitle.text = it.originalName
-                textViewDetailsGenre.text = getNamesFromGenre(it.genres)
-                textViewDetailsOverview.text = it.overview
-                textViewDetailsVoteCount.text = "${it.voteCount}  People watched"
-                textViewDetailsVoteAverage.text = it.voteAverage.toString()
-                it.posterPath?.loadPosterSmall(imageViewDetailsPoster)
-                it.backdropPath?.loadBackDropImage(imageViewDetailsBackPoster)
-            }
-        })
+        viewModel.movieDetailsLD.observe(viewLifecycleOwner, { bindUI(it) })
+        viewModel.tvDetailsLD.observe(viewLifecycleOwner, { bindUI(it) })
 
         viewModel.movieCastLD.observe(viewLifecycleOwner, {
             castRecAdapter.updateList(it.getTopCast())
@@ -128,6 +111,31 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
                     progressBarDetails.visibility = View.GONE
                 }
             }
+        }
+    }
+
+    private fun bindUI(tvShow: TvShow) {
+        binding.apply {
+            textViewDetailsTitle.text = tvShow.originalName
+            textViewDetailsGenre.text = getNamesFromGenre(tvShow.genres)
+            textViewDetailsOverview.text = tvShow.overview
+            textViewDetailsVoteCount.text = "${tvShow.voteCount}  People watched"
+            textViewDetailsVoteAverage.text = tvShow.voteAverage.toString()
+            tvShow.posterPath?.loadPosterSmall(imageViewDetailsPoster)
+            tvShow.backdropPath?.loadBackDropImage(imageViewDetailsBackPoster)
+        }
+    }
+
+    private fun bindUI(movie: Movie) {
+        binding.apply {
+            textViewDetailsTitle.text = movie.title
+            textViewDetailsGenre.text = getNamesFromGenre(movie.genres)
+            textViewDetailsOverview.text = movie.overview
+            textViewDetailsVoteCount.text = "${movie.voteCount}  People watched"
+            textViewDetailsVoteAverage.text = movie.voteAverage.toString()
+            movie.posterPath?.loadPosterSmall(imageViewDetailsPoster)
+            movie.backdropPath?.loadBackDropImage(imageViewDetailsBackPoster)
+                ?: movie.posterPath?.loadPosterLarge(imageViewDetailsBackPoster)
         }
     }
 
@@ -156,6 +164,17 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
             findNavController().navigate(R.id.action_detailsTvFragment_to_personTvFragment, bundle)
         }
 
+    }
+
+    private fun setupPlayBtn() {
+        binding.imageButtonDetailsPlay.setOnClickListener {
+            activity?.let {
+                val intent = Intent(it, VideoActivity::class.java)
+                intent.putExtra(MOVIE_ID, movieID)
+                intent.putExtra(TV_ID, tvID)
+                it.startActivity(intent)
+            }
+        }
     }
 
     private fun setupBackButton() {

@@ -4,6 +4,12 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
 
+    <queries>
+        <intent>
+            <action android:name="com.google.android.youtube.api.service.START" />
+        </intent>
+    </queries>
+
     <application
         android:name=".App"
         android:allowBackup="true"
@@ -12,6 +18,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.TopMovie">
+        <activity
+            android:name=".presentation.video.VideoActivity"
+            android:exported="false"
+            android:label="@string/title_activity_video"
+            android:theme="@style/Theme.TopMovie.NoActionBar" />
         <activity
             android:name=".presentation.onboarding.SplashScreenActivity"
             android:exported="true"
@@ -26,9 +37,7 @@
         <activity
             android:name=".MainActivity"
             android:exported="false"
-            android:theme="@style/Theme.TopMovie.NoActionBar">
-
-        </activity>
+            android:theme="@style/Theme.TopMovie.NoActionBar" />
     </application>
 
 </manifest>

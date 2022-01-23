@@ -1,4 +1,4 @@
-package com.ruslangrigoriev.topmovie.data.database
+package com.ruslangrigoriev.topmovie.data.local
 
 import android.content.Context
 import androidx.room.Database

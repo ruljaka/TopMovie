@@ -2,8 +2,8 @@ package com.ruslangrigoriev.topmovie.di
 
 import android.app.Application
 import android.content.Context
-import com.ruslangrigoriev.topmovie.data.database.AppDatabase
-import com.ruslangrigoriev.topmovie.data.database.FavoriteDAO
+import com.ruslangrigoriev.topmovie.data.local.AppDatabase
+import com.ruslangrigoriev.topmovie.data.local.FavoriteDAO
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton

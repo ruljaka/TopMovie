@@ -161,6 +161,7 @@ class MoviesFragment : Fragment(R.layout.fragment_movies) {
         bundle.putInt(MOVIE_ID, id)
         bundle.putInt(TV_ID, 0)
         findNavController().navigate(R.id.action_movie_to_detailsFragment, bundle)
+
     }
 
     private fun showToast(message: String?) {

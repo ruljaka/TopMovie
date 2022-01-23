@@ -3,8 +3,8 @@ package com.ruslangrigoriev.topmovie.domain.paging
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.ruslangrigoriev.topmovie.data.repository.Repository
-import com.ruslangrigoriev.topmovie.domain.model.QueryType
-import com.ruslangrigoriev.topmovie.domain.model.QueryType.*
+import com.ruslangrigoriev.topmovie.domain.utils.QueryType
+import com.ruslangrigoriev.topmovie.domain.utils.QueryType.*
 
 class MoviePagingSource<T : Any>(
     private val query: String = "",

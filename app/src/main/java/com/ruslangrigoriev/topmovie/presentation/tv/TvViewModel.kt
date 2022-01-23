@@ -29,7 +29,7 @@ class TvViewModel(val repository: Repository) : ViewModel() {
         get() = _isLoadingLiveData
 
     init {
-        if(_popularLD.value == null){
+        if (_popularLD.value == null) {
             fetchData()
         }
     }

@@ -1,8 +1,9 @@
 package com.ruslangrigoriev.topmovie.domain.model.tv
 
 
-import com.google.gson.annotations.SerializedName
 import com.google.gson.annotations.Expose
+import com.google.gson.annotations.SerializedName
+import com.ruslangrigoriev.topmovie.domain.model.ContentType
 import com.ruslangrigoriev.topmovie.domain.model.Genre
 
 data class TvShow(
@@ -39,4 +40,9 @@ data class TvShow(
     @SerializedName("vote_count")
     @Expose
     val voteCount: Int
-)
+) : ContentType {
+
+    override fun getType(): Int {
+        return ContentType.TYPE_TvSHOW
+    }
+}

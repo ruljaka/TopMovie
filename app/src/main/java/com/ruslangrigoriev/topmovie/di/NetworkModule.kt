@@ -11,6 +11,8 @@ import javax.inject.Singleton
 @Module
 class NetworkModule {
 
+
+
     @Singleton
     @Provides
     fun provideApiService(retrofit: Retrofit): ApiService {

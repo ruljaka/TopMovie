@@ -1,14 +1,14 @@
-package com.ruslangrigoriev.topmovie.domain.paging
+package com.ruslangrigoriev.topmovie.data.paging
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.ruslangrigoriev.topmovie.data.repository.Repository
-import com.ruslangrigoriev.topmovie.domain.utils.QueryType
-import com.ruslangrigoriev.topmovie.domain.utils.QueryType.*
+import com.ruslangrigoriev.topmovie.domain.utils.PagingType
+import com.ruslangrigoriev.topmovie.domain.utils.PagingType.*
 
 class MoviePagingSource<T : Any>(
     private val query: String = "",
-    private val type: QueryType = EMPTY,
+    private val type: PagingType = MOVIE_FLOW,
     private val repository: Repository,
 ) : PagingSource<Int, T>() {
 
@@ -22,24 +22,31 @@ class MoviePagingSource<T : Any>(
         return try {
             val currentPage = params.key ?: 1
             when (type) {
-                (MOVIE) -> {
+                (MOVIE_SEARCH) -> {
                     val data =
                         (repository.getSearchMoviesPagedResult(query = query, page = currentPage)
                             ?.movies ?: emptyList()) as List<T>
                     responseData = mutableListOf<T>()
                     responseData.addAll(data)
                 }
-                (TV) -> {
+                (TV_SEARCH) -> {
                     val data = (repository.getSearchTvPagedResult(query = query, page = currentPage)
                         ?.tvShows ?: emptyList()) as List<T>
                     responseData = mutableListOf<T>()
                     responseData.addAll(data)
                 }
-                else -> {
+                (MOVIE_FLOW) -> {
                     val data = (repository.getMoviesTrending(currentPage)?.movies
                         ?: emptyList()) as List<T>
                     responseData = mutableListOf<T>()
                     responseData.addAll(data)
+                }
+//                (FAVORITE_FLOW)->{
+//                    val favoriteList = repository.
+//                }
+
+                else -> {
+                    //TODO
                 }
             }
 

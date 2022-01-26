@@ -2,18 +2,21 @@ package com.ruslangrigoriev.topmovie.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.ruslangrigoriev.topmovie.data.repository.AuthRepository
 import com.ruslangrigoriev.topmovie.data.repository.Repository
-import com.ruslangrigoriev.topmovie.presentation.profile.ProfileViewModel
-import com.ruslangrigoriev.topmovie.presentation.movies.MovieViewModel
-import com.ruslangrigoriev.topmovie.presentation.search.SearchViewModel
 import com.ruslangrigoriev.topmovie.presentation.details.DetailsViewModel
+import com.ruslangrigoriev.topmovie.presentation.movies.MovieViewModel
 import com.ruslangrigoriev.topmovie.presentation.person.PersonViewModel
+import com.ruslangrigoriev.topmovie.presentation.profile.ProfileViewModel
+import com.ruslangrigoriev.topmovie.presentation.profile.login.LoginViewModel
+import com.ruslangrigoriev.topmovie.presentation.search.SearchViewModel
 import com.ruslangrigoriev.topmovie.presentation.tv.TvViewModel
 import com.ruslangrigoriev.topmovie.presentation.video.VideoViewModel
 import javax.inject.Inject
 
 class MyViewModelFactory @Inject constructor(
-    private var repository: Repository
+    private var repository: Repository,
+    private var authRepository: AuthRepository
 ) : ViewModelProvider.Factory {
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -40,7 +43,16 @@ class MyViewModelFactory @Inject constructor(
             }
             modelClass.isAssignableFrom(ProfileViewModel::class.java) -> {
                 @Suppress("UNCHECKED_CAST")
-                return ProfileViewModel(repository = repository) as T
+                return ProfileViewModel(
+                    authRepository = authRepository,
+                    repository = repository
+                ) as T
+            }
+            modelClass.isAssignableFrom(LoginViewModel::class.java) -> {
+                @Suppress("UNCHECKED_CAST")
+                return LoginViewModel(
+                    authRepository = authRepository
+                ) as T
             }
             modelClass.isAssignableFrom(VideoViewModel::class.java) -> {
                 @Suppress("UNCHECKED_CAST")

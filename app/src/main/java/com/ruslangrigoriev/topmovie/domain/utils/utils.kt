@@ -10,12 +10,16 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
+import com.google.gson.GsonBuilder
 import com.ruslangrigoriev.topmovie.App
 import com.ruslangrigoriev.topmovie.R
 import com.ruslangrigoriev.topmovie.di.AppComponent
 import com.ruslangrigoriev.topmovie.domain.model.Genre
+import com.ruslangrigoriev.topmovie.domain.model.auth.RequestToken
+import com.ruslangrigoriev.topmovie.domain.model.auth.Session
 import com.ruslangrigoriev.topmovie.domain.model.credits.Cast
 import com.ruslangrigoriev.topmovie.domain.model.movies.Movie
+import retrofit2.Response
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.*
@@ -147,6 +151,51 @@ fun Context.onBoardingIsFinished(): Boolean {
     val sharedPref = this.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE)
     return sharedPref.getBoolean(OB_FINISHED, false)
 }
+
+fun <T : Any> getResultOrError(response: Response<T>): T? {
+    if (response.isSuccessful) {
+        return response.body()
+    } else {
+        throw Throwable(response.errorBody().toString())
+    }
+}
+
+fun Context.saveAuthToken(requestToken: RequestToken) {
+    val sharedPref = this.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE)
+    val editor = sharedPref.edit()
+    val jsonString = GsonBuilder().create().toJson(requestToken)
+    editor.putString(REQUEST_TOKEN, jsonString)
+    editor.apply()
+}
+
+fun Context.saveSession(session: Session) {
+    val sharedPref = this.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE)
+    val editor = sharedPref.edit()
+    val jsonString = GsonBuilder().create().toJson(session)
+    editor.putString(SESSION, jsonString)
+    editor.apply()
+}
+
+fun Context.getAuthToken(): RequestToken? {
+    val sharedPref = this.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE)
+    val jsonString = sharedPref.getString(REQUEST_TOKEN, "")
+    jsonString?.let {
+        return GsonBuilder().create().fromJson(jsonString, RequestToken::class.java)
+    }
+    return null
+}
+
+fun Context.getSession(): Session? {
+    val sharedPref = this.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE)
+    val jsonString = sharedPref.getString(SESSION, "")
+    jsonString?.let {
+        return GsonBuilder().create().fromJson(jsonString, Session::class.java)
+    }
+    return null
+}
+
+
+
 
 
 

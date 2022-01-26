@@ -1,19 +1,18 @@
 package com.ruslangrigoriev.topmovie.data.remote
 
-import com.ruslangrigoriev.topmovie.domain.model.auth.RequestToken
+import com.ruslangrigoriev.topmovie.domain.model.auth.*
 import com.ruslangrigoriev.topmovie.domain.model.credits.CreditsResponse
 import com.ruslangrigoriev.topmovie.domain.model.movies.Movie
 import com.ruslangrigoriev.topmovie.domain.model.movies.MovieResponse
 import com.ruslangrigoriev.topmovie.domain.model.person.Person
 import com.ruslangrigoriev.topmovie.domain.model.person.PersonCreditsResponse
+import com.ruslangrigoriev.topmovie.domain.model.profile.User
 import com.ruslangrigoriev.topmovie.domain.model.tv.TvResponse
 import com.ruslangrigoriev.topmovie.domain.model.tv.TvShow
 import com.ruslangrigoriev.topmovie.domain.model.video.VideoResponse
 import com.ruslangrigoriev.topmovie.domain.utils.API_KEY
 import retrofit2.Response
-import retrofit2.http.GET
-import retrofit2.http.Path
-import retrofit2.http.Query
+import retrofit2.http.*
 
 interface ApiService {
 
@@ -113,6 +112,56 @@ interface ApiService {
     suspend fun createRequestToken(
         @Query("api_key") apiKey: String = API_KEY,
     ): Response<RequestToken>
+
+    @POST("authentication/token/validate_with_login")
+    suspend fun validateRequestToken(
+        @Query("api_key") apiKey: String = API_KEY,
+        @Body credentials: Credentials
+    ): Response<RequestToken>
+
+    @POST("authentication/session/new")
+    suspend fun createSession(
+        @Query("api_key") apiKey: String = API_KEY,
+        @Body token: Token
+    ): Response<Session>
+
+    @GET("account")
+    suspend fun getUser(
+        @Query("api_key") apiKey: String = API_KEY,
+        @Query("session_id") session_id: String,
+    ): Response<User>
+
+    @GET("account/{account_id}/rated/movies")
+    suspend fun getRatedMovies(
+        @Path("account_id") account_id: Int,
+        @Query("api_key") apiKey: String = API_KEY,
+        @Query("session_id") session_id: String,
+        @Query("page") page: Int = 1,
+    ): Response<MovieResponse>
+
+    @GET("account/{account_id}/rated/tv")
+    suspend fun getRatedTvShow(
+        @Path("account_id") account_id: Int,
+        @Query("api_key") apiKey: String = API_KEY,
+        @Query("session_id") session_id: String,
+        @Query("page") page: Int = 1,
+    ): Response<TvResponse>
+
+    @GET("account/{account_id}/favorite/movies")
+    suspend fun getFavoriteMovies(
+        @Path("account_id") account_id: Int,
+        @Query("api_key") apiKey: String = API_KEY,
+        @Query("session_id") session_id: String,
+        @Query("page") page: Int = 1,
+    ) :Response<MovieResponse>
+
+    @GET("account/{account_id}/favorite/tv")
+    suspend fun getFavoriteTvShow(
+        @Path("account_id") account_id: Int,
+        @Query("api_key") apiKey: String = API_KEY,
+        @Query("session_id") session_id: String,
+        @Query("page") page: Int = 1,
+    ): Response<TvResponse>
 
 
 }

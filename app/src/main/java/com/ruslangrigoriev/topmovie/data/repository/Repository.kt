@@ -1,7 +1,7 @@
 package com.ruslangrigoriev.topmovie.data.repository
 
+import com.ruslangrigoriev.topmovie.domain.model.profile.User
 import com.ruslangrigoriev.topmovie.domain.model.credits.CreditsResponse
-import com.ruslangrigoriev.topmovie.domain.model.favorite.Favorite
 import com.ruslangrigoriev.topmovie.domain.model.movies.Movie
 import com.ruslangrigoriev.topmovie.domain.model.movies.MovieResponse
 import com.ruslangrigoriev.topmovie.domain.model.person.Person
@@ -9,7 +9,6 @@ import com.ruslangrigoriev.topmovie.domain.model.person.PersonCreditsResponse
 import com.ruslangrigoriev.topmovie.domain.model.tv.TvResponse
 import com.ruslangrigoriev.topmovie.domain.model.tv.TvShow
 import com.ruslangrigoriev.topmovie.domain.model.video.VideoResponse
-import kotlinx.coroutines.flow.Flow
 
 interface Repository {
     suspend fun getMoviesTrending(page: Int): MovieResponse?
@@ -32,8 +31,14 @@ interface Repository {
     suspend fun getMovieVideo(movie_id: Int): VideoResponse?
     suspend fun getTvVideo(movie_id: Int): VideoResponse?
 
-    fun getFavoriteList(): Flow<List<Favorite>>
-    suspend fun insertFavorite(favorite: Favorite)
-    suspend fun removeFavorite(id: Int)
-    suspend fun deleteFavorite(favorite: Favorite)
+    suspend fun getUserData(): User?
+    suspend fun getRatedMovies(accountID: Int): MovieResponse?
+    suspend fun getRatedTvShows(accountID: Int): TvResponse?
+    suspend fun getFavoriteMovies(accountID: Int): MovieResponse?
+    suspend fun getFavoriteTvShows(accountID: Int): TvResponse?
+
+//    fun getFavoriteList(): Flow<List<Favorite>>
+//    suspend fun insertFavorite(favorite: Favorite)
+//    suspend fun removeFavorite(id: Int)
+//    suspend fun deleteFavorite(favorite: Favorite)
 }

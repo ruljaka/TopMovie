@@ -11,11 +11,12 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.ruslangrigoriev.topmovie.data.repository.Repository
 import com.ruslangrigoriev.topmovie.domain.model.movies.Movie
-import com.ruslangrigoriev.topmovie.domain.paging.MoviePagingSource
+import com.ruslangrigoriev.topmovie.data.paging.MoviePagingSource
 import com.ruslangrigoriev.topmovie.domain.utils.TAG
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 class MovieViewModel(val repository: Repository) : ViewModel() {
@@ -57,11 +58,15 @@ class MovieViewModel(val repository: Repository) : ViewModel() {
 
     private fun fetchMoviesData() {
         Log.d(TAG, "fetchMoviesData -> MovieViewModel")
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch() {
             _isLoadingLiveData.postValue(true)
             try {
-                _nowLD.postValue(repository.getMoviesNow()?.movies)
-                _popularLD.postValue(repository.getMoviesPopular()?.movies)
+                val listNow =
+                    withContext(Dispatchers.IO) { repository.getMoviesNow()?.movies }
+                val listPopular =
+                    withContext(Dispatchers.IO) { repository.getMoviesPopular()?.movies }
+                listNow?.let{_nowLD.postValue(it)}
+                listPopular?.let{_popularLD.postValue(it)}
                 _isLoadingLiveData.postValue(false)
             } catch (e: Exception) {
                 _errorLD.postValue(e.message)

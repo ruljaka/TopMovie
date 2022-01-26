@@ -1,11 +1,11 @@
 package com.ruslangrigoriev.topmovie.data.repository
 
 import android.app.Application
-import android.util.Log
 import com.ruslangrigoriev.topmovie.data.local.FavoriteDAO
 import com.ruslangrigoriev.topmovie.data.remote.ApiService
+import com.ruslangrigoriev.topmovie.domain.model.auth.Session
+import com.ruslangrigoriev.topmovie.domain.model.profile.User
 import com.ruslangrigoriev.topmovie.domain.model.credits.CreditsResponse
-import com.ruslangrigoriev.topmovie.domain.model.favorite.Favorite
 import com.ruslangrigoriev.topmovie.domain.model.movies.Movie
 import com.ruslangrigoriev.topmovie.domain.model.movies.MovieResponse
 import com.ruslangrigoriev.topmovie.domain.model.person.Person
@@ -13,11 +13,9 @@ import com.ruslangrigoriev.topmovie.domain.model.person.PersonCreditsResponse
 import com.ruslangrigoriev.topmovie.domain.model.tv.TvResponse
 import com.ruslangrigoriev.topmovie.domain.model.tv.TvShow
 import com.ruslangrigoriev.topmovie.domain.model.video.VideoResponse
-import com.ruslangrigoriev.topmovie.domain.utils.Result
-import com.ruslangrigoriev.topmovie.domain.utils.TAG
 import com.ruslangrigoriev.topmovie.domain.utils.appComponent
-import kotlinx.coroutines.flow.Flow
-import retrofit2.Response
+import com.ruslangrigoriev.topmovie.domain.utils.getResultOrError
+import com.ruslangrigoriev.topmovie.domain.utils.getSession
 import javax.inject.Inject
 
 class RepositoryImpl(private val application: Application) : Repository {
@@ -27,6 +25,8 @@ class RepositoryImpl(private val application: Application) : Repository {
 
     @Inject
     lateinit var favoriteDAO: FavoriteDAO
+
+    private var session: Session? = null
 
     init {
         application.appComponent.inject(this)
@@ -107,48 +107,85 @@ class RepositoryImpl(private val application: Application) : Repository {
         return getResultOrError(response)
     }
 
-    override fun getFavoriteList(): Flow<List<Favorite>> {
-        Log.d(TAG, "RepositoryImpl -> getFavoriteList")
-        return favoriteDAO.getFavoriteList()
-    }
-
-    override suspend fun insertFavorite(favorite: Favorite) {
-        favoriteDAO.insertFavorite(favorite)
-        Log.d(TAG, "RepositoryImpl -> insertFavorite")
-    }
-
-    override suspend fun removeFavorite(id: Int) {
-        Log.d(TAG, "RepositoryImpl -> removeFavorite")
-        favoriteDAO.removeFavorite(id)
-    }
-
-    override suspend fun deleteFavorite(favorite: Favorite) {
-        favoriteDAO.deleteFavorite(favorite)
-        Log.d(TAG, "RepositoryImpl -> deleteFavorite")
-    }
-
-    private fun <T : Any> getResultOrError(response: Response<T>): T? {
-        if (response.isSuccessful) {
-            return response.body()
-        } else {
-            throw Throwable(response.errorBody().toString())
+    override suspend fun getUserData(): User? {
+        session = application.applicationContext.getSession()
+        session?.let {
+            return getResultOrError(
+                apiService.getUser(
+                    session_id = it.sessionId
+                )
+            )
         }
+        return null
     }
 
-//    private suspend fun <T> getResult(
-//        request: suspend () -> Response<T>,
-//        defaultErrorMessage: String
-//    ): Result<T> {
-//        return try {
-//            val result = request.invoke()
-//            if (result.isSuccessful) {
-//                Result.success(result.body())
-//            } else {
-//                Result.error(result.errorBody().toString() ?: defaultErrorMessage)
-//            }
-//        } catch (e: Throwable) {
-//            Result.error("No internet connection")
-//        }
+    override suspend fun getRatedMovies(accountID: Int): MovieResponse? {
+        session?.let {
+            return getResultOrError(
+                apiService.getRatedMovies(
+                    account_id = accountID,
+                    session_id = session!!.sessionId
+                )
+            )
+        }
+        return null
+    }
+
+    override suspend fun getRatedTvShows(accountID: Int): TvResponse? {
+        session?.let {
+            return getResultOrError(
+                apiService.getRatedTvShow(
+                    account_id = accountID,
+                    session_id = session!!.sessionId
+                )
+            )
+        }
+        return null
+    }
+
+    override suspend fun getFavoriteMovies(accountID: Int): MovieResponse? {
+        session?.let {
+            return getResultOrError(
+                apiService.getFavoriteMovies(
+                    account_id = accountID,
+                    session_id = session!!.sessionId
+                )
+            )
+        }
+        return null
+    }
+
+    override suspend fun getFavoriteTvShows(accountID: Int): TvResponse? {
+        session?.let {
+            return getResultOrError(
+                apiService.getFavoriteTvShow(
+                    account_id = accountID,
+                    session_id = session!!.sessionId
+                )
+            )
+        }
+        return null
+    }
+
+//    override fun getFavoriteList(): Flow<List<Favorite>> {
+//
+//        return favoriteDAO.getFavoriteList()
 //    }
+//
+//    override suspend fun insertFavorite(favorite: Favorite) {
+//        favoriteDAO.insertFavorite(favorite)
+//        Log.d(TAG, "RepositoryImpl -> insertFavorite")
+//    }
+//
+//    override suspend fun removeFavorite(id: Int) {
+//        Log.d(TAG, "RepositoryImpl -> removeFavorite")
+//        favoriteDAO.removeFavorite(id)
+//    }
+//
+//    override suspend fun deleteFavorite(favorite: Favorite) {
+//        favoriteDAO.deleteFavorite(favorite)
+//        Log.d(TAG, "RepositoryImpl -> deleteFavorite")
+//    }
+
 
 }

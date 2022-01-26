@@ -10,7 +10,9 @@ import com.ruslangrigoriev.topmovie.domain.model.credits.Cast
 import com.ruslangrigoriev.topmovie.domain.model.movies.Movie
 import com.ruslangrigoriev.topmovie.domain.model.tv.TvShow
 import com.ruslangrigoriev.topmovie.domain.utils.TAG
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class DetailsViewModel(val repository: Repository) : ViewModel() {
 
@@ -43,8 +45,12 @@ class DetailsViewModel(val repository: Repository) : ViewModel() {
         viewModelScope.launch {
             _isLoadingLiveData.value = true
             try {
-                _movieDetailsLD.postValue(repository.getMovieDetails(id))
-                _movieCastLD.postValue(repository.getMovieCredits(id)?.cast)
+                val movieDetails =
+                    withContext(Dispatchers.IO) { repository.getMovieDetails(id) }
+                val listMovieCast =
+                    withContext(Dispatchers.IO) { repository.getMovieCredits(id)?.cast }
+                movieDetails?.let { _movieDetailsLD.postValue(it) }
+                listMovieCast?.let { _movieCastLD.postValue(it) }
                 _isLoadingLiveData.value = false
             } catch (e: Exception) {
                 _errorLD.postValue(e.message)
@@ -58,8 +64,12 @@ class DetailsViewModel(val repository: Repository) : ViewModel() {
             _isLoadingLiveData.value = true
             Log.d(TAG, "fetchTvDetailsData ID: $id -> DetailsViewModel")
             try {
-                _tvDetailsLD.postValue(repository.getTvDetails(id))
-                _tvCastLD.postValue(repository.getTvCredits(id)?.cast)
+                val tvDetails =
+                    withContext(Dispatchers.IO) { repository.getTvDetails(id) }
+                val listTvCast =
+                    withContext(Dispatchers.IO) { repository.getTvCredits(id)?.cast }
+                tvDetails?.let { _tvDetailsLD.postValue(it) }
+                listTvCast?.let { _tvCastLD.postValue(it) }
                 _isLoadingLiveData.value = false
             } catch (e: Exception) {
                 _errorLD.postValue(e.message)

@@ -8,17 +8,19 @@ import androidx.lifecycle.viewModelScope
 import com.ruslangrigoriev.topmovie.data.repository.Repository
 import com.ruslangrigoriev.topmovie.domain.model.tv.TvShow
 import com.ruslangrigoriev.topmovie.domain.utils.TAG
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class TvViewModel(val repository: Repository) : ViewModel() {
-
-    private val _popularLD = MutableLiveData<List<TvShow>>()
-    val popularLD: LiveData<List<TvShow>>
-        get() = _popularLD
 
     private val _nowLD = MutableLiveData<List<TvShow>>()
     val nowLD: LiveData<List<TvShow>>
         get() = _nowLD
+
+    private val _popularLD = MutableLiveData<List<TvShow>>()
+    val popularLD: LiveData<List<TvShow>>
+        get() = _popularLD
 
     private val _errorLD = MutableLiveData<String>()
     val errorLD: LiveData<String>
@@ -39,8 +41,12 @@ class TvViewModel(val repository: Repository) : ViewModel() {
             Log.d(TAG, "fetchTvNow -> TvViewModel")
             _isLoadingLiveData.value = true
             try {
-                _nowLD.postValue(repository.getTvNow()?.tvShows)
-                _popularLD.postValue(repository.getTvPopular()?.tvShows)
+                val listNow =
+                    withContext(Dispatchers.IO) { repository.getTvNow()?.tvShows }
+                val listPopular =
+                    withContext(Dispatchers.IO) { repository.getTvPopular()?.tvShows }
+                listNow?.let { _nowLD.postValue(it) }
+                listPopular?.let { _popularLD.postValue(it) }
                 _isLoadingLiveData.value = false
             } catch (e: Exception) {
                 _errorLD.postValue(e.message)

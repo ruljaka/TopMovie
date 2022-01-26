@@ -8,5 +8,14 @@
         android:id="@+id/profile_fragment"
         android:name="com.ruslangrigoriev.topmovie.presentation.profile.ProfileFragment"
         android:label="profile_fragment"
-        tools:layout="@layout/fragment_tv" />
+        tools:layout="@layout/fragment_profile" >
+        <action
+            android:id="@+id/action_profile_fragment_to_loginProfileFragment"
+            app:destination="@id/loginProfileFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/loginProfileFragment"
+        android:name="com.ruslangrigoriev.topmovie.presentation.profile.login.LoginFragment"
+        android:label="fragment_login"
+        tools:layout="@layout/fragment_login" />
 </navigation>

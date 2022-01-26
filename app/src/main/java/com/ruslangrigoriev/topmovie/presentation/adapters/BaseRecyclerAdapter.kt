@@ -36,6 +36,8 @@ class BaseRecyclerAdapter<T : Any>(
 
     override fun getItemCount(): Int = dataSet.size
 
+
+
     fun updateList(list: List<T>) {
         this.dataSet = list
         notifyDataSetChanged()

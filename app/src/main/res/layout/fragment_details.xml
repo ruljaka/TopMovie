@@ -34,18 +34,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <ImageButton
-        android:id="@+id/imageButton_details_play"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:backgroundTint="@android:color/transparent"
-        android:contentDescription="@string/imageButton_details_play"
-        android:src="@drawable/ic_play"
-        app:layout_constraintBottom_toBottomOf="@id/imageView_details_back_poster"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/button_details_back"
         android:layout_width="wrap_content"
@@ -169,8 +157,8 @@
                     android:textColor="#D6182A"
                     android:textSize="22sp"
                     android:textStyle="bold"
-                    app:layout_constraintBottom_toBottomOf="@+id/cardView_details_poster"
                     app:layout_constraintStart_toEndOf="@+id/cardView_details_poster"
+                    app:layout_constraintTop_toBottomOf="@+id/textView_details_genre"
                     tools:text="9.8" />
 
                 <androidx.appcompat.widget.LinearLayoutCompat
@@ -210,24 +198,13 @@
 
                 </androidx.appcompat.widget.LinearLayoutCompat>
 
-                <ProgressBar
-                    android:id="@+id/progress_bar_details"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:indeterminateTint="?colorPrimary"
-                    android:visibility="visible"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
+                style="@style/OverviewStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                style="@style/OverviewStyle"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/consLO_title">
@@ -360,9 +337,35 @@
                     app:layout_constraintStart_toStartOf="@id/cardView_details_comment"
                     app:layout_constraintTop_toBottomOf="@id/cardView_details_comment" />
 
+
             </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
+
+
+    <ImageButton
+        android:id="@+id/imageButton_details_play"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@android:color/transparent"
+        android:contentDescription="@string/imageButton_details_play"
+        android:src="@drawable/ic_play"
+        app:layout_constraintBottom_toBottomOf="@id/imageView_details_back_poster"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ProgressBar
+        android:id="@+id/progress_bar_details"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:indeterminateTint="?colorPrimary"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 
 </androidx.constraintlayout.motion.widget.MotionLayout>

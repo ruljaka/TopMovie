@@ -36,8 +36,17 @@
         </activity>
         <activity
             android:name=".MainActivity"
-            android:exported="false"
-            android:theme="@style/Theme.TopMovie.NoActionBar" />
+            android:exported="true"
+            android:theme="@style/Theme.TopMovie.NoActionBar" >
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data
+                    android:host="callback"
+                    android:scheme="top_movies" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

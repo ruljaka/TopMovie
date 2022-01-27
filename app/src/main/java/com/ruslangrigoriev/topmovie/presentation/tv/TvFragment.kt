@@ -143,8 +143,8 @@ class TvFragment : Fragment(R.layout.fragment_tv) {
                     showToast("Enter your request")
                 } else {
                     val bundle = Bundle()
-                    bundle.putString(TV_QUERY, query)
-                    bundle.putString(MOVIE_QUERY, null)
+                    bundle.putString(QUERY, query)
+                    bundle.putString(SOURCE_TYPE, TV_TYPE)
                     findNavController().navigate(
                         R.id.action_tv_fragment_to_searchTvFragment,
                         bundle
@@ -163,7 +163,7 @@ class TvFragment : Fragment(R.layout.fragment_tv) {
         val bundle = Bundle()
         bundle.putInt(MEDIA_ID, id)
         bundle.putString(SOURCE_TYPE, TV_TYPE)
-        findNavController().navigate(R.id.action_tv_fragment_to_detailsTvFragment, bundle)
+        findNavController().navigate(R.id.action_tv_fragment_to_details, bundle)
     }
 
     private fun showToast(message: String?) {

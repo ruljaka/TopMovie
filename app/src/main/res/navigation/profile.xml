@@ -3,19 +3,24 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/profile"
+    android:label="profile"
     app:startDestination="@id/profile_fragment">
     <fragment
         android:id="@+id/profile_fragment"
         android:name="com.ruslangrigoriev.topmovie.presentation.profile.ProfileFragment"
         android:label="profile_fragment"
-        tools:layout="@layout/fragment_profile" >
+        tools:layout="@layout/fragment_profile">
         <action
             android:id="@+id/action_profile_fragment_to_loginProfileFragment"
             app:destination="@id/loginProfileFragment" />
+        <action
+            android:id="@+id/action_profile_fragment_to_details"
+            app:destination="@id/details" />
     </fragment>
     <fragment
         android:id="@+id/loginProfileFragment"
         android:name="com.ruslangrigoriev.topmovie.presentation.profile.login.LoginFragment"
         android:label="fragment_login"
         tools:layout="@layout/fragment_login" />
+    <include app:graph="@navigation/details" />
 </navigation>

@@ -14,11 +14,9 @@ import androidx.recyclerview.widget.GridLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.ruslangrigoriev.topmovie.R
 import com.ruslangrigoriev.topmovie.databinding.FragmentSearchBinding
-import com.ruslangrigoriev.topmovie.domain.model.ContentType
 import com.ruslangrigoriev.topmovie.domain.utils.*
 import com.ruslangrigoriev.topmovie.presentation.MyViewModelFactory
 import com.ruslangrigoriev.topmovie.presentation.adapters.MyPagingAdapter
-import com.ruslangrigoriev.topmovie.presentation.adapters.TvPagingAdapter
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collectLatest
 import javax.inject.Inject
@@ -31,8 +29,9 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
     private val viewModel: SearchViewModel by viewModels { factory }
     private lateinit var myPagingAdapter: MyPagingAdapter
 
-    private var movieQuery: String? = null
+    private var searchQuery: String? = null
     private var tvQuery: String? = null
+    private var searchSource: String? = null
 
     override fun onAttach(context: Context) {
         context.appComponent.inject(this)
@@ -46,19 +45,18 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         setupSearch()
         subscribeQuerySearch()
 
-        movieQuery = arguments?.getString(MOVIE_QUERY)
-        movieQuery?.let {
+        searchQuery = arguments?.getString(QUERY)
+        searchSource = arguments?.getString(SOURCE_TYPE)
+
+        searchQuery?.let {
             if (viewModel.queryFlow.value == "") {
                 viewModel.queryFlow.value = it
             }
-            subscribeMovieSearch()
-        }
-        tvQuery = arguments?.getString(TV_QUERY)
-        tvQuery?.let {
-            if (viewModel.queryFlow.value == "") {
-                viewModel.queryFlow.value = it
+            if(searchSource == MOVIE_TYPE){
+                subscribeMovieSearch()
+            } else{
+                subscribeTvSearch()
             }
-            subscribeTvSearch()
         }
     }
 
@@ -123,17 +121,14 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
     }
 
     private fun onListItemClick(id: Int) {
-        movieQuery?.let {
             val bundle = Bundle()
-            bundle.putInt(MOVIE_ID, id)
-            bundle.putInt(TV_ID, 0)
+            bundle.putInt(MEDIA_ID, id)
+            bundle.putString(SOURCE_TYPE, searchSource)
+        if(searchSource== MOVIE_TYPE){
             findNavController().navigate(R.id.action_searchFragment_to_details, bundle)
+        } else{
+            findNavController().navigate(R.id.action_searchTvFragment_to_details, bundle)
         }
-        tvQuery?.let {
-            val bundle = Bundle()
-            bundle.putInt(MOVIE_ID, 0)
-            bundle.putInt(TV_ID, id)
-            findNavController().navigate(R.id.action_searchTvFragment_to_detailsTvFragment, bundle)
-        }
+
     }
 }

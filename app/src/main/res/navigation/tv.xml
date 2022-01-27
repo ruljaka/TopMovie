@@ -3,44 +3,29 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/tv"
-    app:startDestination="@+id/tv_fragment">
+    android:label="tv"
+    app:startDestination="@id/tv_fragment">
+
     <fragment
         android:id="@+id/tv_fragment"
         android:name="com.ruslangrigoriev.topmovie.presentation.tv.TvFragment"
         android:label="tv_fragment"
-        tools:layout="@layout/fragment_profile" >
-        <action
-            android:id="@+id/action_tv_fragment_to_detailsTvFragment"
-            app:destination="@id/detailsTvFragment" />
+        tools:layout="@layout/fragment_tv">
         <action
             android:id="@+id/action_tv_fragment_to_searchTvFragment"
             app:destination="@id/searchTvFragment" />
+        <action
+            android:id="@+id/action_tv_fragment_to_details"
+            app:destination="@id/details" />
     </fragment>
     <fragment
         android:id="@+id/searchTvFragment"
         android:name="com.ruslangrigoriev.topmovie.presentation.search.SearchFragment"
         android:label="fragment_search"
-        tools:layout="@layout/fragment_search" >
+        tools:layout="@layout/fragment_search">
         <action
-            android:id="@+id/action_searchTvFragment_to_detailsTvFragment"
-            app:destination="@id/detailsTvFragment" />
+            android:id="@+id/action_searchTvFragment_to_details"
+            app:destination="@id/details" />
     </fragment>
-    <fragment
-        android:id="@+id/detailsTvFragment"
-        android:name="com.ruslangrigoriev.topmovie.presentation.details.DetailsFragment"
-        android:label="fragment_details"
-        tools:layout="@layout/fragment_details" >
-        <action
-            android:id="@+id/action_detailsTvFragment_to_personTvFragment"
-            app:destination="@id/personTvFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/personTvFragment"
-        android:name="com.ruslangrigoriev.topmovie.presentation.person.PersonFragment"
-        android:label="fragment_person"
-        tools:layout="@layout/fragment_person" >
-        <action
-            android:id="@+id/action_personTvFragment_to_detailsTvFragment"
-            app:destination="@id/detailsTvFragment" />
-    </fragment>
+    <include app:graph="@navigation/details" />
 </navigation>

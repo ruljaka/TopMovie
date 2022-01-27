@@ -9,34 +9,13 @@
     <fragment
         android:id="@+id/movies_fragment"
         android:name="com.ruslangrigoriev.topmovie.presentation.movies.MoviesFragment"
-        android:label="movies"
+        android:label="movies_fragment"
         tools:layout="@layout/fragment_movies">
-        <action
-            android:id="@+id/action_movie_to_detailsFragment"
-            app:destination="@id/details" />
         <action
             android:id="@+id/action_movies_fragment_to_searchFragment"
             app:destination="@id/searchFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/details"
-        android:name="com.ruslangrigoriev.topmovie.presentation.details.DetailsFragment"
-        android:label="details"
-        tools:layout="@layout/fragment_details">
         <action
-            android:id="@+id/action_details_to_personFragment"
-            app:destination="@id/person" />
-        <action
-            android:id="@+id/action_details_to_videoActivity"
-            app:destination="@id/videoActivity" />
-    </fragment>
-    <fragment
-        android:id="@+id/person"
-        android:name="com.ruslangrigoriev.topmovie.presentation.person.PersonFragment"
-        android:label="person"
-        tools:layout="@layout/fragment_person">
-        <action
-            android:id="@+id/action_person_to_details"
+            android:id="@+id/action_movies_fragment_to_details"
             app:destination="@id/details" />
     </fragment>
     <fragment
@@ -48,9 +27,5 @@
             android:id="@+id/action_searchFragment_to_details"
             app:destination="@id/details" />
     </fragment>
-    <activity
-        android:id="@+id/videoActivity"
-        android:name="com.ruslangrigoriev.topmovie.presentation.video.VideoActivity"
-        android:label="activity_video"
-        tools:layout="@layout/activity_video" />
+    <include app:graph="@navigation/details" />
 </navigation>

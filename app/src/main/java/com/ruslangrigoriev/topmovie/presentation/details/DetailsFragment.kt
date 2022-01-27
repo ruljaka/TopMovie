@@ -158,16 +158,11 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
     private fun onListItemClick(personID: Int) {
         val bundle = Bundle()
         bundle.putInt(PERSON_ID, personID)
-        if (sourceType == MOVIE_TYPE) {
-            findNavController().navigate(
-                R.id.action_details_to_personFragment, bundle
-            )
-        }
-        if (sourceType == TV_TYPE) {
-            findNavController().navigate(
-                R.id.action_detailsTvFragment_to_personTvFragment, bundle
-            )
-        }
+        findNavController().navigate(
+            R.id.action_detailsFragment_to_personFragment, bundle
+        )
+
+
     }
 
     private fun setupPlayBtn() {

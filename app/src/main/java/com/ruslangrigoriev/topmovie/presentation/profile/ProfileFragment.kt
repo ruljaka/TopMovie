@@ -21,10 +21,7 @@ import com.ruslangrigoriev.topmovie.domain.model.movies.Movie
 import com.ruslangrigoriev.topmovie.domain.model.profile.CountLikeFavorite
 import com.ruslangrigoriev.topmovie.domain.model.profile.User
 import com.ruslangrigoriev.topmovie.domain.model.tv.TvShow
-import com.ruslangrigoriev.topmovie.domain.utils.IMAGE_URL_AVATAR
-import com.ruslangrigoriev.topmovie.domain.utils.IMAGE_URL_GRAVATAR
-import com.ruslangrigoriev.topmovie.domain.utils.appComponent
-import com.ruslangrigoriev.topmovie.domain.utils.loadPosterSmall
+import com.ruslangrigoriev.topmovie.domain.utils.*
 import com.ruslangrigoriev.topmovie.presentation.MyViewModelFactory
 import com.ruslangrigoriev.topmovie.presentation.adapters.BaseRecyclerAdapter
 import com.ruslangrigoriev.topmovie.presentation.adapters.BindingInterface
@@ -127,12 +124,12 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                 if (item.getType() == ContentType.TYPE_MOVIE) {
                     (item as Movie).posterPath?.loadPosterSmall(poster)
                     view.setOnClickListener {
-                        onListItemClick(item.id)
+                        onListItemClick(item.id, MOVIE_TYPE)
                     }
                 } else {
                     (item as TvShow).posterPath?.loadPosterSmall(poster)
                     view.setOnClickListener {
-                        onListItemClick(item.id)
+                        onListItemClick(item.id, TV_TYPE)
                     }
                 }
             }
@@ -161,12 +158,10 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         }
     }
 
-    private fun onListItemClick(id: Int) {
+    private fun onListItemClick(id: Int, sourceType: String) {
         val bundle = Bundle()
-        //bundle.putInt(MOVIE_ID, id)
-        //bundle.putInt(TV_ID, 0)
-        //findNavController().navigate(R.id.action_movie_to_detailsFragment, bundle)
-
+        bundle.putInt(MEDIA_ID, id)
+        bundle.putString(SOURCE_TYPE, sourceType)
+        findNavController().navigate(R.id.action_profile_fragment_to_details, bundle)
     }
-
 }

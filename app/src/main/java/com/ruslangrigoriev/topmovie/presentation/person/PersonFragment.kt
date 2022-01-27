@@ -96,9 +96,9 @@ class PersonFragment : Fragment(R.layout.fragment_person) {
     }
 
     private fun onListItemClick(movieID: Int) {
-        //TODO
-//        val bundle = Bundle()
-//        bundle.putInt(MOVIE_ID, movieID)
-//        findNavController().navigate(R.id.action_person_to_details, bundle)
+        val bundle = Bundle()
+        bundle.putInt(MEDIA_ID, movieID)
+        bundle.putString(SOURCE_TYPE, MOVIE_TYPE)
+        findNavController().navigate(R.id.action_personFragment_to_detailsFragment, bundle)
     }
 }

@@ -12,6 +12,7 @@ import androidx.paging.cachedIn
 import com.ruslangrigoriev.topmovie.data.repository.Repository
 import com.ruslangrigoriev.topmovie.domain.model.movies.Movie
 import com.ruslangrigoriev.topmovie.data.paging.MoviePagingSource
+import com.ruslangrigoriev.topmovie.domain.utils.PagingType
 import com.ruslangrigoriev.topmovie.domain.utils.TAG
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -52,7 +53,7 @@ class MovieViewModel(val repository: Repository) : ViewModel() {
     private fun fetchMoviesTrending() {
         _trendingFlowData =
             Pager(PagingConfig(pageSize = 20)) {
-                MoviePagingSource<Movie>(repository = repository)
+                MoviePagingSource<Movie>(repository = repository, type = PagingType.MOVIE_FLOW)
             }.flow.cachedIn(viewModelScope)
     }
 

@@ -1,18 +1,26 @@
 package com.ruslangrigoriev.topmovie.data.repository
 
 import android.app.Application
+import androidx.lifecycle.LiveData
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import androidx.paging.liveData
 import com.ruslangrigoriev.topmovie.data.local.FavoriteDAO
+import com.ruslangrigoriev.topmovie.data.paging.MoviePagingSource
 import com.ruslangrigoriev.topmovie.data.remote.ApiService
+import com.ruslangrigoriev.topmovie.domain.model.ContentType
 import com.ruslangrigoriev.topmovie.domain.model.auth.Session
-import com.ruslangrigoriev.topmovie.domain.model.profile.User
 import com.ruslangrigoriev.topmovie.domain.model.credits.CreditsResponse
 import com.ruslangrigoriev.topmovie.domain.model.movies.Movie
 import com.ruslangrigoriev.topmovie.domain.model.movies.MovieResponse
 import com.ruslangrigoriev.topmovie.domain.model.person.Person
 import com.ruslangrigoriev.topmovie.domain.model.person.PersonCreditsResponse
+import com.ruslangrigoriev.topmovie.domain.model.profile.User
 import com.ruslangrigoriev.topmovie.domain.model.tv.TvResponse
 import com.ruslangrigoriev.topmovie.domain.model.tv.TvShow
 import com.ruslangrigoriev.topmovie.domain.model.video.VideoResponse
+import com.ruslangrigoriev.topmovie.domain.utils.PagingType
 import com.ruslangrigoriev.topmovie.domain.utils.appComponent
 import com.ruslangrigoriev.topmovie.domain.utils.getResultOrError
 import com.ruslangrigoriev.topmovie.domain.utils.getSession
@@ -166,6 +174,19 @@ class RepositoryImpl(private val application: Application) : Repository {
         }
         return null
     }
+
+//    override suspend fun getFavoriteLiveData(accountID: Int): LiveData<PagingData<ContentType>> {
+//        return Pager(
+//            config = PagingConfig(pageSize = 20),
+//            pagingSourceFactory = {
+//                MoviePagingSource<ContentType>(
+//                    query = accountID.toString(),
+//                    type = PagingType.FAVORITE_FLOW,
+//                    repository = this
+//                )
+//            }
+//        ).liveData
+//    }
 
 //    override fun getFavoriteList(): Flow<List<Favorite>> {
 //

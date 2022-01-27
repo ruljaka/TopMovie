@@ -6,6 +6,7 @@ import android.view.View
 import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
@@ -27,6 +28,7 @@ import com.ruslangrigoriev.topmovie.domain.utils.loadPosterSmall
 import com.ruslangrigoriev.topmovie.presentation.MyViewModelFactory
 import com.ruslangrigoriev.topmovie.presentation.adapters.BaseRecyclerAdapter
 import com.ruslangrigoriev.topmovie.presentation.adapters.BindingInterface
+import com.ruslangrigoriev.topmovie.presentation.adapters.ItemOffsetDecoration
 import javax.inject.Inject
 
 
@@ -50,8 +52,9 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        subscribeUI()
         setFavoriteRecView()
+        subscribeUI()
+
 
         val isAuth = viewModel.checkIfUserIsAuthenticated()
         if (isAuth) {
@@ -65,13 +68,21 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
     }
 
     private fun subscribeUI() {
-        viewModel.userLD.observe(viewLifecycleOwner, { user ->
-            bindUI(user)
-        })
-        viewModel.countLD.observe(viewLifecycleOwner, { counters ->
-            bindCounters(counters)
-        })
+        lifecycleScope.launchWhenStarted {
+            viewModel.userLD.observe(viewLifecycleOwner, { user ->
+                bindUI(user)
+            })
+            viewModel.countLD.observe(viewLifecycleOwner, { counters ->
+                bindCounters(counters)
+            })
+            viewModel.favoriteLD.observe(viewLifecycleOwner, {
+                favoriteRecAdapter.updateList(it)
+            })
+        }
+
+
     }
+
 
     private fun bindCounters(counters: CountLikeFavorite) {
         binding.textViewProfileLikeCount.text = counters.countLike.toString()
@@ -106,34 +117,39 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
             override fun bindData(item: ContentType, view: View) {
                 val poster = view.findViewById<ImageView>(R.id.imageView_favorite_poster)
                 if (item.getType() == ContentType.TYPE_MOVIE) {
-                    (item as Movie).apply {
-                        posterPath?.loadPosterSmall(poster)
-                        view.setOnClickListener { onListItemClick(this.id) }
+                    (item as Movie).posterPath?.loadPosterSmall(poster)
+                    view.setOnClickListener {
+                        onListItemClick(item.id)
                     }
                 } else {
-                    (item as TvShow).apply {
-                        posterPath?.loadPosterSmall(poster)
-                        view.setOnClickListener { onListItemClick(this.id) }
+                    (item as TvShow).posterPath?.loadPosterSmall(poster)
+                    view.setOnClickListener {
+                        onListItemClick(item.id)
                     }
                 }
             }
         }
-        favoriteRecAdapter =
-            BaseRecyclerAdapter(
-                emptyList(),
-                R.layout.item_favorite,
-                bindingInterface
-            )
-        binding.recyclerViewProfile.apply {
-            layoutManager =
+        favoriteRecAdapter = BaseRecyclerAdapter(
+            emptyList(),
+            R.layout.item_favorite,
+            bindingInterface,
+        )
+        binding.apply {
+            recyclerViewProfile.layoutManager =
                 GridLayoutManager(
                     activity,
                     4,
                     GridLayoutManager.VERTICAL,
                     false
                 )
-            adapter = favoriteRecAdapter
-            setHasFixedSize(true)
+            recyclerViewProfile.adapter = favoriteRecAdapter
+             recyclerViewProfile.setHasFixedSize(true)
+            recyclerViewProfile.addItemDecoration(
+                ItemOffsetDecoration(
+                    requireContext(),
+                    R.dimen.item_offset
+                )
+            )
         }
     }
 

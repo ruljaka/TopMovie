@@ -22,7 +22,7 @@ import com.ruslangrigoriev.topmovie.domain.utils.*
 import com.ruslangrigoriev.topmovie.presentation.MyViewModelFactory
 import com.ruslangrigoriev.topmovie.presentation.adapters.BaseRecyclerAdapter
 import com.ruslangrigoriev.topmovie.presentation.adapters.BindingInterface
-import com.ruslangrigoriev.topmovie.presentation.adapters.MoviePagingAdapter
+import com.ruslangrigoriev.topmovie.presentation.adapters.MyPagingAdapter
 import javax.inject.Inject
 
 class MoviesFragment : Fragment(R.layout.fragment_movies) {
@@ -32,7 +32,7 @@ class MoviesFragment : Fragment(R.layout.fragment_movies) {
     lateinit var factory: MyViewModelFactory
     private val viewModel: MovieViewModel by viewModels { factory }
 
-    private lateinit var pagingAdapter: MoviePagingAdapter
+    private lateinit var pagingAdapter: MyPagingAdapter
     private lateinit var nowRecyclerAdapter: BaseRecyclerAdapter<Movie>
     private lateinit var popularRecyclerAdapter: BaseRecyclerAdapter<Movie>
 
@@ -98,15 +98,18 @@ class MoviesFragment : Fragment(R.layout.fragment_movies) {
             R.layout.item_movie_popular,
             bindingInterface,
         )
-        binding.recyclerViewPopular.layoutManager =
-            GridLayoutManager(
-                activity,
-                2,
-                GridLayoutManager.HORIZONTAL,
-                false
-            )
-        binding.recyclerViewPopular.adapter = popularRecyclerAdapter
-        binding.recyclerViewPopular.setHasFixedSize(true)
+        binding.apply {
+            recyclerViewPopular.layoutManager =
+                GridLayoutManager(
+                    activity,
+                    2,
+                    GridLayoutManager.HORIZONTAL,
+                    false
+                )
+            recyclerViewPopular.adapter = popularRecyclerAdapter
+            recyclerViewPopular.setHasFixedSize(true)
+        }
+
     }
 
     private fun setupSearch() {

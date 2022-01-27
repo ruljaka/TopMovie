@@ -14,9 +14,10 @@ import androidx.recyclerview.widget.GridLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.ruslangrigoriev.topmovie.R
 import com.ruslangrigoriev.topmovie.databinding.FragmentSearchBinding
+import com.ruslangrigoriev.topmovie.domain.model.ContentType
 import com.ruslangrigoriev.topmovie.domain.utils.*
 import com.ruslangrigoriev.topmovie.presentation.MyViewModelFactory
-import com.ruslangrigoriev.topmovie.presentation.adapters.MoviePagingAdapter
+import com.ruslangrigoriev.topmovie.presentation.adapters.MyPagingAdapter
 import com.ruslangrigoriev.topmovie.presentation.adapters.TvPagingAdapter
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collectLatest
@@ -28,8 +29,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
     @Inject
     lateinit var factory: MyViewModelFactory
     private val viewModel: SearchViewModel by viewModels { factory }
-    private lateinit var moviePagingAdapter: MoviePagingAdapter
-    private lateinit var tvPagingAdapter: TvPagingAdapter
+    private lateinit var myPagingAdapter: MyPagingAdapter
 
     private var movieQuery: String? = null
     private var tvQuery: String? = null
@@ -42,6 +42,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setMovieRecView()
         setupSearch()
         subscribeQuerySearch()
 
@@ -62,7 +63,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
     }
 
     private fun setMovieRecView() {
-        moviePagingAdapter = MoviePagingAdapter { id -> onListItemClick(id) }
+        myPagingAdapter = MyPagingAdapter { id -> onListItemClick(id) }
         val gridLM = GridLayoutManager(
             activity,
             2,
@@ -71,22 +72,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         )
         binding.recyclerView.apply {
             layoutManager = gridLM
-            adapter = moviePagingAdapter
-            setHasFixedSize(true)
-        }
-    }
-
-    private fun setTvRecView() {
-        tvPagingAdapter = TvPagingAdapter { id -> onListItemClick(id) }
-        val gridLM = GridLayoutManager(
-            activity,
-            2,
-            GridLayoutManager.VERTICAL,
-            false
-        )
-        binding.recyclerView.apply {
-            layoutManager = gridLM
-            adapter = tvPagingAdapter
+            adapter = myPagingAdapter
             setHasFixedSize(true)
         }
     }
@@ -114,8 +100,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
     private fun subscribeMovieSearch() {
         lifecycleScope.launchWhenStarted {
             viewModel.searchMoviesFlowData.collectLatest { pagingData ->
-                setMovieRecView()
-                moviePagingAdapter.submitData(pagingData)
+                myPagingAdapter.submitData(pagingData)
             }
         }
     }
@@ -124,8 +109,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
     private fun subscribeTvSearch() {
         lifecycleScope.launchWhenStarted {
             viewModel.searchTvFlowData.collectLatest { pagingData ->
-                setTvRecView()
-                tvPagingAdapter.submitData(pagingData)
+                myPagingAdapter.submitData(pagingData)
             }
         }
     }

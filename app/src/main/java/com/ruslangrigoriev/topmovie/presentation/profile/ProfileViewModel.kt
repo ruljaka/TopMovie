@@ -12,9 +12,8 @@ import com.ruslangrigoriev.topmovie.domain.model.ContentType
 import com.ruslangrigoriev.topmovie.domain.model.profile.CountLikeFavorite
 import com.ruslangrigoriev.topmovie.domain.model.profile.User
 import com.ruslangrigoriev.topmovie.domain.utils.TAG
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class ProfileViewModel(
     val authRepository: AuthRepository,
@@ -29,10 +28,6 @@ class ProfileViewModel(
     val countLD: LiveData<CountLikeFavorite>
         get() = _countLD
 
-    private val _favoriteListLD = MutableLiveData<ContentType>()
-    val favoriteListLD: LiveData<ContentType>
-        get() = _favoriteListLD
-
     private val _errorLD = MutableLiveData<String>()
     val errorLD: LiveData<String>
         get() = _errorLD
@@ -45,45 +40,50 @@ class ProfileViewModel(
         return authRepository.checkIsUserIsAuthenticated()
     }
 
+    private val _favoriteLD = MutableLiveData<List<ContentType>>()
+    val favoriteLD: LiveData<List<ContentType>>
+        get() = _favoriteLD
+
     fun fetchUserData() {
         Log.d(TAG, "fetchUserData -> ProfileViewModel")
-        viewModelScope.launch(Dispatchers.IO) {
-            _isLoadingLiveData.postValue(true)
+        viewModelScope.launch {
+            //_isLoadingLiveData.postValue(true)
             try {
-                val user =
-                    withContext(Dispatchers.IO) { repository.getUserData() }
-                user?.let {
-                    //rated count
-                    val listRatedMoviesSize = withContext(Dispatchers.IO) {
-                        repository.getRatedMovies(it.id)?.totalResults ?: 0
+                val user = async { repository.getUserData() }
+                user.await()?.let { user ->
+
+                    val listRatedMoviesSize = async {
+                        repository.getRatedMovies(user.id)?.totalResults ?: 0
                     }
-                    val listRatedTvShowsSize = withContext(Dispatchers.IO) {
-                        repository.getRatedTvShows(it.id)?.totalResults ?: 0
+                    val listRatedTvShowsSize = async {
+                        repository.getRatedTvShows(user.id)?.totalResults ?: 0
                     }
-                    //favorite count
-                    val listFavoriteMovies = withContext(Dispatchers.IO) {
-                        repository.getFavoriteMovies(it.id)?.totalResults ?: 0
+                    val listFavoriteMovies = async {
+                        repository.getFavoriteMovies(user.id)
                     }
-                    val listFavoriteTvShows = withContext(Dispatchers.IO) {
-                        repository.getFavoriteTvShows(it.id)?.totalResults ?: 0
+                    val listFavoriteTvShows = async {
+                        repository.getFavoriteTvShows(user.id)
                     }
 
-
-
-
+                    _userLD.postValue(user)
                     _countLD.postValue(
                         CountLikeFavorite(
-                            countLike = listRatedMoviesSize + listRatedTvShowsSize,
-                            countFavorite = listFavoriteMovies + listFavoriteTvShows
+                            countLike = listRatedMoviesSize.await() + listRatedTvShowsSize.await(),
+                            countFavorite = (listFavoriteMovies.await()?.totalResults ?: 0)
+                                    + (listFavoriteTvShows.await()?.totalResults ?: 0)
                         )
                     )
-                    _userLD.postValue(it)
+                    val favoriteList = mutableListOf<ContentType>().apply {
+                        addAll(listFavoriteMovies.await()?.movies as List<ContentType>)
+                        addAll(listFavoriteTvShows.await()?.tvShows as List<ContentType>)
+                    }
+                    _favoriteLD.postValue(favoriteList)
+
                 }
             } catch (e: Exception) {
                 _errorLD.postValue(e.message)
             }
         }
     }
-
 
 }

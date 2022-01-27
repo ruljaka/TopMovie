@@ -102,9 +102,9 @@ interface ApiService {
         @Query("api_key") apiKey: String = API_KEY,
     ): Response<VideoResponse>
 
-    @GET("tv/{movie_id}/videos?")
+    @GET("tv/{tv_id}/videos?")
     suspend fun getTvVideos(
-        @Path("movie_id") movie_id: Int,
+        @Path("tv_id") tv_id: Int,
         @Query("api_key") apiKey: String = API_KEY,
     ): Response<VideoResponse>
 

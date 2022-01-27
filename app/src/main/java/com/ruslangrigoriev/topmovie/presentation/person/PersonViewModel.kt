@@ -10,6 +10,7 @@ import com.ruslangrigoriev.topmovie.domain.model.person.Person
 import com.ruslangrigoriev.topmovie.domain.model.person.PersonCreditsResponse
 import com.ruslangrigoriev.topmovie.domain.utils.TAG
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 class PersonViewModel(val repository: Repository) : ViewModel() {
 
@@ -31,7 +32,7 @@ class PersonViewModel(val repository: Repository) : ViewModel() {
 
 
     fun fetchData(person_id: Int) = viewModelScope.launch {
-        Log.d(TAG, "getPerson -> Person ID: $person_id")
+        Timber.d( "getPerson -> Person ID: $person_id")
         _isLoadingLiveData.value = true
         try {
             _personLD.postValue(repository.getPerson(person_id))

@@ -13,6 +13,7 @@ import com.ruslangrigoriev.topmovie.domain.utils.TAG
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 
 class DetailsViewModel(val repository: Repository) : ViewModel() {
 
@@ -41,9 +42,9 @@ class DetailsViewModel(val repository: Repository) : ViewModel() {
         get() = _isLoadingLiveData
 
     fun fetchMovieDetailsData(id: Int) {
-        Log.d(TAG, "fetchMovieDetailsData ID: $id -> DetailsViewModel")
+        Timber.d( "fetchMovieDetailsData ID: $id ")
         viewModelScope.launch {
-            _isLoadingLiveData.value = true
+            _isLoadingLiveData.postValue(true)
             try {
                 val movieDetails =
                     withContext(Dispatchers.IO) { repository.getMovieDetails(id) }
@@ -51,10 +52,10 @@ class DetailsViewModel(val repository: Repository) : ViewModel() {
                     withContext(Dispatchers.IO) { repository.getMovieCredits(id)?.cast }
                 movieDetails?.let { _movieDetailsLD.postValue(it) }
                 listMovieCast?.let { _movieCastLD.postValue(it) }
-                _isLoadingLiveData.value = false
+                _isLoadingLiveData.postValue(false)
             } catch (e: Exception) {
                 _errorLD.postValue(e.message)
-                _isLoadingLiveData.value = false
+                _isLoadingLiveData.postValue(false)
             }
         }
     }
@@ -62,7 +63,7 @@ class DetailsViewModel(val repository: Repository) : ViewModel() {
     fun fetchTvDetailsData(id: Int) =
         viewModelScope.launch {
             _isLoadingLiveData.value = true
-            Log.d(TAG, "fetchTvDetailsData ID: $id -> DetailsViewModel")
+            Timber.d("fetchTvDetailsData ID: $id ")
             try {
                 val tvDetails =
                     withContext(Dispatchers.IO) { repository.getTvDetails(id) }

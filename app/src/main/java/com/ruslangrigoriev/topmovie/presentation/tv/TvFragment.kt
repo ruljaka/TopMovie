@@ -48,6 +48,29 @@ class TvFragment : Fragment(R.layout.fragment_tv) {
 
     }
 
+    private fun subscribeUi() {
+        lifecycleScope.launchWhenStarted {
+            viewModel.nowLD.observe(viewLifecycleOwner, {
+                nowRecyclerAdapter.updateList(it)
+            })
+            viewModel.popularLD.observe(viewLifecycleOwner, {
+                popularRecyclerAdapter.updateList(it)
+            })
+            viewModel.errorLD.observe(viewLifecycleOwner, {
+                showToast(it)
+            })
+            viewModel.isLoadingLiveData.observe(viewLifecycleOwner) {
+                binding.apply {
+                    if (it == true) {
+                        progressBarTv.visibility = View.VISIBLE
+                    } else {
+                        progressBarTv.visibility = View.GONE
+                    }
+                }
+            }
+        }
+    }
+
     private fun setNowRecView() {
         val bindingInterface = object : BindingInterface<TvShow> {
             override fun bindData(item: TvShow, view: View) {
@@ -136,33 +159,10 @@ class TvFragment : Fragment(R.layout.fragment_tv) {
         })
     }
 
-    private fun subscribeUi() {
-        lifecycleScope.launchWhenStarted {
-            viewModel.nowLD.observe(viewLifecycleOwner, {
-                nowRecyclerAdapter.updateList(it)
-            })
-            viewModel.popularLD.observe(viewLifecycleOwner, {
-                popularRecyclerAdapter.updateList(it)
-            })
-            viewModel.errorLD.observe(viewLifecycleOwner, {
-                showToast(it)
-            })
-            viewModel.isLoadingLiveData.observe(viewLifecycleOwner) {
-                binding.apply {
-                    if (it == true) {
-                        progressBarTv.visibility = View.VISIBLE
-                    } else {
-                        progressBarTv.visibility = View.GONE
-                    }
-                }
-            }
-        }
-    }
-
     private fun onListItemClick(id: Int) {
         val bundle = Bundle()
-        bundle.putInt(TV_ID, id)
-        bundle.putInt(MOVIE_ID, 0)
+        bundle.putInt(MEDIA_ID, id)
+        bundle.putString(SOURCE_TYPE, TV_TYPE)
         findNavController().navigate(R.id.action_tv_fragment_to_detailsTvFragment, bundle)
     }
 
@@ -171,5 +171,4 @@ class TvFragment : Fragment(R.layout.fragment_tv) {
             activity, message ?: "Unknown Error", Toast.LENGTH_SHORT
         ).show()
     }
-
 }

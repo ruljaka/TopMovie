@@ -20,6 +20,7 @@ import com.ruslangrigoriev.topmovie.domain.model.auth.Session
 import com.ruslangrigoriev.topmovie.domain.model.credits.Cast
 import com.ruslangrigoriev.topmovie.domain.model.movies.Movie
 import retrofit2.Response
+import timber.log.Timber
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.*
@@ -110,7 +111,7 @@ fun Context.saveToFavorites(moveID: Int) {
             putString(FAVORITES, oldList.joinToString())
             apply()
         }
-        Log.d("TAG", "saveToFavorite :: ${oldList.joinToString()}")
+        Timber.d( "saveToFavorite :: ${oldList.joinToString()}")
     }
 }
 
@@ -122,7 +123,7 @@ fun Context.removeFromFavorites(moveID: Int) {
         putString(FAVORITES, oldList.joinToString())
         apply()
     }
-    Log.d("TAG", "removeFromFavorites :: ${oldList.joinToString()}")
+    Timber.d( "removeFromFavorites :: ${oldList.joinToString()}")
 }
 
 fun Context.getFavorites(): MutableList<Int> {
@@ -132,7 +133,7 @@ fun Context.getFavorites(): MutableList<Int> {
         .filter { it.isNotEmpty() }
         .map { it.toInt() }
         .toMutableList()
-    Log.d("TAG", "getFavorites :: $favoriteList")
+    Timber.d( "getFavorites :: $favoriteList")
     return favoriteList
 }
 

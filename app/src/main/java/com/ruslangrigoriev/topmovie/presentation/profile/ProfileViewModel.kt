@@ -14,6 +14,7 @@ import com.ruslangrigoriev.topmovie.domain.model.profile.User
 import com.ruslangrigoriev.topmovie.domain.utils.TAG
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 class ProfileViewModel(
     val authRepository: AuthRepository,
@@ -45,9 +46,9 @@ class ProfileViewModel(
         get() = _favoriteLD
 
     fun fetchUserData() {
-        Log.d(TAG, "fetchUserData -> ProfileViewModel")
+        Timber.d( "fetchUserData")
         viewModelScope.launch {
-            //_isLoadingLiveData.postValue(true)
+            _isLoadingLiveData.postValue(true)
             try {
                 val user = async { repository.getUserData() }
                 user.await()?.let { user ->
@@ -78,10 +79,12 @@ class ProfileViewModel(
                         addAll(listFavoriteTvShows.await()?.tvShows as List<ContentType>)
                     }
                     _favoriteLD.postValue(favoriteList)
+                    _isLoadingLiveData.postValue(false)
 
                 }
             } catch (e: Exception) {
                 _errorLD.postValue(e.message)
+                _isLoadingLiveData.postValue(false)
             }
         }
     }

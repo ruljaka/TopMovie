@@ -161,10 +161,9 @@ class MoviesFragment : Fragment(R.layout.fragment_movies) {
 
     private fun onListItemClick(id: Int) {
         val bundle = Bundle()
-        bundle.putInt(MOVIE_ID, id)
-        bundle.putInt(TV_ID, 0)
+        bundle.putInt(MEDIA_ID, id)
+        bundle.putString(SOURCE_TYPE, MOVIE_TYPE)
         findNavController().navigate(R.id.action_movie_to_detailsFragment, bundle)
-
     }
 
     private fun showToast(message: String?) {

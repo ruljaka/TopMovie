@@ -9,16 +9,13 @@ import com.ruslangrigoriev.topmovie.data.repository.Repository
 import com.ruslangrigoriev.topmovie.domain.model.video.Video
 import com.ruslangrigoriev.topmovie.domain.utils.TAG
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 class VideoViewModel(val repository: Repository) : ViewModel() {
 
-    private val _movieVideoLD = MutableLiveData<List<Video>>()
-    val movieVideoLD: LiveData<List<Video>>
-        get() = _movieVideoLD
-
-    private val _tvVideoLD = MutableLiveData<List<Video>>()
-    val tvVideoLD: LiveData<List<Video>>
-        get() = _tvVideoLD
+    private val _videoLD = MutableLiveData<List<Video>>()
+    val videoLD: LiveData<List<Video>>
+        get() = _videoLD
 
     private val _errorLD = MutableLiveData<String>()
     val errorLD: LiveData<String>
@@ -26,10 +23,9 @@ class VideoViewModel(val repository: Repository) : ViewModel() {
 
     fun fetchMovieVideoData(id: Int) =
         viewModelScope.launch {
-            Log.d(TAG, "fetchMovieVideoData ID: $id -> VideoViewModel")
+            Timber.d( "fetchMovieVideoData ID: $id ")
             try {
-                _movieVideoLD.postValue(repository.getMovieVideo(id)?.videos)
-
+                _videoLD.postValue(repository.getMovieVideo(id)?.videos)
             } catch (e: Exception) {
                 _errorLD.postValue(e.message)
             }
@@ -37,9 +33,9 @@ class VideoViewModel(val repository: Repository) : ViewModel() {
 
     fun fetchTvVideoData(id: Int) =
         viewModelScope.launch {
-            Log.d(TAG, "fetchTvVideoData ID: $id -> VideoViewModel")
+            Timber.d( "fetchTvVideoData ID: $id ")
             try {
-                _tvVideoLD.postValue(repository.getTvVideo(id)?.videos)
+                _videoLD.postValue(repository.getTvVideo(id)?.videos)
             } catch (e: Exception) {
                 _errorLD.postValue(e.message)
             }

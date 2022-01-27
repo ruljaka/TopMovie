@@ -11,6 +11,7 @@ import com.ruslangrigoriev.topmovie.domain.model.auth.Token
 import com.ruslangrigoriev.topmovie.domain.utils.TAG
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 class LoginViewModel(
     val authRepository: AuthRepository,
@@ -33,13 +34,13 @@ class LoginViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 var requestToken = authRepository.getRequestToken()
-                Log.d(TAG, "requestToken -> ${requestToken?.success}")
+                Timber.d( "requestToken -> ${requestToken?.success}")
                 requestToken?.let { token ->
                     val credentials = Credentials(username, password, token.requestToken)
                     requestToken = authRepository.validateRequestToken(credentials)
-                    Log.d(TAG, "validateToken -> ${requestToken?.success}")
+                    Timber.d( "validateToken -> ${requestToken?.success}")
                     val session = authRepository.createSession(Token(token.requestToken))
-                    Log.d(TAG, "session -> ${session?.success}")
+                    Timber.d("session -> ${session?.success}")
                     session?.let {
                         authRepository.saveSession(it)
                         _isLogged.postValue(true)

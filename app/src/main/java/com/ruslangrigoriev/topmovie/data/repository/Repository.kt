@@ -32,7 +32,7 @@ interface Repository {
     suspend fun getPersonCredits(person_id: Int): PersonCreditsResponse?
 
     suspend fun getMovieVideo(movie_id: Int): VideoResponse?
-    suspend fun getTvVideo(movie_id: Int): VideoResponse?
+    suspend fun getTvVideo(tv_id: Int): VideoResponse?
 
     suspend fun getUserData(): User?
     suspend fun getRatedMovies(accountID: Int): MovieResponse?

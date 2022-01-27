@@ -33,6 +33,9 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
     private var movieID = 0
     private var tvID = 0
 
+    private var mediaID = 0
+    private var sourceType: String? = null
+
     @Inject
     lateinit var factory: MyViewModelFactory
     private val viewModel: DetailsViewModel by viewModels { factory }
@@ -44,13 +47,50 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         setCastRecView()
         setupBackButton()
+        setupPlayBtn()
         subscribeUI()
         loadData()
-        setupPlayBtn()
+    }
 
+    private fun loadData() {
+        mediaID = arguments?.getInt(MEDIA_ID) ?: 0
+        sourceType = arguments?.getString(SOURCE_TYPE)
+        if ((sourceType == MOVIE_TYPE)
+            && (viewModel.movieDetailsLD.value == null)
+        ) {
+            viewModel.fetchMovieDetailsData(mediaID)
+        }
+        if ((sourceType == TV_TYPE)
+            && (viewModel.tvDetailsLD.value == null)
+        ) {
+            viewModel.fetchTvDetailsData(mediaID)
+        }
+    }
+
+    private fun subscribeUI() {
+        viewModel.movieDetailsLD.observe(viewLifecycleOwner, { bindUI(it) })
+        viewModel.tvDetailsLD.observe(viewLifecycleOwner, { bindUI(it) })
+
+        viewModel.movieCastLD.observe(viewLifecycleOwner, {
+            castRecAdapter.updateList(it.getTopCast())
+        })
+        viewModel.tvCastLD.observe(viewLifecycleOwner, {
+            castRecAdapter.updateList(it.getTopCast())
+        })
+        viewModel.errorLD.observe(viewLifecycleOwner, {
+            Toast.makeText(activity, it, Toast.LENGTH_SHORT).show()
+        })
+        viewModel.isLoadingLiveData.observe(viewLifecycleOwner) {
+            binding.apply {
+                if (it == true) {
+                    progressBarDetails.visibility = View.VISIBLE
+                } else {
+                    progressBarDetails.visibility = View.GONE
+                }
+            }
+        }
     }
 
     private fun setCastRecView() {
@@ -90,30 +130,6 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
         }
     }
 
-    private fun subscribeUI() {
-        viewModel.movieDetailsLD.observe(viewLifecycleOwner, { bindUI(it) })
-        viewModel.tvDetailsLD.observe(viewLifecycleOwner, { bindUI(it) })
-
-        viewModel.movieCastLD.observe(viewLifecycleOwner, {
-            castRecAdapter.updateList(it.getTopCast())
-        })
-        viewModel.tvCastLD.observe(viewLifecycleOwner, {
-            castRecAdapter.updateList(it.getTopCast())
-        })
-        viewModel.errorLD.observe(viewLifecycleOwner, {
-            Toast.makeText(activity, it, Toast.LENGTH_SHORT).show()
-        })
-        viewModel.isLoadingLiveData.observe(viewLifecycleOwner) {
-            binding.apply {
-                if (it == true) {
-                    progressBarDetails.visibility = View.VISIBLE
-                } else {
-                    progressBarDetails.visibility = View.GONE
-                }
-            }
-        }
-    }
-
     private fun bindUI(tvShow: TvShow) {
         binding.apply {
             textViewDetailsTitle.text = tvShow.originalName
@@ -139,39 +155,27 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
         }
     }
 
-    private fun loadData() {
-        movieID = arguments?.getInt(MOVIE_ID) ?: 0
-        tvID = arguments?.getInt(TV_ID) ?: 0
-        if (movieID != 0) {
-            if (viewModel.movieDetailsLD.value == null) {
-                viewModel.fetchMovieDetailsData(movieID)
-            }
-        }
-        if (tvID != 0) {
-            if (viewModel.tvDetailsLD.value == null) {
-                viewModel.fetchTvDetailsData(tvID)
-            }
-        }
-    }
-
     private fun onListItemClick(personID: Int) {
         val bundle = Bundle()
         bundle.putInt(PERSON_ID, personID)
-        if (movieID != 0) {
-            findNavController().navigate(R.id.action_details_to_personFragment, bundle)
+        if (sourceType == MOVIE_TYPE) {
+            findNavController().navigate(
+                R.id.action_details_to_personFragment, bundle
+            )
         }
-        if (tvID != 0) {
-            findNavController().navigate(R.id.action_detailsTvFragment_to_personTvFragment, bundle)
+        if (sourceType == TV_TYPE) {
+            findNavController().navigate(
+                R.id.action_detailsTvFragment_to_personTvFragment, bundle
+            )
         }
-
     }
 
     private fun setupPlayBtn() {
         binding.imageButtonDetailsPlay.setOnClickListener {
             activity?.let {
                 val intent = Intent(it, VideoActivity::class.java)
-                intent.putExtra(MOVIE_ID, movieID)
-                intent.putExtra(TV_ID, tvID)
+                intent.putExtra(MEDIA_ID, mediaID)
+                intent.putExtra(SOURCE_TYPE, sourceType)
                 it.startActivity(intent)
             }
         }

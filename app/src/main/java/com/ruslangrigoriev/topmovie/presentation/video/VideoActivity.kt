@@ -5,9 +5,7 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.ruslangrigoriev.topmovie.R
-import com.ruslangrigoriev.topmovie.domain.utils.MOVIE_ID
-import com.ruslangrigoriev.topmovie.domain.utils.TV_ID
-import com.ruslangrigoriev.topmovie.domain.utils.appComponent
+import com.ruslangrigoriev.topmovie.domain.utils.*
 import com.ruslangrigoriev.topmovie.presentation.MyViewModelFactory
 import kr.co.prnd.YouTubePlayerView
 import javax.inject.Inject
@@ -19,8 +17,8 @@ class VideoActivity : AppCompatActivity() {
     lateinit var factory: MyViewModelFactory
     private val viewModel: VideoViewModel by viewModels { factory }
 
-    private var movieID = 0
-    private var tvID = 0
+    private var mediaID = 0
+    private var sourceType: String? = null
     private var videoLink: String? = null
     private lateinit var youTubePlayerView: YouTubePlayerView
 
@@ -36,37 +34,30 @@ class VideoActivity : AppCompatActivity() {
     }
 
     private fun loadData() {
-        movieID = intent.getIntExtra(MOVIE_ID, 0)
-        tvID = intent.getIntExtra(TV_ID, 0)
-        if (movieID != 0) {
-            if (viewModel.movieVideoLD.value == null) {
-                viewModel.fetchMovieVideoData(movieID)
-            }
+        mediaID = intent.getIntExtra(MEDIA_ID, 0)
+        sourceType = intent.getStringExtra(SOURCE_TYPE)
+        if (sourceType == MOVIE_TYPE) {
+            viewModel.fetchMovieVideoData(mediaID)
         }
-        if (tvID != 0) {
-            if (viewModel.tvVideoLD.value == null) {
-                viewModel.fetchTvVideoData(tvID)
-            }
+        if (sourceType == TV_TYPE) {
+            viewModel.fetchTvVideoData(mediaID)
         }
     }
 
     private fun subscribeUI() {
-        viewModel.movieVideoLD.observe(this, { list ->
-            videoLink = list[0].key
-            videoLink?.let {
-                youTubePlayerView.play(it)
+        viewModel.videoLD.observe(this, { list ->
+            if (list.isNotEmpty()) {
+                videoLink = list[0].key
+                videoLink?.let {
+                    youTubePlayerView.play(it)
+                }
+            } else {
+                Toast.makeText(this, "No videos", Toast.LENGTH_LONG).show()
             }
         })
 
-        viewModel.tvVideoLD.observe(this, { list ->
-            videoLink = list[0].key
-            videoLink?.let {
-                youTubePlayerView.play(it)
-            }
-        })
         viewModel.errorLD.observe(this, {
             Toast.makeText(this, it, Toast.LENGTH_LONG).show()
         })
     }
-
 }

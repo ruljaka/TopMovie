@@ -11,6 +11,7 @@ import com.ruslangrigoriev.topmovie.domain.utils.TAG
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 
 class TvViewModel(val repository: Repository) : ViewModel() {
 
@@ -38,7 +39,7 @@ class TvViewModel(val repository: Repository) : ViewModel() {
 
     private fun fetchData() {
         viewModelScope.launch {
-            Log.d(TAG, "fetchTvNow -> TvViewModel")
+            Timber.d( "fetchData")
             _isLoadingLiveData.value = true
             try {
                 val listNow =

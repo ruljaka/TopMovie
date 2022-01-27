@@ -110,8 +110,8 @@ class RepositoryImpl(private val application: Application) : Repository {
         return getResultOrError(response)
     }
 
-    override suspend fun getTvVideo(movie_id: Int): VideoResponse? {
-        val response = apiService.getTvVideos(movie_id)
+    override suspend fun getTvVideo(tv_id: Int): VideoResponse? {
+        val response = apiService.getTvVideos(tv_id)
         return getResultOrError(response)
     }
 

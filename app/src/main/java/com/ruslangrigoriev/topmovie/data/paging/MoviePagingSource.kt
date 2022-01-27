@@ -6,6 +6,7 @@ import androidx.paging.PagingState
 import com.ruslangrigoriev.topmovie.data.repository.Repository
 import com.ruslangrigoriev.topmovie.domain.utils.PagingType
 import com.ruslangrigoriev.topmovie.domain.utils.TAG
+import timber.log.Timber
 
 class MoviePagingSource<T : Any>(
     private val query: String = "",
@@ -31,7 +32,7 @@ class MoviePagingSource<T : Any>(
                             ?.movies ?: emptyList()) as List<T>
                     responseData = mutableListOf<T>()
                     responseData.addAll(data)
-                    Log.d(TAG, " page $currentPage responsedata = " + responseData.toString())
+                    Timber.d( " page $currentPage responsedata = " + responseData.toString())
                 }
                 (PagingType.TV_SEARCH) -> {
                     val data = (repository.getSearchTvPagedResult(
@@ -46,7 +47,7 @@ class MoviePagingSource<T : Any>(
                         ?: emptyList()) as List<T>
                     responseData = mutableListOf<T>()
                     responseData.addAll(data)
-                    Log.d(TAG, " page $currentPage responsedata = " + responseData.toString())
+                    Timber.d(TAG, " page $currentPage responsedata = " + responseData.toString())
                 }
 //                (PagingType.FAVORITE_FLOW) -> {
 //                    val favoriteMovieList = (repository.getFavoriteMovies(

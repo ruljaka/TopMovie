@@ -18,6 +18,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 
 
 class MovieViewModel(val repository: Repository) : ViewModel() {
@@ -58,7 +59,7 @@ class MovieViewModel(val repository: Repository) : ViewModel() {
     }
 
     private fun fetchMoviesData() {
-        Log.d(TAG, "fetchMoviesData -> MovieViewModel")
+        Timber.d( "fetchMoviesData ")
         viewModelScope.launch() {
             _isLoadingLiveData.postValue(true)
             try {

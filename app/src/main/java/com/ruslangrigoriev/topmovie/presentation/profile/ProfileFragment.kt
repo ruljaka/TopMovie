@@ -78,11 +78,19 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
             viewModel.favoriteLD.observe(viewLifecycleOwner, {
                 favoriteRecAdapter.updateList(it)
             })
+            viewModel.isLoadingLiveData.observe(viewLifecycleOwner,{
+                binding.apply {
+                    if (it == true) {
+                        progressBarProfile.visibility = View.VISIBLE
+                    } else {
+                        progressBarProfile.visibility = View.GONE
+                    }
+                }
+            })
         }
 
 
     }
-
 
     private fun bindCounters(counters: CountLikeFavorite) {
         binding.textViewProfileLikeCount.text = counters.countLike.toString()

@@ -14,6 +14,15 @@ const val IMAGE_URL_GRAVATAR: String = "https://secure.gravatar.com/avatar/"
 const val PERSON_ID: String = "person_id"
 const val MOVIE_ID: String = "movie_id"
 const val TV_ID: String = "tv_id"
+
+const val MEDIA_ID: String = "media_id"
+const val SOURCE_TYPE: String = "source_type"
+const val MOVIE_TYPE: String = "movie_type"
+const val TV_TYPE: String = "tv_type"
+
+
+
+
 const val VIDEO_KEY: String = "video_key"
 const val VIDEO_PATH: String = "https://www.youtube.com/watch?v="
 const val YOUTUBE_API_KEY = "AIzaSyAXwVXAQQoSwXLB5GErbLkJPxml1Jf9Kpc"

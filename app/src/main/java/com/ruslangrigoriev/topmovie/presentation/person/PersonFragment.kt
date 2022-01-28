@@ -12,11 +12,11 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.ruslangrigoriev.topmovie.R
 import com.ruslangrigoriev.topmovie.databinding.FragmentPersonBinding
 import com.ruslangrigoriev.topmovie.domain.model.credits.Cast
-import com.ruslangrigoriev.topmovie.domain.model.person.Person
 import com.ruslangrigoriev.topmovie.domain.utils.*
 import com.ruslangrigoriev.topmovie.presentation.MyViewModelFactory
 import com.ruslangrigoriev.topmovie.presentation.adapters.BaseRecyclerAdapter
 import com.ruslangrigoriev.topmovie.presentation.adapters.PersonCastAdapter
+import com.ruslangrigoriev.topmovie.presentation.person.PersonScreenViewState.*
 import javax.inject.Inject
 
 
@@ -37,44 +37,63 @@ class PersonFragment : Fragment(R.layout.fragment_person) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         val personID = arguments?.getInt(PERSON_ID)
         loadData(personID)
         setAdapter(view)
         subscribeUI()
     }
 
-    private fun subscribeUI() {
-        viewModel.personLD.observe(viewLifecycleOwner, {
-            bindUI(it)
-        })
-        viewModel.personCastLD.observe(viewLifecycleOwner, {
-            personCastAdapter.updateList(it.cast.getTopPersonCasts())
-        })
-        viewModel.errorLD.observe(viewLifecycleOwner, {
-            Toast.makeText(activity, it, Toast.LENGTH_SHORT).show()
-        })
-        viewModel.isLoadingLiveData.observe(viewLifecycleOwner) {
-            binding.apply {
-                if (it == true) {
-                    progressBarPerson.visibility = View.VISIBLE
-                } else progressBarPerson.visibility = View.GONE
+    private fun loadData(personID: Int?) {
+        personID?.let {
+            if (viewModel.viewState.value == null) {
+                viewModel.fetchData(personID)
             }
         }
     }
 
-    private fun bindUI(it: Person) {
-        binding.textViewPersonName.text = it.name
-        binding.textViewPersonKnownFor.text = it.knownForDepartment
-        binding.textViewPersonGender.text = when (it.gender) {
-            1 -> "Female"
-            2 -> "Male"
-            else -> "Undefined"
+    private fun subscribeUI() {
+        viewModel.viewState.observe(viewLifecycleOwner, {
+            when (it) {
+                Loading -> {
+                    showLoading(true)
+                }
+                is Failure -> {
+                    showToast(it.errorMessage)
+                    showLoading(false)
+                }
+                is Success -> {
+                    showLoading(false)
+                    bindUI(it)
+                }
+            }
+        })
+    }
+
+    private fun showLoading(loading: Boolean) {
+        if (loading) {
+            binding.progressBarPerson.visibility = View.VISIBLE
+        } else {
+            binding.progressBarPerson.visibility = View.GONE
         }
-        binding.textViewPersonBirthday.text = it.birthday
-        binding.textViewPersonPlaceOfBirth.text = it.placeOfBirth
-        binding.textViewPersonBiography.text = it.biography
-        it.profilePath?.loadPosterLarge(binding.imageviewPersonPoster)
+    }
+
+    private fun bindUI(it: Success) {
+        it.person?.let {
+            binding.apply {
+                textViewPersonName.text = it.name
+                textViewPersonKnownFor.text = it.knownForDepartment
+                textViewPersonGender.text = when (it.gender) {
+                    1 -> "Female"
+                    2 -> "Male"
+                    else -> "Undefined"
+                }
+                textViewPersonBirthday.text = it.birthday
+                textViewPersonPlaceOfBirth.text = it.placeOfBirth
+                textViewPersonBiography.text = it.biography
+                it.profilePath?.loadPosterLarge(imageviewPersonPoster)
+            }
+        }
+        it.personCastList?.let { personCastAdapter.updateList(it.getTopPersonCasts()) }
     }
 
     private fun setAdapter(view: View) {
@@ -83,16 +102,6 @@ class PersonFragment : Fragment(R.layout.fragment_person) {
         binding.recyclerViewPerson.layoutManager =
             LinearLayoutManager(view.context, LinearLayoutManager.HORIZONTAL, false)
         binding.recyclerViewPerson.adapter = personCastAdapter
-
-
-    }
-
-    private fun loadData(personID: Int?) {
-        personID?.let {
-            if (viewModel.personLD.value == null) {
-                viewModel.fetchData(personID)
-            }
-        }
     }
 
     private fun onListItemClick(movieID: Int) {
@@ -100,5 +109,11 @@ class PersonFragment : Fragment(R.layout.fragment_person) {
         bundle.putInt(MEDIA_ID, movieID)
         bundle.putString(SOURCE_TYPE, MOVIE_TYPE)
         findNavController().navigate(R.id.action_personFragment_to_detailsFragment, bundle)
+    }
+
+    private fun showToast(message: String?) {
+        Toast.makeText(
+            activity, message ?: "Unknown Error", Toast.LENGTH_SHORT
+        ).show()
     }
 }

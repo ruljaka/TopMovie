@@ -1,24 +1,29 @@
 package com.ruslangrigoriev.topmovie
 
 import android.os.Bundle
-import android.view.MenuItem
 import android.view.View
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import androidx.navigation.findNavController
+import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.*
 import by.kirich1409.viewbindingdelegate.viewBinding
-import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.ruslangrigoriev.topmovie.databinding.ActivityMainBinding
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(R.layout.activity_main) {
     private val binding by viewBinding(ActivityMainBinding::bind)
+
+    private lateinit var appBarConfiguration: AppBarConfiguration
+    private lateinit var navController: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+
+
+
+
+        //setupToolbar(binding.toolbar)
         setUpNavigation()
 
         this.window.apply {
@@ -29,12 +34,30 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    fun setupToolbar(toolBar: Toolbar){
+        setSupportActionBar(toolBar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true);
+        supportActionBar?.setDisplayShowHomeEnabled(true);
+        supportActionBar?.setDisplayShowTitleEnabled(false)
+        appBarConfiguration = AppBarConfiguration(setOf(R.id.movies_fragment, R.id.tv_fragment, R.id.profile_fragment))
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        navController = navHostFragment.navController
+        setupActionBarWithNavController(navController, appBarConfiguration)
+        setUpNavigation()
+    }
+
     private fun setUpNavigation() {
         binding.bttmNav.itemIconTintList = null
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-        NavigationUI.setupWithNavController(binding.bttmNav, navHostFragment.navController)
+        navController = navHostFragment.navController
+        NavigationUI.setupWithNavController(binding.bttmNav, navController)
 
+    }
 
+    override fun onSupportNavigateUp(): Boolean {
+        return navController.navigateUp(appBarConfiguration)
+                || super.onSupportNavigateUp()
     }
 }

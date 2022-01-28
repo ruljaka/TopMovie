@@ -14,6 +14,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
+import com.ruslangrigoriev.topmovie.MainActivity
 import com.ruslangrigoriev.topmovie.R
 import com.ruslangrigoriev.topmovie.databinding.FragmentTvBinding
 import com.ruslangrigoriev.topmovie.domain.model.tv.TvShow
@@ -38,36 +39,50 @@ class TvFragment : Fragment(R.layout.fragment_tv) {
         super.onAttach(context)
     }
 
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        (requireActivity() as MainActivity).setupToolbar(binding.toolbarTv.toolbar)
+        binding.toolbarTv.toolbarTitle.text = "TV"
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         setNowRecView()
         setPopularRecView()
         setupSearch()
         subscribeUi()
-
     }
 
     private fun subscribeUi() {
         lifecycleScope.launchWhenStarted {
-            viewModel.nowLD.observe(viewLifecycleOwner, {
-                nowRecyclerAdapter.updateList(it)
-            })
-            viewModel.popularLD.observe(viewLifecycleOwner, {
-                popularRecyclerAdapter.updateList(it)
-            })
-            viewModel.errorLD.observe(viewLifecycleOwner, {
-                showToast(it)
-            })
-            viewModel.isLoadingLiveData.observe(viewLifecycleOwner) {
-                binding.apply {
-                    if (it == true) {
-                        progressBarTv.visibility = View.VISIBLE
-                    } else {
-                        progressBarTv.visibility = View.GONE
+            viewModel.viewState.observe(viewLifecycleOwner, {
+                when (it) {
+                    TvScreenViewState.Loading -> {
+                        showLoading(true)
+                    }
+                    is TvScreenViewState.Failure -> {
+                        showToast(it.errorMessage)
+                        showLoading(false)
+                    }
+                    is TvScreenViewState.Success -> {
+                        showLoading(false)
+                        bindUI(it)
                     }
                 }
-            }
+            })
+        }
+    }
+
+    private fun bindUI(it: TvScreenViewState.Success) {
+        it.nowList?.let { nowList -> nowRecyclerAdapter.updateList(nowList) }
+        it.popularList?.let { popularList -> popularRecyclerAdapter.updateList(popularList) }
+    }
+
+    private fun showLoading(loading: Boolean) {
+        if (loading) {
+            binding.progressBarTv.visibility = View.VISIBLE
+        } else {
+            binding.progressBarTv.visibility = View.GONE
         }
     }
 
@@ -136,7 +151,7 @@ class TvFragment : Fragment(R.layout.fragment_tv) {
     }
 
     private fun setupSearch() {
-        binding.searchViewTV.setOnQueryTextListener(object : SearchView.OnQueryTextListener,
+        binding.toolbarTv.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener,
             androidx.appcompat.widget.SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 if (TextUtils.isEmpty(query)) {
@@ -171,4 +186,6 @@ class TvFragment : Fragment(R.layout.fragment_tv) {
             activity, message ?: "Unknown Error", Toast.LENGTH_SHORT
         ).show()
     }
+
+
 }

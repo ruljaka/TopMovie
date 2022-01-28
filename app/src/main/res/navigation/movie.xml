@@ -9,7 +9,7 @@
     <fragment
         android:id="@+id/movies_fragment"
         android:name="com.ruslangrigoriev.topmovie.presentation.movies.MoviesFragment"
-        android:label="movies_fragment"
+        android:label="MOVIES"
         tools:layout="@layout/fragment_movies">
         <action
             android:id="@+id/action_movies_fragment_to_searchFragment"

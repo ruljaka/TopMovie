@@ -31,7 +31,13 @@
         <item name="android:background">@color/white</item>
     </style>
 
-    <style name="Theme.TopMovie.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="TitleTextStyle" parent="TextAppearance.Design.CollapsingToolbar.Expanded">
+        <item name="android:textSize">26sp</item>
+    </style>
+
+
+    <style name="Theme.TopMovie.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" >
+    </style>
 
     <style name="Theme.TopMovie.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 

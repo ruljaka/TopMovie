@@ -1,7 +1,6 @@
 package com.ruslangrigoriev.topmovie.presentation.profile
 
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -9,9 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.ruslangrigoriev.topmovie.data.repository.AuthRepository
 import com.ruslangrigoriev.topmovie.data.repository.Repository
 import com.ruslangrigoriev.topmovie.domain.model.ContentType
-import com.ruslangrigoriev.topmovie.domain.model.profile.CountLikeFavorite
-import com.ruslangrigoriev.topmovie.domain.model.profile.User
-import com.ruslangrigoriev.topmovie.domain.utils.TAG
+import com.ruslangrigoriev.topmovie.domain.model.profile.CounterLikeFavorite
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -21,72 +18,51 @@ class ProfileViewModel(
     val repository: Repository
 ) : ViewModel() {
 
-    private val _userLD = MutableLiveData<User>()
-    val userLD: LiveData<User>
-        get() = _userLD
-
-    private val _countLD = MutableLiveData<CountLikeFavorite>()
-    val countLD: LiveData<CountLikeFavorite>
-        get() = _countLD
-
-    private val _errorLD = MutableLiveData<String>()
-    val errorLD: LiveData<String>
-        get() = _errorLD
-
-    private val _isLoadingLiveData = MutableLiveData<Boolean>()
-    val isLoadingLiveData: LiveData<Boolean>
-        get() = _isLoadingLiveData
+    private val _viewState = MutableLiveData<ProfileScreenViewState>()
+    val viewState: LiveData<ProfileScreenViewState>
+        get() = _viewState
 
     fun checkIfUserIsAuthenticated(): Boolean {
         return authRepository.checkIsUserIsAuthenticated()
     }
 
-    private val _favoriteLD = MutableLiveData<List<ContentType>>()
-    val favoriteLD: LiveData<List<ContentType>>
-        get() = _favoriteLD
-
     fun fetchUserData() {
-        Timber.d( "fetchUserData")
+        Timber.d("fetchUserData")
         viewModelScope.launch {
-            _isLoadingLiveData.postValue(true)
+            _viewState.value = ProfileScreenViewState.Loading
             try {
-                val user = async { repository.getUserData() }
-                user.await()?.let { user ->
-
+                val user = repository.getUserData()
+                user?.let {
                     val listRatedMoviesSize = async {
-                        repository.getRatedMovies(user.id)?.totalResults ?: 0
+                        repository.getRatedMovies(it.id)?.totalResults ?: 0
                     }
                     val listRatedTvShowsSize = async {
-                        repository.getRatedTvShows(user.id)?.totalResults ?: 0
+                        repository.getRatedTvShows(it.id)?.totalResults ?: 0
                     }
                     val listFavoriteMovies = async {
-                        repository.getFavoriteMovies(user.id)
+                        repository.getFavoriteMovies(it.id)
                     }
                     val listFavoriteTvShows = async {
-                        repository.getFavoriteTvShows(user.id)
+                        repository.getFavoriteTvShows(it.id)
                     }
-
-                    _userLD.postValue(user)
-                    _countLD.postValue(
-                        CountLikeFavorite(
-                            countLike = listRatedMoviesSize.await() + listRatedTvShowsSize.await(),
-                            countFavorite = (listFavoriteMovies.await()?.totalResults ?: 0)
-                                    + (listFavoriteTvShows.await()?.totalResults ?: 0)
-                        )
+                    val counter = CounterLikeFavorite(
+                        countLike = listRatedMoviesSize.await() + listRatedTvShowsSize.await(),
+                        countFavorite = (listFavoriteMovies.await()?.totalResults ?: 0)
+                                + (listFavoriteTvShows.await()?.totalResults ?: 0)
                     )
                     val favoriteList = mutableListOf<ContentType>().apply {
                         addAll(listFavoriteMovies.await()?.movies as List<ContentType>)
                         addAll(listFavoriteTvShows.await()?.tvShows as List<ContentType>)
                     }
-                    _favoriteLD.postValue(favoriteList)
-                    _isLoadingLiveData.postValue(false)
-
+                    _viewState.postValue(
+                        ProfileScreenViewState.Success(
+                            user, counter, favoriteList
+                        )
+                    )
                 }
             } catch (e: Exception) {
-                _errorLD.postValue(e.message)
-                _isLoadingLiveData.postValue(false)
+                _viewState.postValue(ProfileScreenViewState.Failure(e.message))
             }
         }
     }
-
 }

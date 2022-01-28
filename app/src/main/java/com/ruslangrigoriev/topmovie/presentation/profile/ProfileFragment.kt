@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -18,14 +19,14 @@ import com.ruslangrigoriev.topmovie.data.remote.ApiService
 import com.ruslangrigoriev.topmovie.databinding.FragmentProfileBinding
 import com.ruslangrigoriev.topmovie.domain.model.ContentType
 import com.ruslangrigoriev.topmovie.domain.model.movies.Movie
-import com.ruslangrigoriev.topmovie.domain.model.profile.CountLikeFavorite
-import com.ruslangrigoriev.topmovie.domain.model.profile.User
+import com.ruslangrigoriev.topmovie.domain.model.profile.CounterLikeFavorite
 import com.ruslangrigoriev.topmovie.domain.model.tv.TvShow
 import com.ruslangrigoriev.topmovie.domain.utils.*
 import com.ruslangrigoriev.topmovie.presentation.MyViewModelFactory
 import com.ruslangrigoriev.topmovie.presentation.adapters.BaseRecyclerAdapter
 import com.ruslangrigoriev.topmovie.presentation.adapters.BindingInterface
 import com.ruslangrigoriev.topmovie.presentation.adapters.ItemOffsetDecoration
+import com.ruslangrigoriev.topmovie.presentation.profile.ProfileScreenViewState.*
 import javax.inject.Inject
 
 
@@ -66,55 +67,56 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
 
     private fun subscribeUI() {
         lifecycleScope.launchWhenStarted {
-            viewModel.userLD.observe(viewLifecycleOwner, { user ->
-                bindUI(user)
-            })
-            viewModel.countLD.observe(viewLifecycleOwner, { counters ->
-                bindCounters(counters)
-            })
-            viewModel.favoriteLD.observe(viewLifecycleOwner, {
-                favoriteRecAdapter.updateList(it)
-            })
-            viewModel.isLoadingLiveData.observe(viewLifecycleOwner,{
-                binding.apply {
-                    if (it == true) {
-                        progressBarProfile.visibility = View.VISIBLE
-                    } else {
-                        progressBarProfile.visibility = View.GONE
+            viewModel.viewState.observe(viewLifecycleOwner, {
+                when (it) {
+                    Loading -> {
+                        showLoading(true)
+                    }
+                    is Failure -> {
+                        showToast(it.errorMessage)
+                        showLoading(false)
+                    }
+                    is Success -> {
+                        showLoading(false)
+                        bindUI(it)
                     }
                 }
             })
         }
-
-
     }
 
-    private fun bindCounters(counters: CountLikeFavorite) {
-        binding.textViewProfileLikeCount.text = counters.countLike.toString()
-        binding.textViewProfileFavoriteCount.text = counters.countFavorite.toString()
-    }
-
-    private fun bindUI(user: User) {
-        binding.apply {
-            if (user.name.isEmpty()) {
-                textViewUsername.text = user.username
-            } else {
-                textViewUsername.text = user.name
-            }
-            if (user.avatar.tmdb.avatarPath != null) {
-                Glide.with(requireContext())
-                    .load(IMAGE_URL_AVATAR + user.avatar.tmdb.avatarPath)
-                    .apply(RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL))
-                    .placeholder(R.drawable.placeholder)
-                    .into(this.imageViewUserAvatar)
-            } else {
-                Glide.with(requireContext())
-                    .load(IMAGE_URL_GRAVATAR + user.avatar.gravatar.hash + ".jpg?s=200")
-                    .apply(RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL))
-                    .placeholder(R.drawable.placeholder)
-                    .into(this.imageViewUserAvatar)
-            }
+    private fun showLoading(loading: Boolean) {
+        if (loading) {
+            binding.progressBarProfile.visibility = View.VISIBLE
+        } else {
+            binding.progressBarProfile.visibility = View.GONE
         }
+    }
+
+    private fun bindUI(it: Success) {
+        binding.apply {
+            if (it.user.name.isEmpty()) {
+                textViewUsername.text = it.user.username
+            } else {
+                textViewUsername.text = it.user.name
+            }
+            if (it.user.avatar.tmdb.avatarPath != null) {
+                Glide.with(requireContext())
+                    .load(IMAGE_URL_AVATAR + it.user.avatar.tmdb.avatarPath)
+                    .apply(RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL))
+                    .placeholder(R.drawable.placeholder)
+                    .into(this.imageViewUserAvatar)
+            } else {
+                Glide.with(requireContext())
+                    .load(IMAGE_URL_GRAVATAR + it.user.avatar.gravatar.hash + ".jpg?s=200")
+                    .apply(RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL))
+                    .placeholder(R.drawable.placeholder)
+                    .into(this.imageViewUserAvatar)
+            }
+            textViewProfileLikeCount.text = it.counters.countLike.toString()
+            textViewProfileFavoriteCount.text = it.counters.countFavorite.toString()
+        }
+        favoriteRecAdapter.updateList(it.favoriteList)
     }
 
     private fun setFavoriteRecView() {
@@ -148,7 +150,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                     false
                 )
             recyclerViewProfile.adapter = favoriteRecAdapter
-             recyclerViewProfile.setHasFixedSize(true)
+            recyclerViewProfile.setHasFixedSize(true)
             recyclerViewProfile.addItemDecoration(
                 ItemOffsetDecoration(
                     requireContext(),
@@ -163,5 +165,11 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         bundle.putInt(MEDIA_ID, id)
         bundle.putString(SOURCE_TYPE, sourceType)
         findNavController().navigate(R.id.action_profile_fragment_to_details, bundle)
+    }
+
+    private fun showToast(message: String?) {
+        Toast.makeText(
+            activity, message ?: "Unknown Error", Toast.LENGTH_SHORT
+        ).show()
     }
 }

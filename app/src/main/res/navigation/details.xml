@@ -8,8 +8,7 @@
     <fragment
         android:id="@+id/detailsFragment"
         android:name="com.ruslangrigoriev.topmovie.presentation.details.DetailsFragment"
-        android:label="fragment_details"
-        tools:layout="@layout/fragment_details" >
+        tools:layout="@layout/fragment_details">
         <action
             android:id="@+id/action_detailsFragment_to_personFragment"
             app:destination="@id/personFragment" />
@@ -20,14 +19,12 @@
     <fragment
         android:id="@+id/personFragment"
         android:name="com.ruslangrigoriev.topmovie.presentation.person.PersonFragment"
-        android:label="fragment_person"
-        tools:layout="@layout/fragment_person" >
+        tools:layout="@layout/fragment_person">
         <action
             android:id="@+id/action_personFragment_to_detailsFragment"
             app:destination="@id/detailsFragment" />
     </fragment>
     <activity
         android:id="@+id/videoActivity"
-        android:name="com.ruslangrigoriev.topmovie.presentation.video.VideoActivity"
-        android:label="VideoActivity" />
+        android:name="com.ruslangrigoriev.topmovie.presentation.video.VideoActivity" />
 </navigation>

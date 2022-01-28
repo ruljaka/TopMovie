@@ -3,6 +3,8 @@ package com.ruslangrigoriev.topmovie.presentation.movies
 import android.content.Context
 import android.os.Bundle
 import android.text.TextUtils
+import android.view.Menu
+import android.view.MenuInflater
 import android.view.View
 import android.widget.ImageView
 import android.widget.SearchView
@@ -15,6 +17,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
+import com.ruslangrigoriev.topmovie.MainActivity
 import com.ruslangrigoriev.topmovie.R
 import com.ruslangrigoriev.topmovie.databinding.FragmentMoviesBinding
 import com.ruslangrigoriev.topmovie.domain.model.movies.Movie
@@ -23,6 +26,7 @@ import com.ruslangrigoriev.topmovie.presentation.MyViewModelFactory
 import com.ruslangrigoriev.topmovie.presentation.adapters.BaseRecyclerAdapter
 import com.ruslangrigoriev.topmovie.presentation.adapters.BindingInterface
 import com.ruslangrigoriev.topmovie.presentation.adapters.MyPagingAdapter
+import com.ruslangrigoriev.topmovie.presentation.movies.MovieScreenViewState.*
 import javax.inject.Inject
 
 class MoviesFragment : Fragment(R.layout.fragment_movies) {
@@ -41,8 +45,16 @@ class MoviesFragment : Fragment(R.layout.fragment_movies) {
         super.onAttach(context)
     }
 
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        (requireActivity() as MainActivity).setupToolbar(binding.toolbarMovies.toolbar)
+        binding.toolbarMovies.toolbarTitle.text = "MOVIES"
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        setHasOptionsMenu(true)
 
         setNowRecView()
         setPopularRecView()
@@ -113,7 +125,7 @@ class MoviesFragment : Fragment(R.layout.fragment_movies) {
     }
 
     private fun setupSearch() {
-        binding.searchViewMovies.setOnQueryTextListener(object : SearchView.OnQueryTextListener,
+        binding.toolbarMovies.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener,
             androidx.appcompat.widget.SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 if (TextUtils.isEmpty(query)) {
@@ -137,24 +149,34 @@ class MoviesFragment : Fragment(R.layout.fragment_movies) {
 
     private fun subscribeUi() {
         lifecycleScope.launchWhenStarted {
-            viewModel.nowLD.observe(viewLifecycleOwner, {
-                nowRecyclerAdapter.updateList(it)
-            })
-            viewModel.popularLD.observe(viewLifecycleOwner, {
-                popularRecyclerAdapter.updateList(it)
-            })
-            viewModel.errorLD.observe(viewLifecycleOwner, {
-                showToast(it)
-            })
-            viewModel.isLoadingLiveData.observe(viewLifecycleOwner) {
-                binding.apply {
-                    if (it == true) {
-                        progressBarMovies.visibility = View.VISIBLE
-                    } else {
-                        progressBarMovies.visibility = View.GONE
+            viewModel.viewState.observe(viewLifecycleOwner, {
+                when (it) {
+                    Loading -> {
+                        showLoading(true)
+                    }
+                     is Failure -> {
+                        showToast(it.errorMessage)
+                        showLoading(false)
+                    }
+                    is Success -> {
+                        showLoading(false)
+                        bindUI(it)
                     }
                 }
-            }
+            })
+        }
+    }
+
+    private fun bindUI(it: Success) {
+        it.nowList?.let { nowList -> nowRecyclerAdapter.updateList(nowList) }
+        it.popularList?.let { popularList -> popularRecyclerAdapter.updateList(popularList) }
+    }
+
+    private fun showLoading(loading: Boolean) {
+        if (loading) {
+            binding.progressBarMovies.visibility = View.VISIBLE
+        } else {
+            binding.progressBarMovies.visibility = View.GONE
         }
     }
 
@@ -197,4 +219,6 @@ class MoviesFragment : Fragment(R.layout.fragment_movies) {
             }
         }
     }*/
+
+
 }

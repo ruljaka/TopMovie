@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/profile_fragment"
         android:name="com.ruslangrigoriev.topmovie.presentation.profile.ProfileFragment"
-        android:label="profile_fragment"
+        android:label="Profile"
         tools:layout="@layout/fragment_profile">
         <action
             android:id="@+id/action_profile_fragment_to_loginProfileFragment"
@@ -20,7 +20,7 @@
     <fragment
         android:id="@+id/loginProfileFragment"
         android:name="com.ruslangrigoriev.topmovie.presentation.profile.login.LoginFragment"
-        android:label="fragment_login"
+        android:label="Login"
         tools:layout="@layout/fragment_login" />
     <include app:graph="@navigation/details" />
 </navigation>

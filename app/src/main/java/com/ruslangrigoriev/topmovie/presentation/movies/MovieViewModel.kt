@@ -1,6 +1,5 @@
 package com.ruslangrigoriev.topmovie.presentation.movies
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -9,15 +8,13 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import com.ruslangrigoriev.topmovie.data.paging.MoviePagingSource
 import com.ruslangrigoriev.topmovie.data.repository.Repository
 import com.ruslangrigoriev.topmovie.domain.model.movies.Movie
-import com.ruslangrigoriev.topmovie.data.paging.MoviePagingSource
 import com.ruslangrigoriev.topmovie.domain.utils.PagingType
-import com.ruslangrigoriev.topmovie.domain.utils.TAG
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import timber.log.Timber
 
 
@@ -27,26 +24,12 @@ class MovieViewModel(val repository: Repository) : ViewModel() {
     val trendingFlowData: Flow<PagingData<Movie>>
         get() = _trendingFlowData
 
-    private val _popularLD = MutableLiveData<List<Movie>>()
-    val popularLD: LiveData<List<Movie>>
-        get() = _popularLD
-
-    private val _nowLD = MutableLiveData<List<Movie>>()
-    val nowLD: LiveData<List<Movie>>
-        get() = _nowLD
-
-    private val _errorLD = MutableLiveData<String>()
-    val errorLD: LiveData<String>
-        get() = _errorLD
-
-    private val _isLoadingLiveData = MutableLiveData<Boolean>()
-    val isLoadingLiveData: LiveData<Boolean>
-        get() = _isLoadingLiveData
+    private val _viewState = MutableLiveData<MovieScreenViewState>()
+    val viewState: LiveData<MovieScreenViewState>
+        get() = _viewState
 
     init {
-        if ((_nowLD.value == null)
-            || (_popularLD.value == null)
-        ) {
+        if(_viewState.value == null){
             fetchMoviesData()
         }
     }
@@ -59,20 +42,20 @@ class MovieViewModel(val repository: Repository) : ViewModel() {
     }
 
     private fun fetchMoviesData() {
-        Timber.d( "fetchMoviesData ")
+        Timber.d("fetchMoviesData ")
         viewModelScope.launch() {
-            _isLoadingLiveData.postValue(true)
+            _viewState.value = MovieScreenViewState.Loading
             try {
-                val listNow =
-                    withContext(Dispatchers.IO) { repository.getMoviesNow()?.movies }
-                val listPopular =
-                    withContext(Dispatchers.IO) { repository.getMoviesPopular()?.movies }
-                listNow?.let{_nowLD.postValue(it)}
-                listPopular?.let{_popularLD.postValue(it)}
-                _isLoadingLiveData.postValue(false)
+                val listNow = async { repository.getMoviesNow()?.movies }
+                val listPopular = async { repository.getMoviesPopular()?.movies }
+                _viewState.postValue(
+                    MovieScreenViewState.Success(
+                        listNow.await(),
+                        listPopular.await()
+                    )
+                )
             } catch (e: Exception) {
-                _errorLD.postValue(e.message)
-                _isLoadingLiveData.postValue(false)
+                _viewState.postValue(MovieScreenViewState.Failure(e.message))
             }
         }
     }

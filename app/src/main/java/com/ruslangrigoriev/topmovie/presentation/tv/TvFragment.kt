@@ -17,7 +17,7 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.ruslangrigoriev.topmovie.MainActivity
 import com.ruslangrigoriev.topmovie.R
 import com.ruslangrigoriev.topmovie.databinding.FragmentTvBinding
-import com.ruslangrigoriev.topmovie.domain.model.tv.TvShow
+import com.ruslangrigoriev.topmovie.domain.model.media.Media
 import com.ruslangrigoriev.topmovie.domain.utils.*
 import com.ruslangrigoriev.topmovie.presentation.MyViewModelFactory
 import com.ruslangrigoriev.topmovie.presentation.adapters.BaseRecyclerAdapter
@@ -31,8 +31,8 @@ class TvFragment : Fragment(R.layout.fragment_tv) {
     lateinit var factory: MyViewModelFactory
     private val viewModel: TvViewModel by viewModels { factory }
 
-    private lateinit var nowRecyclerAdapter: BaseRecyclerAdapter<TvShow>
-    private lateinit var popularRecyclerAdapter: BaseRecyclerAdapter<TvShow>
+    private lateinit var nowRecyclerAdapter: BaseRecyclerAdapter<Media>
+    private lateinit var popularRecyclerAdapter: BaseRecyclerAdapter<Media>
 
     override fun onAttach(context: Context) {
         context.appComponent.inject(this)
@@ -57,14 +57,14 @@ class TvFragment : Fragment(R.layout.fragment_tv) {
         lifecycleScope.launchWhenStarted {
             viewModel.viewState.observe(viewLifecycleOwner, {
                 when (it) {
-                    TvScreenViewState.Loading -> {
+                    ResultTvState.Loading -> {
                         showLoading(true)
                     }
-                    is TvScreenViewState.Failure -> {
+                    is ResultTvState.Failure -> {
                         showToast(it.errorMessage)
                         showLoading(false)
                     }
-                    is TvScreenViewState.Success -> {
+                    is ResultTvState.Success -> {
                         showLoading(false)
                         bindUI(it)
                     }
@@ -73,24 +73,16 @@ class TvFragment : Fragment(R.layout.fragment_tv) {
         }
     }
 
-    private fun bindUI(it: TvScreenViewState.Success) {
-        it.nowList?.let { nowList -> nowRecyclerAdapter.updateList(nowList) }
-        it.popularList?.let { popularList -> popularRecyclerAdapter.updateList(popularList) }
-    }
-
-    private fun showLoading(loading: Boolean) {
-        if (loading) {
-            binding.progressBarTv.visibility = View.VISIBLE
-        } else {
-            binding.progressBarTv.visibility = View.GONE
-        }
+    private fun bindUI(it: ResultTvState.Success) {
+        nowRecyclerAdapter.updateList(it.nowList)
+        popularRecyclerAdapter.updateList(it.popularList)
     }
 
     private fun setNowRecView() {
-        val bindingInterface = object : BindingInterface<TvShow> {
-            override fun bindData(item: TvShow, view: View) {
+        val bindingInterface = object : BindingInterface<Media> {
+            override fun bindData(item: Media, view: View) {
                 val title: TextView = view.findViewById(R.id.textView_now_title)
-                title.text = item.originalName
+                title.text = item.title
                 val poster: ImageView = view.findViewById(R.id.imageView_now_poster)
                 item.posterPath?.loadPosterLarge(poster)
                 view.setOnClickListener {
@@ -117,12 +109,12 @@ class TvFragment : Fragment(R.layout.fragment_tv) {
     }
 
     private fun setPopularRecView() {
-        val bindingInterface = object : BindingInterface<TvShow> {
-            override fun bindData(item: TvShow, view: View) {
+        val bindingInterface = object : BindingInterface<Media> {
+            override fun bindData(item: Media, view: View) {
                 val name: TextView = view.findViewById(R.id.textView_tv_popular_name)
-                name.text = item.originalName
+                name.text = item.title
                 val date: TextView = view.findViewById(R.id.textView_tv_popular_date)
-                date.text = item.firstAirDate.formatDate()
+                date.text = item.releaseDate?.formatDate()
                 val vote: TextView = view.findViewById(R.id.textView_tv_popular_score)
                 vote.text = item.voteAverage.toString()
                 val poster: ImageView = view.findViewById(R.id.imageView_tv_popular_poster)
@@ -172,6 +164,14 @@ class TvFragment : Fragment(R.layout.fragment_tv) {
                 return false
             }
         })
+    }
+
+    private fun showLoading(loading: Boolean) {
+        if (loading) {
+            binding.progressBarTv.visibility = View.VISIBLE
+        } else {
+            binding.progressBarTv.visibility = View.GONE
+        }
     }
 
     private fun onListItemClick(id: Int) {

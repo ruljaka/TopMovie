@@ -1,6 +1,5 @@
 package com.ruslangrigoriev.topmovie.data.paging
 
-import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.ruslangrigoriev.topmovie.data.repository.Repository
@@ -26,27 +25,24 @@ class MoviePagingSource<T : Any>(
             when (type) {
                 (PagingType.MOVIE_SEARCH) -> {
                     val data =
-                        (repository.getSearchMoviesPagedResult(
+                        (repository.searchMovies(
                             query = query, page = currentPage
                         )
-                            ?.movies ?: emptyList()) as List<T>
-                    responseData = mutableListOf<T>()
-                    responseData.addAll(data)
+                            ?.movies ?: emptyList()) as MutableList<T>
+                    responseData = data
                     Timber.d( " page $currentPage responsedata = " + responseData.toString())
                 }
                 (PagingType.TV_SEARCH) -> {
                     val data = (repository.getSearchTvPagedResult(
                         query = query, page = currentPage
                     )
-                        ?.tvShows ?: emptyList()) as List<T>
-                    responseData = mutableListOf<T>()
-                    responseData.addAll(data)
+                        ?.tvShows ?: emptyList()) as MutableList<T>
+                    responseData = data
                 }
                 (PagingType.MOVIE_FLOW) -> {
                     val data = (repository.getMoviesTrending(currentPage)?.movies
-                        ?: emptyList()) as List<T>
-                    responseData = mutableListOf<T>()
-                    responseData.addAll(data)
+                        ?: emptyList()) as MutableList<T>
+                    responseData = data
                     Timber.d(TAG, " page $currentPage responsedata = " + responseData.toString())
                 }
 //                (PagingType.FAVORITE_FLOW) -> {

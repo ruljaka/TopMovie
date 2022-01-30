@@ -20,7 +20,7 @@ class PersonViewModel(val repository: Repository) : ViewModel() {
         _viewState.value = PersonScreenViewState.Loading
         try {
             val person = async { repository.getPerson(person_id) }
-            val personCastList = async { repository.getPersonCredits(person_id)?.cast }
+            val personCastList = async { repository.getPersonCredits(person_id) }
             _viewState.postValue(
                 PersonScreenViewState.Success(
                     person.await(),

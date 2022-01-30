@@ -87,14 +87,6 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         }
     }
 
-    private fun showLoading(loading: Boolean) {
-        if (loading) {
-            binding.progressBarProfile.visibility = View.VISIBLE
-        } else {
-            binding.progressBarProfile.visibility = View.GONE
-        }
-    }
-
     private fun bindUI(it: Success) {
         binding.apply {
             if (it.user.name.isEmpty()) {
@@ -163,16 +155,20 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         }
     }
 
+    private fun showLoading(loading: Boolean) {
+        if (loading) {
+            binding.progressBarProfile.visibility = View.VISIBLE
+        } else {
+            binding.progressBarProfile.visibility = View.GONE
+        }
+    }
+
+
     private fun onListItemClick(id: Int, sourceType: String) {
         val bundle = Bundle()
         bundle.putInt(MEDIA_ID, id)
         bundle.putString(MEDIA_TYPE, sourceType)
         findNavController().navigate(R.id.action_profile_fragment_to_details, bundle)
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu_profile, menu)
-        super.onCreateOptionsMenu(menu, inflater)
     }
 
     private fun showToast(message: String?) {
@@ -181,9 +177,14 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         ).show()
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_profile, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item.itemId){
-            R.id.settings ->{
+        when (item.itemId) {
+            R.id.settings -> {
                 showToast("Settings will be there")
             }
         }

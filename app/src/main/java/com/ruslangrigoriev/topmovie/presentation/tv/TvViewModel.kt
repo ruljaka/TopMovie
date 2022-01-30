@@ -11,8 +11,8 @@ import timber.log.Timber
 
 class TvViewModel(val repository: Repository) : ViewModel() {
 
-    private val _viewState = MutableLiveData<TvScreenViewState>()
-    val viewState: LiveData<TvScreenViewState>
+    private val _viewState = MutableLiveData<ResultTvState>()
+    val viewState: LiveData<ResultTvState>
         get() = _viewState
 
     init {
@@ -24,18 +24,18 @@ class TvViewModel(val repository: Repository) : ViewModel() {
     private fun fetchData() {
         viewModelScope.launch {
             Timber.d("fetchData")
-            _viewState.value = TvScreenViewState.Loading
+            _viewState.value = ResultTvState.Loading
             try {
-                val listNow = async { repository.getTvNow()?.tvShows }
-                val listPopular = async { repository.getTvPopular()?.tvShows }
+                val listNow = async { repository.getTvNow() }
+                val listPopular = async { repository.getTvPopular() }
                 _viewState.postValue(
-                    TvScreenViewState.Success(
+                    ResultTvState.Success(
                         listNow.await(),
                         listPopular.await()
                     )
                 )
             } catch (e: Throwable) {
-                _viewState.postValue(TvScreenViewState.Failure(e.message))
+                _viewState.postValue(ResultTvState.Failure(e.message))
             }
         }
     }

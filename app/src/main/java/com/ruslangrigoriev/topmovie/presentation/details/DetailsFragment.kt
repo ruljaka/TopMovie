@@ -10,7 +10,6 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
-import androidx.annotation.NonNull
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -27,7 +26,7 @@ import com.ruslangrigoriev.topmovie.domain.utils.*
 import com.ruslangrigoriev.topmovie.presentation.MyViewModelFactory
 import com.ruslangrigoriev.topmovie.presentation.adapters.BaseRecyclerAdapter
 import com.ruslangrigoriev.topmovie.presentation.adapters.BindingInterface
-import com.ruslangrigoriev.topmovie.presentation.details.DetailsScreenViewState.*
+import com.ruslangrigoriev.topmovie.presentation.details.ResultDetailsState.*
 import com.ruslangrigoriev.topmovie.presentation.video.VideoActivity
 import javax.inject.Inject
 
@@ -35,7 +34,6 @@ import javax.inject.Inject
 class DetailsFragment : Fragment(R.layout.fragment_details_new) {
     private val binding by viewBinding(FragmentDetailsNewBinding::bind)
     private lateinit var castRecAdapter: BaseRecyclerAdapter<Cast>
-
 
     private var mediaID = 0
     private var mediaType: String = ""
@@ -47,11 +45,6 @@ class DetailsFragment : Fragment(R.layout.fragment_details_new) {
     override fun onAttach(context: Context) {
         context.appComponent.inject(this)
         super.onAttach(context)
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -84,11 +77,7 @@ class DetailsFragment : Fragment(R.layout.fragment_details_new) {
                     showToast(it.errorMessage)
                     showLoading(false)
                 }
-                is SuccessMovie -> {
-                    showLoading(false)
-                    bindUI(it)
-                }
-                is SuccessTvShow -> {
+                is Success -> {
                     showLoading(false)
                     bindUI(it)
                 }
@@ -96,11 +85,21 @@ class DetailsFragment : Fragment(R.layout.fragment_details_new) {
         })
     }
 
-    private fun showLoading(loading: Boolean) {
-        if (loading) {
-            binding.progressBarDetails.visibility = View.VISIBLE
-        } else {
-            binding.progressBarDetails.visibility = View.GONE
+    private fun bindUI(success: Success) {
+        success.details.let { media ->
+            binding.apply {
+                toolbar.title = media.title
+                textViewDetailsGenre.text = media.genres?.let { getNamesFromGenre(it) }
+                textViewDetailsOverview.text = media.overview
+                textViewDetailsVoteCount.text = "${media.voteCount}  People watched"
+                textViewDetailsVoteAverage.text = media.voteAverage.toString()
+                media.posterPath?.loadPosterSmall(imageViewDetailsPoster)
+                media.backdropPath?.loadBackDropImage(imageViewDetailsBackPoster)
+                markFavorite()
+            }
+        }
+        success.listCast?.let {
+            castRecAdapter.updateList(it.getTopCast())
         }
     }
 
@@ -141,47 +140,11 @@ class DetailsFragment : Fragment(R.layout.fragment_details_new) {
         }
     }
 
-    private fun bindUI(successTvShow: SuccessTvShow) {
-        successTvShow.details?.let { tvShow ->
-            binding.apply {
-                toolbar.title = tvShow.originalName
-                textViewDetailsGenre.text = getNamesFromGenre(tvShow.genres)
-                textViewDetailsOverview.text = tvShow.overview
-                textViewDetailsVoteCount.text = "${tvShow.voteCount}  People watched"
-                textViewDetailsVoteAverage.text = tvShow.voteAverage.toString()
-                tvShow.posterPath?.loadPosterSmall(imageViewDetailsPoster)
-                tvShow.backdropPath?.loadBackDropImage(imageViewDetailsBackPoster)
-                markFavorite()
-            }
-        }
-        successTvShow.listCast?.let {
-            castRecAdapter.updateList(it.getTopCast())
-        }
-    }
-
-    private fun markFavorite() {
-        binding.imageButtonDetailsFavorite.setOnClickListener {
-            viewModel.markFavorite(mediaType, mediaID)
-        }
-    }
-
-    private fun bindUI(successMovie: SuccessMovie) {
-        successMovie.details?.let { movie ->
-            binding.apply {
-                toolbar.title = movie.title
-                // textViewDetailsTitle.text = movie.title
-                textViewDetailsGenre.text = getNamesFromGenre(movie.genres)
-                textViewDetailsOverview.text = movie.overview
-                textViewDetailsVoteCount.text = "${movie.voteCount}  People watched"
-                textViewDetailsVoteAverage.text = movie.voteAverage.toString()
-                movie.posterPath?.loadPosterSmall(imageViewDetailsPoster)
-                movie.backdropPath?.loadBackDropImage(imageViewDetailsBackPoster)
-                    ?: movie.posterPath?.loadPosterLarge(imageViewDetailsBackPoster)
-                markFavorite()
-            }
-        }
-        successMovie.listCast?.let {
-            castRecAdapter.updateList(it.getTopCast())
+    private fun showLoading(loading: Boolean) {
+        if (loading) {
+            binding.progressBarDetails.visibility = View.VISIBLE
+        } else {
+            binding.progressBarDetails.visibility = View.GONE
         }
     }
 
@@ -191,6 +154,12 @@ class DetailsFragment : Fragment(R.layout.fragment_details_new) {
         findNavController().navigate(
             R.id.action_detailsFragment_to_personFragment, bundle
         )
+    }
+
+    private fun markFavorite() {
+        binding.imageButtonDetailsFavorite.setOnClickListener {
+            viewModel.markFavorite(mediaType, mediaID)
+        }
     }
 
     private fun setupPlayBtn() {
@@ -209,13 +178,6 @@ class DetailsFragment : Fragment(R.layout.fragment_details_new) {
         super.onCreateOptionsMenu(menu, inflater)
     }
 
-    private fun showToast(message: String?) {
-        Toast.makeText(
-            activity, message ?: "Unknown Error", Toast.LENGTH_SHORT
-        ).show()
-    }
-
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.share ->
@@ -224,4 +186,9 @@ class DetailsFragment : Fragment(R.layout.fragment_details_new) {
         return super.onOptionsItemSelected(item)
     }
 
+    private fun showToast(message: String?) {
+        Toast.makeText(
+            activity, message ?: "Unknown Error", Toast.LENGTH_SHORT
+        ).show()
+    }
 }

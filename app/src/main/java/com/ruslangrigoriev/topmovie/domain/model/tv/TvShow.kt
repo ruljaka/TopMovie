@@ -16,7 +16,7 @@ data class TvShow(
     val firstAirDate: String,
     @SerializedName("genres")
     @Expose
-    val genres: List<Genre>,
+    val genres: List<Genre>?,
     @SerializedName("id")
     @Expose
     val id: Int,
@@ -47,17 +47,4 @@ data class TvShow(
         return ContentType.TYPE_TvSHOW
     }
 
-    fun toMedia() = Media(
-        id,
-        name,
-        originalName,
-        posterPath,
-        backdropPath,
-        genres,
-        overview,
-        popularity,
-        firstAirDate,
-        voteAverage,
-        voteCount
-    )
 }

@@ -17,7 +17,9 @@ import com.ruslangrigoriev.topmovie.domain.model.Genre
 import com.ruslangrigoriev.topmovie.domain.model.ResponseObject
 import com.ruslangrigoriev.topmovie.domain.model.auth.RequestToken
 import com.ruslangrigoriev.topmovie.domain.model.credits.Cast
+import com.ruslangrigoriev.topmovie.domain.model.media.Media
 import com.ruslangrigoriev.topmovie.domain.model.movies.Movie
+import com.ruslangrigoriev.topmovie.domain.model.tv.TvShow
 import retrofit2.Response
 import timber.log.Timber
 import java.time.LocalDate
@@ -81,10 +83,10 @@ fun String.loadBackDropImage(imageView: ImageView) {
         .into(imageView)
 }
 
-fun List<Movie>.getTopPersonCasts(): List<Movie> {
-    val sortedList = this.toMutableList().sortedByDescending { it.voteCount }
-    return if (sortedList.size > 15) {
-        sortedList.subList(0, 15)
+fun List<Media>.getTopPersonCasts(): List<Media> {
+    val sortedList = this.toMutableList().sortedByDescending { it.popularity }
+    return if (sortedList.size > 20) {
+        sortedList.subList(0, 20)
     } else {
         sortedList
     }
@@ -161,6 +163,18 @@ fun <T : Any> getResultOrError(response: Response<T>): T? {
             throw Throwable("Unknown error")
         }
     }
+}
+
+fun mapMovieToMedia(moviesList: List<Movie>?): List<Media> {
+    return moviesList?.map {
+        MovieMapper.map(it)
+    } ?: emptyList()
+}
+
+fun mapTvShowToMedia(tvList: List<TvShow>?): List<Media> {
+    return tvList?.map {
+        TvMapper.map(it)
+    } ?: emptyList()
 }
 
 fun Context.saveSessionID(sessionID: String) {

@@ -24,12 +24,12 @@ class MovieViewModel(val repository: Repository) : ViewModel() {
     val trendingFlowData: Flow<PagingData<Movie>>
         get() = _trendingFlowData
 
-    private val _viewState = MutableLiveData<MovieScreenViewState>()
-    val viewState: LiveData<MovieScreenViewState>
+    private val _viewState = MutableLiveData<ResultMovieState>()
+    val viewState: LiveData<ResultMovieState>
         get() = _viewState
 
     init {
-        if(_viewState.value == null){
+        if (_viewState.value == null) {
             fetchMoviesData()
         }
     }
@@ -44,18 +44,18 @@ class MovieViewModel(val repository: Repository) : ViewModel() {
     private fun fetchMoviesData() {
         Timber.d("fetchMoviesData ")
         viewModelScope.launch() {
-            _viewState.value = MovieScreenViewState.Loading
+            _viewState.value = ResultMovieState.Loading
             try {
-                val listNow = async { repository.getMoviesNow()?.movies }
-                val listPopular = async { repository.getMoviesPopular()?.movies }
+                val listNow = async { repository.getMoviesNow() }
+                val listPopular = async { repository.getMoviesPopular() }
                 _viewState.postValue(
-                    MovieScreenViewState.Success(
+                    ResultMovieState.Success(
                         listNow.await(),
                         listPopular.await()
                     )
                 )
             } catch (e: Throwable) {
-                _viewState.postValue(MovieScreenViewState.Failure(e.message))
+                _viewState.postValue(ResultMovieState.Failure(e.message))
             }
         }
     }

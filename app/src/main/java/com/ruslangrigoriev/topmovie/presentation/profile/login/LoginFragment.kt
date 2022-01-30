@@ -30,23 +30,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         subscribeUI()
-       // sighInWithLogin("ruljaka", "thLexicon1984")
         bindUI()
-    }
-
-    private fun bindUI() {
-        binding.apply {
-            buttonLoginLogin.setOnClickListener {
-                val username = editTextLoginUsername.text.toString()
-                val password = editTextLoginPassword.text.toString()
-                if (username.isNotEmpty() && password.isNotEmpty()
-                ) {
-                    sighInWithLogin(username, password)
-                } else {
-                    showToast("Incorrect login or password")
-                }
-            }
-        }
     }
 
     private fun sighInWithLogin(username: String, password: String) {
@@ -70,8 +54,21 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                 }
             }
         })
+    }
 
-
+    private fun bindUI() {
+        binding.apply {
+            buttonLoginLogin.setOnClickListener {
+                val username = editTextLoginUsername.text.toString()
+                val password = editTextLoginPassword.text.toString()
+                if (username.isNotEmpty() && password.isNotEmpty()
+                ) {
+                    sighInWithLogin(username, password)
+                } else {
+                    showToast("Incorrect login or password")
+                }
+            }
+        }
     }
 
     private fun showLoading(loading: Boolean) {
@@ -87,5 +84,4 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
             activity, message ?: "Unknown Error", Toast.LENGTH_SHORT
         ).show()
     }
-
 }

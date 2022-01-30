@@ -5,14 +5,14 @@ import com.ruslangrigoriev.topmovie.data.local.FavoriteDAO
 import com.ruslangrigoriev.topmovie.data.remote.ApiService
 import com.ruslangrigoriev.topmovie.domain.model.FavoriteCredentials
 import com.ruslangrigoriev.topmovie.domain.model.ResponseObject
-import com.ruslangrigoriev.topmovie.domain.model.credits.CreditsResponse
+import com.ruslangrigoriev.topmovie.domain.model.credits.Cast
+import com.ruslangrigoriev.topmovie.domain.model.media.Media
 import com.ruslangrigoriev.topmovie.domain.model.movies.Movie
 import com.ruslangrigoriev.topmovie.domain.model.movies.MovieResponse
 import com.ruslangrigoriev.topmovie.domain.model.person.Person
-import com.ruslangrigoriev.topmovie.domain.model.person.PersonCreditsResponse
 import com.ruslangrigoriev.topmovie.domain.model.profile.User
 import com.ruslangrigoriev.topmovie.domain.model.tv.TvResponse
-import com.ruslangrigoriev.topmovie.domain.model.tv.TvShow
+import com.ruslangrigoriev.topmovie.domain.model.video.Video
 import com.ruslangrigoriev.topmovie.domain.model.video.VideoResponse
 import com.ruslangrigoriev.topmovie.domain.utils.*
 import javax.inject.Inject
@@ -34,49 +34,82 @@ class RepositoryImpl(private val application: Application) : Repository {
         return getResultOrError(response)
     }
 
-    override suspend fun getMoviesNow(): MovieResponse? {
+    override suspend fun getMoviesNow(): List<Media> {
         val response = apiService.getMoviesNow()
-        return getResultOrError(response)
+        try {
+            val nowList = getResultOrError(response)?.movies
+            return mapMovieToMedia(nowList)
+        } catch (t: Throwable) {
+            throw Throwable(t.message)
+        }
     }
 
-    override suspend fun getMoviesPopular(): MovieResponse? {
+    override suspend fun getMoviesPopular(): List<Media> {
         val response = apiService.getMoviesPopular()
-        return getResultOrError(response)
+        try {
+            val popularList = getResultOrError(response)?.movies
+            return mapMovieToMedia(popularList)
+        } catch (t: Throwable) {
+            throw Throwable(t.message)
+        }
     }
 
-    override suspend fun getMovieDetails(id: Int): Movie? {
+
+    override suspend fun getMovieDetails(id: Int): Media {
         val response = apiService.getMovieDetails(id)
-        return getResultOrError(response)
+        try {
+            getResultOrError(response)?.let {
+                return MovieMapper.map(it)
+            } ?: throw Throwable("Movie info is empty")
+        } catch (t: Throwable) {
+            throw Throwable(t.message)
+        }
     }
 
-    override suspend fun getMovieCredits(id: Int): CreditsResponse? {
+    override suspend fun getMovieCredits(id: Int): List<Cast> {
         val response = apiService.getMovieCredits(id)
-        return getResultOrError(response)
+        return getResultOrError(response)?.cast ?: emptyList()
     }
 
-    override suspend fun getSearchMoviesPagedResult(query: String, page: Int): MovieResponse? {
+    override suspend fun searchMovies(query: String, page: Int): MovieResponse? {
         val response = apiService.searchPagedMovie(query = query, page = page)
         return getResultOrError(response)
     }
 
-    override suspend fun getTvNow(): TvResponse? {
+    override suspend fun getTvNow(): List<Media> {
         val response = apiService.getTVNow()
-        return getResultOrError(response)
+        try {
+            val nowList = getResultOrError(response)?.tvShows
+            return mapTvShowToMedia(nowList)
+        } catch (t: Throwable) {
+            throw Throwable(t.message)
+        }
     }
 
-    override suspend fun getTvPopular(): TvResponse? {
+    override suspend fun getTvPopular(): List<Media> {
         val response = apiService.getTvPopular()
-        return getResultOrError(response)
+        try {
+            val popularList = getResultOrError(response)?.tvShows
+            return mapTvShowToMedia(popularList)
+        } catch (t: Throwable) {
+            throw Throwable(t.message)
+        }
     }
 
-    override suspend fun getTvDetails(id: Int): TvShow? {
+    override suspend fun getTvDetails(id: Int): Media {
         val response = apiService.getTvDetails(id)
-        return getResultOrError(response)
+        try {
+            getResultOrError(response)?.let {
+                return TvMapper.map(it)
+            } ?: throw Throwable("TvShow info is empty")
+        } catch (t: Throwable) {
+            throw Throwable(t.message)
+        }
     }
 
-    override suspend fun getTvCredits(id: Int): CreditsResponse? {
+    override suspend fun getTvCredits(id: Int): List<Cast> {
         val response = apiService.getTvCredits(id)
-        return getResultOrError(response)
+        return getResultOrError(response)?.cast ?: emptyList()
     }
 
     override suspend fun getSearchTvPagedResult(query: String, page: Int): TvResponse? {
@@ -89,19 +122,24 @@ class RepositoryImpl(private val application: Application) : Repository {
         return getResultOrError(response)
     }
 
-    override suspend fun getPersonCredits(person_id: Int): PersonCreditsResponse? {
+    override suspend fun getPersonCredits(person_id: Int): List<Media> {
         val response = apiService.getPersonCredits(person_id)
-        return getResultOrError(response)
+        try {
+            val movieCastList = getResultOrError(response)?.cast
+            return mapMovieToMedia(movieCastList)
+        } catch (t: Throwable) {
+            throw Throwable(t.message)
+        }
     }
 
-    override suspend fun getMovieVideo(movie_id: Int): VideoResponse? {
+    override suspend fun getMovieVideo(movie_id: Int): List<Video> {
         val response = apiService.getMovieVideos(movie_id)
-        return getResultOrError(response)
+        return getResultOrError(response)?.videos ?: emptyList()
     }
 
-    override suspend fun getTvVideo(tv_id: Int): VideoResponse? {
+    override suspend fun getTvVideo(tv_id: Int): List<Video> {
         val response = apiService.getTvVideos(tv_id)
-        return getResultOrError(response)
+        return getResultOrError(response)?.videos ?: emptyList()
     }
 
     override suspend fun getUserData(): User? {

@@ -13,6 +13,8 @@ class BaseRecyclerAdapter<T : Any>(
 ) :
     RecyclerView.Adapter<BaseRecyclerAdapter.ViewHolder>() {
 
+
+
     class ViewHolder(
         val view: View,
     ) : RecyclerView.ViewHolder(view) {
@@ -35,8 +37,6 @@ class BaseRecyclerAdapter<T : Any>(
     }
 
     override fun getItemCount(): Int = dataSet.size
-
-
 
     fun updateList(list: List<T>) {
         this.dataSet = list

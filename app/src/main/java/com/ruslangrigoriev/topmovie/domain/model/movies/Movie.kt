@@ -14,7 +14,7 @@ data class Movie(
     val backdropPath: String?,
 
     @SerializedName("genres")
-    val genres: List<Genre>,
+    val genres: List<Genre>?,
 
     @SerializedName("original_title")
     val originalTitle: String,
@@ -48,17 +48,4 @@ data class Movie(
         return ContentType.TYPE_MOVIE
     }
 
-    fun toMedia() = Media(
-        id,
-        title,
-        originalTitle,
-        posterPath,
-        backdropPath,
-        genres,
-        overview,
-        popularity,
-        releaseDate,
-        voteAverage,
-        voteCount
-    )
 }

@@ -13,36 +13,36 @@ import timber.log.Timber
 
 class DetailsViewModel(val repository: Repository) : ViewModel() {
 
-    private val _viewState = MutableLiveData<DetailsScreenViewState>()
-    val viewState: LiveData<DetailsScreenViewState>
+    private val _viewState = MutableLiveData<ResultDetailsState>()
+    val viewState: LiveData<ResultDetailsState>
         get() = _viewState
 
     fun fetchDetailsData(mediaID: Int, sourceType: String) {
         Timber.d("fetchDetailsData ID: $mediaID ")
         viewModelScope.launch {
-            _viewState.value = DetailsScreenViewState.Loading
+            _viewState.value = ResultDetailsState.Loading
             try {
                 if (sourceType == MOVIE_TYPE) {
                     val details = async { repository.getMovieDetails(mediaID) }
-                    val listCast = async { repository.getMovieCredits(mediaID)?.cast }
+                    val listCast = async { repository.getMovieCredits(mediaID) }
                     _viewState.postValue(
-                        DetailsScreenViewState.SuccessMovie(
+                        ResultDetailsState.Success(
                             details.await(),
                             listCast.await()
                         )
                     )
                 } else {
                     val details = async { repository.getTvDetails(mediaID) }
-                    val listCast = async { repository.getTvCredits(mediaID)?.cast }
+                    val listCast = async { repository.getTvCredits(mediaID) }
                     _viewState.postValue(
-                        DetailsScreenViewState.SuccessTvShow(
+                        ResultDetailsState.Success(
                             details.await(),
                             listCast.await()
                         )
                     )
                 }
             } catch (e: Throwable) {
-                _viewState.postValue(DetailsScreenViewState.Failure(e.message))
+                _viewState.postValue(ResultDetailsState.Failure(e.message))
             }
         }
     }
@@ -61,7 +61,7 @@ class DetailsViewModel(val repository: Repository) : ViewModel() {
                 val response = repository.markFavorite(favoriteCredentials)
                 Timber.d(response?.statusMessage)
             }catch (e: Throwable){
-                _viewState.postValue(DetailsScreenViewState.Failure(e.message))
+                _viewState.postValue(ResultDetailsState.Failure(e.message))
             }
         }
     }

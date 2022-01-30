@@ -31,7 +31,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
 
     private var searchQuery: String? = null
     private var tvQuery: String? = null
-    private var searchSource: String? = null
+    private var mediaType: String? = null
 
     override fun onAttach(context: Context) {
         context.appComponent.inject(this)
@@ -46,16 +46,42 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         subscribeQuerySearch()
 
         searchQuery = arguments?.getString(QUERY)
-        searchSource = arguments?.getString(MEDIA_TYPE)
+        mediaType = arguments?.getString(MEDIA_TYPE)
 
         searchQuery?.let {
             if (viewModel.queryFlow.value == "") {
-                viewModel.queryFlow.value = it
+                viewModel.setQuery(it)
             }
-            if(searchSource == MOVIE_TYPE){
+            if(mediaType == MOVIE_TYPE){
                 subscribeMovieSearch()
             } else{
                 subscribeTvSearch()
+            }
+        }
+    }
+
+    @ExperimentalCoroutinesApi
+    private fun subscribeMovieSearch() {
+        lifecycleScope.launchWhenStarted {
+            viewModel.getSearchMoviesFlowData().collectLatest { pagingData ->
+                myPagingAdapter.submitData(pagingData)
+            }
+        }
+    }
+
+    @ExperimentalCoroutinesApi
+    private fun subscribeTvSearch() {
+        lifecycleScope.launchWhenStarted {
+            viewModel.searchTvFlowData.collectLatest { pagingData ->
+                myPagingAdapter.submitData(pagingData)
+            }
+        }
+    }
+
+    private fun subscribeQuerySearch() {
+        lifecycleScope.launchWhenStarted {
+            viewModel.queryFlow.collectLatest {
+                binding.textViewSearchQuery.text = "for  '${it}'"
             }
         }
     }
@@ -83,7 +109,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                     if (TextUtils.isEmpty(query)) {
                         Toast.makeText(activity, "Enter your request", Toast.LENGTH_SHORT).show()
                     } else {
-                        viewModel.queryFlow.value = query
+                        viewModel.setQuery(query)
                     }
                     return false
                 }
@@ -94,41 +120,14 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
             })
     }
 
-    @ExperimentalCoroutinesApi
-    private fun subscribeMovieSearch() {
-        lifecycleScope.launchWhenStarted {
-            viewModel.searchMoviesFlowData.collectLatest { pagingData ->
-                myPagingAdapter.submitData(pagingData)
-            }
-        }
-    }
-
-    @ExperimentalCoroutinesApi
-    private fun subscribeTvSearch() {
-        lifecycleScope.launchWhenStarted {
-            viewModel.searchTvFlowData.collectLatest { pagingData ->
-                myPagingAdapter.submitData(pagingData)
-            }
-        }
-    }
-
-    private fun subscribeQuerySearch() {
-        lifecycleScope.launchWhenStarted {
-            viewModel.queryFlow.collectLatest {
-                binding.textViewSearchQuery.text = "for  '${it}'"
-            }
-        }
-    }
-
     private fun onListItemClick(id: Int) {
             val bundle = Bundle()
             bundle.putInt(MEDIA_ID, id)
-            bundle.putString(MEDIA_TYPE, searchSource)
-        if(searchSource== MOVIE_TYPE){
+            bundle.putString(MEDIA_TYPE, mediaType)
+        if(mediaType== MOVIE_TYPE){
             findNavController().navigate(R.id.action_searchFragment_to_details, bundle)
         } else{
             findNavController().navigate(R.id.action_searchTvFragment_to_details, bundle)
         }
-
     }
 }

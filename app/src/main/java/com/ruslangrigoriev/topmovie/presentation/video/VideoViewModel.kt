@@ -26,7 +26,7 @@ class VideoViewModel(val repository: Repository) : ViewModel() {
             Timber.d( "fetchMovieVideoData ID: $id ")
             try {
                 _videoLD.postValue(repository.getMovieVideo(id)?.videos)
-            } catch (e: Exception) {
+            } catch (e: Throwable) {
                 _errorLD.postValue(e.message)
             }
         }
@@ -36,7 +36,7 @@ class VideoViewModel(val repository: Repository) : ViewModel() {
             Timber.d( "fetchTvVideoData ID: $id ")
             try {
                 _videoLD.postValue(repository.getTvVideo(id)?.videos)
-            } catch (e: Exception) {
+            } catch (e: Throwable) {
                 _errorLD.postValue(e.message)
             }
         }

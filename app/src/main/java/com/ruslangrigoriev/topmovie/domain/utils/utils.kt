@@ -2,7 +2,6 @@ package com.ruslangrigoriev.topmovie.domain.utils
 
 import android.content.Context
 import android.os.Build
-import android.util.Log
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
@@ -10,13 +9,13 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
-import com.google.gson.GsonBuilder
+import com.google.gson.Gson
 import com.ruslangrigoriev.topmovie.App
 import com.ruslangrigoriev.topmovie.R
 import com.ruslangrigoriev.topmovie.di.AppComponent
 import com.ruslangrigoriev.topmovie.domain.model.Genre
+import com.ruslangrigoriev.topmovie.domain.model.ResponseObject
 import com.ruslangrigoriev.topmovie.domain.model.auth.RequestToken
-import com.ruslangrigoriev.topmovie.domain.model.auth.Session
 import com.ruslangrigoriev.topmovie.domain.model.credits.Cast
 import com.ruslangrigoriev.topmovie.domain.model.movies.Movie
 import retrofit2.Response
@@ -24,6 +23,7 @@ import timber.log.Timber
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.*
+
 
 val Context.appComponent: AppComponent
     get() = when (this) {
@@ -36,9 +36,6 @@ fun getNamesFromGenre(genres: List<Genre>): String {
     return listGenreNames.joinToString(", ")
 }
 
-fun String.showToast(context: Context) {
-    Toast.makeText(context, this, Toast.LENGTH_SHORT).show()
-}
 
 @RequiresApi(Build.VERSION_CODES.O)
 fun String.formatDate(): String {
@@ -111,7 +108,7 @@ fun Context.saveToFavorites(moveID: Int) {
             putString(FAVORITES, oldList.joinToString())
             apply()
         }
-        Timber.d( "saveToFavorite :: ${oldList.joinToString()}")
+        Timber.d("saveToFavorite :: ${oldList.joinToString()}")
     }
 }
 
@@ -123,7 +120,7 @@ fun Context.removeFromFavorites(moveID: Int) {
         putString(FAVORITES, oldList.joinToString())
         apply()
     }
-    Timber.d( "removeFromFavorites :: ${oldList.joinToString()}")
+    Timber.d("removeFromFavorites :: ${oldList.joinToString()}")
 }
 
 fun Context.getFavorites(): MutableList<Int> {
@@ -133,13 +130,10 @@ fun Context.getFavorites(): MutableList<Int> {
         .filter { it.isNotEmpty() }
         .map { it.toInt() }
         .toMutableList()
-    Timber.d( "getFavorites :: $favoriteList")
+    Timber.d("getFavorites :: $favoriteList")
     return favoriteList
 }
 
-fun checkFavorites(savedFavorites: List<Int>, movieID: Int): Boolean {
-    return savedFavorites.contains(movieID)
-}
 
 fun Context.onBoardingFinished() {
     val sharedPref = this.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE)
@@ -157,23 +151,48 @@ fun <T : Any> getResultOrError(response: Response<T>): T? {
     if (response.isSuccessful) {
         return response.body()
     } else {
-        throw Throwable(response.errorBody().toString())
+        try {
+            val responseError = Gson().fromJson(
+                response.errorBody()?.string(),
+                ResponseObject::class.java
+            )
+            throw Throwable(responseError.statusMessage)
+        } catch (e: Exception) {
+            throw Throwable("Unknown error")
+        }
     }
+}
+
+fun Context.saveSessionID(sessionID: String) {
+    val sharedPref = this.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE)
+    val editor = sharedPref.edit()
+    editor.putString(SESSION, sessionID)
+    editor.apply()
+}
+
+fun Context.getSessionID(): String? {
+    val sharedPref = this.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE)
+    return sharedPref.getString(SESSION, "")
+}
+
+fun Context.saveUserID(userID: Int) {
+    val sharedPref = this.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE)
+    val editor = sharedPref.edit()
+    editor.putInt(USER_ID, userID)
+    editor.apply()
+}
+
+fun Context.getUserID(): Int {
+    val sharedPref = this.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE)
+    return sharedPref.getInt(USER_ID, 0)
+
 }
 
 fun Context.saveAuthToken(requestToken: RequestToken) {
     val sharedPref = this.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE)
     val editor = sharedPref.edit()
-    val jsonString = GsonBuilder().create().toJson(requestToken)
+    val jsonString = Gson().toJson(requestToken)
     editor.putString(REQUEST_TOKEN, jsonString)
-    editor.apply()
-}
-
-fun Context.saveSession(session: Session) {
-    val sharedPref = this.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE)
-    val editor = sharedPref.edit()
-    val jsonString = GsonBuilder().create().toJson(session)
-    editor.putString(SESSION, jsonString)
     editor.apply()
 }
 
@@ -181,19 +200,20 @@ fun Context.getAuthToken(): RequestToken? {
     val sharedPref = this.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE)
     val jsonString = sharedPref.getString(REQUEST_TOKEN, "")
     jsonString?.let {
-        return GsonBuilder().create().fromJson(jsonString, RequestToken::class.java)
+        return Gson().fromJson(jsonString, RequestToken::class.java)
     }
     return null
 }
 
-fun Context.getSession(): Session? {
-    val sharedPref = this.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE)
-    val jsonString = sharedPref.getString(SESSION, "")
-    jsonString?.let {
-        return GsonBuilder().create().fromJson(jsonString, Session::class.java)
-    }
-    return null
+fun checkFavorites(savedFavorites: List<Int>, movieID: Int): Boolean {
+    return savedFavorites.contains(movieID)
 }
+
+fun String.showToast(context: Context) {
+    Toast.makeText(context, this, Toast.LENGTH_SHORT).show()
+}
+
+
 
 
 

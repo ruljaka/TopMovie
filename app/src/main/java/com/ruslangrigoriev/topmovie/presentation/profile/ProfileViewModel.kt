@@ -33,6 +33,7 @@ class ProfileViewModel(
             try {
                 val user = repository.getUserData()
                 user?.let {
+                    repository.saveUserID(it.id)
                     val listRatedMoviesSize = async {
                         repository.getRatedMovies(it.id)?.totalResults ?: 0
                     }
@@ -60,7 +61,7 @@ class ProfileViewModel(
                         )
                     )
                 }
-            } catch (e: Exception) {
+            } catch (e: Throwable) {
                 _viewState.postValue(ProfileScreenViewState.Failure(e.message))
             }
         }

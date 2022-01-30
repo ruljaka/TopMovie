@@ -1,16 +1,10 @@
 package com.ruslangrigoriev.topmovie.data.repository
 
 import android.app.Application
-import androidx.lifecycle.LiveData
-import androidx.paging.Pager
-import androidx.paging.PagingConfig
-import androidx.paging.PagingData
-import androidx.paging.liveData
 import com.ruslangrigoriev.topmovie.data.local.FavoriteDAO
-import com.ruslangrigoriev.topmovie.data.paging.MoviePagingSource
 import com.ruslangrigoriev.topmovie.data.remote.ApiService
-import com.ruslangrigoriev.topmovie.domain.model.ContentType
-import com.ruslangrigoriev.topmovie.domain.model.auth.Session
+import com.ruslangrigoriev.topmovie.domain.model.FavoriteCredentials
+import com.ruslangrigoriev.topmovie.domain.model.ResponseObject
 import com.ruslangrigoriev.topmovie.domain.model.credits.CreditsResponse
 import com.ruslangrigoriev.topmovie.domain.model.movies.Movie
 import com.ruslangrigoriev.topmovie.domain.model.movies.MovieResponse
@@ -20,10 +14,7 @@ import com.ruslangrigoriev.topmovie.domain.model.profile.User
 import com.ruslangrigoriev.topmovie.domain.model.tv.TvResponse
 import com.ruslangrigoriev.topmovie.domain.model.tv.TvShow
 import com.ruslangrigoriev.topmovie.domain.model.video.VideoResponse
-import com.ruslangrigoriev.topmovie.domain.utils.PagingType
-import com.ruslangrigoriev.topmovie.domain.utils.appComponent
-import com.ruslangrigoriev.topmovie.domain.utils.getResultOrError
-import com.ruslangrigoriev.topmovie.domain.utils.getSession
+import com.ruslangrigoriev.topmovie.domain.utils.*
 import javax.inject.Inject
 
 class RepositoryImpl(private val application: Application) : Repository {
@@ -33,8 +24,6 @@ class RepositoryImpl(private val application: Application) : Repository {
 
     @Inject
     lateinit var favoriteDAO: FavoriteDAO
-
-    private var session: Session? = null
 
     init {
         application.appComponent.inject(this)
@@ -116,11 +105,11 @@ class RepositoryImpl(private val application: Application) : Repository {
     }
 
     override suspend fun getUserData(): User? {
-        session = application.applicationContext.getSession()
+        val session = application.applicationContext.getSessionID()
         session?.let {
             return getResultOrError(
                 apiService.getUser(
-                    session_id = it.sessionId
+                    session_id = it
                 )
             )
         }
@@ -128,11 +117,12 @@ class RepositoryImpl(private val application: Application) : Repository {
     }
 
     override suspend fun getRatedMovies(accountID: Int): MovieResponse? {
+        val session = application.applicationContext.getSessionID()
         session?.let {
             return getResultOrError(
                 apiService.getRatedMovies(
                     account_id = accountID,
-                    session_id = session!!.sessionId
+                    session_id = it
                 )
             )
         }
@@ -140,11 +130,12 @@ class RepositoryImpl(private val application: Application) : Repository {
     }
 
     override suspend fun getRatedTvShows(accountID: Int): TvResponse? {
+        val session = application.applicationContext.getSessionID()
         session?.let {
             return getResultOrError(
                 apiService.getRatedTvShow(
                     account_id = accountID,
-                    session_id = session!!.sessionId
+                    session_id = it
                 )
             )
         }
@@ -152,11 +143,12 @@ class RepositoryImpl(private val application: Application) : Repository {
     }
 
     override suspend fun getFavoriteMovies(accountID: Int): MovieResponse? {
+        val session = application.applicationContext.getSessionID()
         session?.let {
             return getResultOrError(
                 apiService.getFavoriteMovies(
                     account_id = accountID,
-                    session_id = session!!.sessionId
+                    session_id = it
                 )
             )
         }
@@ -164,49 +156,38 @@ class RepositoryImpl(private val application: Application) : Repository {
     }
 
     override suspend fun getFavoriteTvShows(accountID: Int): TvResponse? {
+        val session = application.applicationContext.getSessionID()
         session?.let {
             return getResultOrError(
                 apiService.getFavoriteTvShow(
                     account_id = accountID,
-                    session_id = session!!.sessionId
+                    session_id = it
                 )
             )
         }
         return null
     }
 
-//    override suspend fun getFavoriteLiveData(accountID: Int): LiveData<PagingData<ContentType>> {
-//        return Pager(
-//            config = PagingConfig(pageSize = 20),
-//            pagingSourceFactory = {
-//                MoviePagingSource<ContentType>(
-//                    query = accountID.toString(),
-//                    type = PagingType.FAVORITE_FLOW,
-//                    repository = this
-//                )
-//            }
-//        ).liveData
-//    }
+    override suspend fun markFavorite(
+        favoriteCredentials: FavoriteCredentials
+    ): ResponseObject? {
+        val session = application.applicationContext.getSessionID()
+        val userID = application.applicationContext.getUserID()
+        session?.let {
+            return getResultOrError(
+                apiService.markAsFavorite(
+                    account_id = userID,
+                    session_id = it,
+                    favoriteCredentials = favoriteCredentials
+                )
+            )
+        }
+        return null
+    }
 
-//    override fun getFavoriteList(): Flow<List<Favorite>> {
-//
-//        return favoriteDAO.getFavoriteList()
-//    }
-//
-//    override suspend fun insertFavorite(favorite: Favorite) {
-//        favoriteDAO.insertFavorite(favorite)
-//        Log.d(TAG, "RepositoryImpl -> insertFavorite")
-//    }
-//
-//    override suspend fun removeFavorite(id: Int) {
-//        Log.d(TAG, "RepositoryImpl -> removeFavorite")
-//        favoriteDAO.removeFavorite(id)
-//    }
-//
-//    override suspend fun deleteFavorite(favorite: Favorite) {
-//        favoriteDAO.deleteFavorite(favorite)
-//        Log.d(TAG, "RepositoryImpl -> deleteFavorite")
-//    }
+    override fun saveUserID(userID: Int) {
+        application.applicationContext.saveUserID(userID)
+    }
 
 
 }

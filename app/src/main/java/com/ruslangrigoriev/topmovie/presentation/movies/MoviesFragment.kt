@@ -3,8 +3,6 @@ package com.ruslangrigoriev.topmovie.presentation.movies
 import android.content.Context
 import android.os.Bundle
 import android.text.TextUtils
-import android.view.Menu
-import android.view.MenuInflater
 import android.view.View
 import android.widget.ImageView
 import android.widget.SearchView
@@ -133,7 +131,7 @@ class MoviesFragment : Fragment(R.layout.fragment_movies) {
                 } else {
                     val bundle = Bundle()
                     bundle.putString(QUERY, query)
-                    bundle.putString(SOURCE_TYPE, MOVIE_TYPE)
+                    bundle.putString(MEDIA_TYPE, MOVIE_TYPE)
                     findNavController().navigate(
                         R.id.action_movies_fragment_to_searchFragment, bundle
                     )
@@ -183,7 +181,7 @@ class MoviesFragment : Fragment(R.layout.fragment_movies) {
     private fun onListItemClick(id: Int) {
         val bundle = Bundle()
         bundle.putInt(MEDIA_ID, id)
-        bundle.putString(SOURCE_TYPE, MOVIE_TYPE)
+        bundle.putString(MEDIA_TYPE, MOVIE_TYPE)
         findNavController().navigate(R.id.action_movies_fragment_to_details, bundle)
     }
 

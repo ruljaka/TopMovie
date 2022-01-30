@@ -27,7 +27,7 @@ class PersonViewModel(val repository: Repository) : ViewModel() {
                     personCastList.await()
                 )
             )
-        } catch (e: Exception) {
+        } catch (e: Throwable) {
             _viewState.postValue(PersonScreenViewState.Failure(e.message))
         }
     }

@@ -3,12 +3,7 @@ package com.ruslangrigoriev.topmovie.data.repository
 import android.app.Application
 import com.ruslangrigoriev.topmovie.data.remote.ApiService
 import com.ruslangrigoriev.topmovie.domain.model.auth.*
-import com.ruslangrigoriev.topmovie.domain.model.movies.MovieResponse
-import com.ruslangrigoriev.topmovie.domain.model.tv.TvResponse
-import com.ruslangrigoriev.topmovie.domain.utils.appComponent
-import com.ruslangrigoriev.topmovie.domain.utils.getResultOrError
-import com.ruslangrigoriev.topmovie.domain.utils.getSession
-import com.ruslangrigoriev.topmovie.domain.utils.saveSession
+import com.ruslangrigoriev.topmovie.domain.utils.*
 import javax.inject.Inject
 
 class AuthRepository(private val application: Application) {
@@ -26,10 +21,10 @@ class AuthRepository(private val application: Application) {
         )
     }
 
-    suspend fun validateRequestToken(credentials: Credentials): RequestToken? {
+    suspend fun validateRequestToken(authCredentials: AuthCredentials): RequestToken? {
         return getResultOrError(
             apiService.validateRequestToken(
-                credentials = credentials
+                authCredentials = authCredentials
             )
         )
     }
@@ -43,15 +38,15 @@ class AuthRepository(private val application: Application) {
     }
 
     fun checkIsUserIsAuthenticated(): Boolean {
-        val session = application.applicationContext.getSession()
-        if (session != null) {
+        val session = application.applicationContext.getSessionID()
+        if (!session.isNullOrEmpty()) {
             return true
         }
         return false
     }
 
-    fun saveSession(session: Session) {
-        application.applicationContext.saveSession(session)
+    fun saveSession(sessionID: String) {
+        application.applicationContext.saveSessionID(sessionID)
     }
 
 }

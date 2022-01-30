@@ -13,19 +13,31 @@
         tools:layout="@layout/fragment_movies">
         <action
             android:id="@+id/action_movies_fragment_to_searchFragment"
-            app:destination="@id/searchFragment" />
+            app:destination="@id/searchFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
         <action
             android:id="@+id/action_movies_fragment_to_details"
-            app:destination="@id/details" />
+            app:destination="@id/details"
+            app:enterAnim="@anim/grow_fade_in_center"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/grow_fade_out_center" />
     </fragment>
     <fragment
         android:id="@+id/searchFragment"
         android:name="com.ruslangrigoriev.topmovie.presentation.search.SearchFragment"
         android:label="fragment_search"
-        tools:layout="@layout/fragment_search" >
+        tools:layout="@layout/fragment_search">
         <action
             android:id="@+id/action_searchFragment_to_details"
-            app:destination="@id/details" />
+            app:destination="@id/details"
+            app:enterAnim="@anim/grow_fade_in_center"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/grow_fade_out_center" />
     </fragment>
     <include app:graph="@navigation/details" />
 </navigation>

@@ -3,6 +3,8 @@ package com.ruslangrigoriev.topmovie.data.repository
 import androidx.lifecycle.LiveData
 import androidx.paging.PagingData
 import com.ruslangrigoriev.topmovie.domain.model.ContentType
+import com.ruslangrigoriev.topmovie.domain.model.FavoriteCredentials
+import com.ruslangrigoriev.topmovie.domain.model.ResponseObject
 import com.ruslangrigoriev.topmovie.domain.model.profile.User
 import com.ruslangrigoriev.topmovie.domain.model.credits.CreditsResponse
 import com.ruslangrigoriev.topmovie.domain.model.movies.Movie
@@ -39,10 +41,7 @@ interface Repository {
     suspend fun getRatedTvShows(accountID: Int): TvResponse?
     suspend fun getFavoriteMovies(accountID: Int): MovieResponse?
     suspend fun getFavoriteTvShows(accountID: Int): TvResponse?
-    //suspend fun getFavoriteLiveData(accountID: Int): LiveData<PagingData<ContentType>>
 
-//    fun getFavoriteList(): Flow<List<Favorite>>
-//    suspend fun insertFavorite(favorite: Favorite)
-//    suspend fun removeFavorite(id: Int)
-//    suspend fun deleteFavorite(favorite: Favorite)
+    fun saveUserID(userID: Int)
+    suspend fun markFavorite(favoriteCredentials: FavoriteCredentials) : ResponseObject?
 }

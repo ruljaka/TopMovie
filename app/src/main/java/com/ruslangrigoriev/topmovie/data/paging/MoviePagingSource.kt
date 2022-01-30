@@ -78,7 +78,7 @@ class MoviePagingSource<T : Any>(
                 nextKey = currentPage.plus(1)
                 //nextKey = if (responseData.size < 20) null else currentPage.plus(1)
             )
-        } catch (e: Exception) {
+        } catch (e: Throwable) {
             LoadResult.Error(e)
         }
     }

@@ -53,7 +53,6 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navController = navHostFragment.navController
         NavigationUI.setupWithNavController(binding.bttmNav, navController)
-
     }
 
     override fun onSupportNavigateUp(): Boolean {

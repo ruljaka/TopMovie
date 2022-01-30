@@ -5,6 +5,7 @@ import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import com.ruslangrigoriev.topmovie.domain.model.ContentType
 import com.ruslangrigoriev.topmovie.domain.model.Genre
+import com.ruslangrigoriev.topmovie.domain.model.media.Media
 
 data class TvShow(
     @SerializedName("backdrop_path")
@@ -45,4 +46,18 @@ data class TvShow(
     override fun getType(): Int {
         return ContentType.TYPE_TvSHOW
     }
+
+    fun toMedia() = Media(
+        id,
+        name,
+        originalName,
+        posterPath,
+        backdropPath,
+        genres,
+        overview,
+        popularity,
+        firstAirDate,
+        voteAverage,
+        voteCount
+    )
 }

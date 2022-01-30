@@ -16,9 +16,9 @@ const val MOVIE_ID: String = "movie_id"
 const val TV_ID: String = "tv_id"
 
 const val MEDIA_ID: String = "media_id"
-const val SOURCE_TYPE: String = "source_type"
-const val MOVIE_TYPE: String = "movie_type"
-const val TV_TYPE: String = "tv_type"
+const val MEDIA_TYPE: String = "media_type"
+const val MOVIE_TYPE: String = "movie"
+const val TV_TYPE: String = "tv"
 
 
 
@@ -38,3 +38,7 @@ const val OB_FINISHED: String = "OnBoarding_finished"
 
 const val REQUEST_TOKEN = "user_token"
 const val SESSION = "session"
+const val USER_ID = "user_id"
+
+const val MOVIE = "movie"
+const val TV = "tv"

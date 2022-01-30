@@ -13,10 +13,18 @@
         tools:layout="@layout/fragment_tv">
         <action
             android:id="@+id/action_tv_fragment_to_searchTvFragment"
-            app:destination="@id/searchTvFragment" />
+            app:destination="@id/searchTvFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
         <action
             android:id="@+id/action_tv_fragment_to_details"
-            app:destination="@id/details" />
+            app:destination="@id/details"
+            app:enterAnim="@anim/grow_fade_in_center"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/grow_fade_out_center" />
     </fragment>
     <fragment
         android:id="@+id/searchTvFragment"
@@ -25,7 +33,11 @@
         tools:layout="@layout/fragment_search">
         <action
             android:id="@+id/action_searchTvFragment_to_details"
-            app:destination="@id/details" />
+            app:destination="@id/details"
+            app:enterAnim="@anim/grow_fade_in_center"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/grow_fade_out_center" />
     </fragment>
     <include app:graph="@navigation/details" />
 </navigation>

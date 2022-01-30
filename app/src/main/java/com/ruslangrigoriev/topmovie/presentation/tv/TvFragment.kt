@@ -159,7 +159,7 @@ class TvFragment : Fragment(R.layout.fragment_tv) {
                 } else {
                     val bundle = Bundle()
                     bundle.putString(QUERY, query)
-                    bundle.putString(SOURCE_TYPE, TV_TYPE)
+                    bundle.putString(MEDIA_TYPE, TV_TYPE)
                     findNavController().navigate(
                         R.id.action_tv_fragment_to_searchTvFragment,
                         bundle
@@ -177,7 +177,7 @@ class TvFragment : Fragment(R.layout.fragment_tv) {
     private fun onListItemClick(id: Int) {
         val bundle = Bundle()
         bundle.putInt(MEDIA_ID, id)
-        bundle.putString(SOURCE_TYPE, TV_TYPE)
+        bundle.putString(MEDIA_TYPE, TV_TYPE)
         findNavController().navigate(R.id.action_tv_fragment_to_details, bundle)
     }
 

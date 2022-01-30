@@ -2,7 +2,7 @@
     <!-- Base application theme. -->
     <style name="Theme.TopMovie" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">#F44336</item>
+        <item name="colorPrimary">#DF4710</item>
         <item name="colorPrimaryVariant">@color/purple_700</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
@@ -35,8 +35,30 @@
         <item name="android:textSize">26sp</item>
     </style>
 
+    <style name="Base_ToolbarStyle">
+        <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:theme">@style/Base_ToolbarTheme</item>
+        <item name="titleTextAppearance">@style/ToolbarTitleTextAppearance</item>
+    </style>
+
+    <style name="Base_ToolbarTheme">
+        <!-- Color used for the title of the Toolbar - as long as not overridden -->
+        <item name="android:textColorPrimary">?attr/colorOnSecondary</item>
+        <!-- Used to color back button and three dots -->
+        <item name="homeAsUpIndicator">@drawable/ic_arrow_back</item>
+        <item name="android:textColorSecondary">?attr/colorOnSecondary</item>
+    </style>
+
+    <style name="ToolbarTitleTextAppearance" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="android:textColor">?attr/colorOnSecondary</item>
+    </style>
 
     <style name="Theme.TopMovie.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" >
+        <item name="expandedTitleTextColor">@color/white</item>
+        <item name="collapsedTitleTextColor">?attr/colorOnSecondary</item>
+        <item name="colorControlNormal">?attr/colorOnSecondary</item>
+        <item name="homeAsUpIndicator">@drawable/ic_arrow_back</item>
     </style>
 
     <style name="Theme.TopMovie.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />

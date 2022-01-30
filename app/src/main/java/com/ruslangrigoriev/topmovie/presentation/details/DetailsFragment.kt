@@ -10,7 +10,7 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
+import androidx.annotation.NonNull
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -21,7 +21,6 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.ruslangrigoriev.topmovie.MainActivity
 import com.ruslangrigoriev.topmovie.R
-import com.ruslangrigoriev.topmovie.databinding.FragmentDetailsBinding
 import com.ruslangrigoriev.topmovie.databinding.FragmentDetailsNewBinding
 import com.ruslangrigoriev.topmovie.domain.model.credits.Cast
 import com.ruslangrigoriev.topmovie.domain.utils.*
@@ -39,7 +38,7 @@ class DetailsFragment : Fragment(R.layout.fragment_details_new) {
 
 
     private var mediaID = 0
-    private var sourceType: String? = null
+    private var mediaType: String = ""
 
     @Inject
     lateinit var factory: MyViewModelFactory
@@ -50,15 +49,18 @@ class DetailsFragment : Fragment(R.layout.fragment_details_new) {
         super.onAttach(context)
     }
 
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         (requireActivity() as MainActivity).setupToolbar(binding.toolbar)
         setHasOptionsMenu(true)
 
-
         setCastRecView()
-        //setupBackButton()
         setupPlayBtn()
         subscribeUI()
         loadData()
@@ -66,9 +68,9 @@ class DetailsFragment : Fragment(R.layout.fragment_details_new) {
 
     private fun loadData() {
         mediaID = arguments?.getInt(MEDIA_ID) ?: 0
-        sourceType = arguments?.getString(SOURCE_TYPE)
-        if ((sourceType != null) && (viewModel.viewState.value == null)) {
-            viewModel.fetchDetailsData(mediaID, sourceType!!)
+        mediaType = arguments?.getString(MEDIA_TYPE) ?: ""
+        if ((mediaType.isNotEmpty()) && (viewModel.viewState.value == null)) {
+            viewModel.fetchDetailsData(mediaID, mediaType)
         }
     }
 
@@ -142,14 +144,14 @@ class DetailsFragment : Fragment(R.layout.fragment_details_new) {
     private fun bindUI(successTvShow: SuccessTvShow) {
         successTvShow.details?.let { tvShow ->
             binding.apply {
-                //textViewDetailsTitle.text = tvShow.originalName
+                toolbar.title = tvShow.originalName
                 textViewDetailsGenre.text = getNamesFromGenre(tvShow.genres)
                 textViewDetailsOverview.text = tvShow.overview
                 textViewDetailsVoteCount.text = "${tvShow.voteCount}  People watched"
                 textViewDetailsVoteAverage.text = tvShow.voteAverage.toString()
                 tvShow.posterPath?.loadPosterSmall(imageViewDetailsPoster)
                 tvShow.backdropPath?.loadBackDropImage(imageViewDetailsBackPoster)
-                toolbar.title = tvShow.originalName
+                markFavorite()
             }
         }
         successTvShow.listCast?.let {
@@ -157,10 +159,17 @@ class DetailsFragment : Fragment(R.layout.fragment_details_new) {
         }
     }
 
+    private fun markFavorite() {
+        binding.imageButtonDetailsFavorite.setOnClickListener {
+            viewModel.markFavorite(mediaType, mediaID)
+        }
+    }
+
     private fun bindUI(successMovie: SuccessMovie) {
         successMovie.details?.let { movie ->
             binding.apply {
-               // textViewDetailsTitle.text = movie.title
+                toolbar.title = movie.title
+                // textViewDetailsTitle.text = movie.title
                 textViewDetailsGenre.text = getNamesFromGenre(movie.genres)
                 textViewDetailsOverview.text = movie.overview
                 textViewDetailsVoteCount.text = "${movie.voteCount}  People watched"
@@ -168,7 +177,7 @@ class DetailsFragment : Fragment(R.layout.fragment_details_new) {
                 movie.posterPath?.loadPosterSmall(imageViewDetailsPoster)
                 movie.backdropPath?.loadBackDropImage(imageViewDetailsBackPoster)
                     ?: movie.posterPath?.loadPosterLarge(imageViewDetailsBackPoster)
-                toolbar.title = movie.title
+                markFavorite()
             }
         }
         successMovie.listCast?.let {
@@ -189,17 +198,11 @@ class DetailsFragment : Fragment(R.layout.fragment_details_new) {
             activity?.let {
                 val intent = Intent(it, VideoActivity::class.java)
                 intent.putExtra(MEDIA_ID, mediaID)
-                intent.putExtra(SOURCE_TYPE, sourceType)
+                intent.putExtra(MEDIA_TYPE, mediaType)
                 it.startActivity(intent)
             }
         }
     }
-
-//    private fun setupBackButton() {
-//        binding.buttonDetailsBack.setOnClickListener {
-//            findNavController().popBackStack()
-//        }
-//    }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_details, menu)
@@ -214,7 +217,10 @@ class DetailsFragment : Fragment(R.layout.fragment_details_new) {
 
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        showToast("CLICK")
+        when (item.itemId) {
+            R.id.share ->
+                showToast("share this media")
+        }
         return super.onOptionsItemSelected(item)
     }
 

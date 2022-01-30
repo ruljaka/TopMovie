@@ -2,6 +2,9 @@ package com.ruslangrigoriev.topmovie.presentation.profile
 
 import android.content.Context
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
 import android.widget.Toast
@@ -14,12 +17,12 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
+import com.ruslangrigoriev.topmovie.MainActivity
 import com.ruslangrigoriev.topmovie.R
 import com.ruslangrigoriev.topmovie.data.remote.ApiService
 import com.ruslangrigoriev.topmovie.databinding.FragmentProfileBinding
 import com.ruslangrigoriev.topmovie.domain.model.ContentType
 import com.ruslangrigoriev.topmovie.domain.model.movies.Movie
-import com.ruslangrigoriev.topmovie.domain.model.profile.CounterLikeFavorite
 import com.ruslangrigoriev.topmovie.domain.model.tv.TvShow
 import com.ruslangrigoriev.topmovie.domain.utils.*
 import com.ruslangrigoriev.topmovie.presentation.MyViewModelFactory
@@ -41,7 +44,6 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
     lateinit var factory: MyViewModelFactory
     private val viewModel: ProfileViewModel by viewModels { factory }
 
-
     override fun onAttach(context: Context) {
         context.appComponent.inject(this)
         super.onAttach(context)
@@ -49,10 +51,11 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        (requireActivity() as MainActivity).setupToolbar(binding.toolbarProfile.toolbar)
+        setHasOptionsMenu(true)
 
         setFavoriteRecView()
         subscribeUI()
-
 
         val isAuth = viewModel.checkIfUserIsAuthenticated()
         if (isAuth) {
@@ -62,7 +65,6 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                 R.id.action_profile_fragment_to_loginProfileFragment
             )
         }
-
     }
 
     private fun subscribeUI() {
@@ -115,6 +117,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
             }
             textViewProfileLikeCount.text = it.counters.countLike.toString()
             textViewProfileFavoriteCount.text = it.counters.countFavorite.toString()
+            textViewProfileCommentsCount.text = "0"
         }
         favoriteRecAdapter.updateList(it.favoriteList)
     }
@@ -163,13 +166,27 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
     private fun onListItemClick(id: Int, sourceType: String) {
         val bundle = Bundle()
         bundle.putInt(MEDIA_ID, id)
-        bundle.putString(SOURCE_TYPE, sourceType)
+        bundle.putString(MEDIA_TYPE, sourceType)
         findNavController().navigate(R.id.action_profile_fragment_to_details, bundle)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_profile, menu)
+        super.onCreateOptionsMenu(menu, inflater)
     }
 
     private fun showToast(message: String?) {
         Toast.makeText(
             activity, message ?: "Unknown Error", Toast.LENGTH_SHORT
         ).show()
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId){
+            R.id.settings ->{
+                showToast("Settings will be there")
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 }

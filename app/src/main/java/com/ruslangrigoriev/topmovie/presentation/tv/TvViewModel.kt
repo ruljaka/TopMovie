@@ -34,7 +34,7 @@ class TvViewModel(val repository: Repository) : ViewModel() {
                         listPopular.await()
                     )
                 )
-            } catch (e: Exception) {
+            } catch (e: Throwable) {
                 _viewState.postValue(TvScreenViewState.Failure(e.message))
             }
         }

@@ -11,10 +11,18 @@
         tools:layout="@layout/fragment_details">
         <action
             android:id="@+id/action_detailsFragment_to_personFragment"
-            app:destination="@id/personFragment" />
+            app:destination="@id/personFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
         <action
             android:id="@+id/action_detailsFragment_to_videoActivity"
-            app:destination="@id/videoActivity" />
+            app:destination="@id/videoActivity"
+            app:enterAnim="@anim/grow_fade_in_center"
+            app:exitAnim="@anim/grow_fade_out_center"
+            app:popEnterAnim="@anim/grow_fade_in_center"
+            app:popExitAnim="@anim/grow_fade_out_center" />
     </fragment>
     <fragment
         android:id="@+id/personFragment"
@@ -22,7 +30,11 @@
         tools:layout="@layout/fragment_person">
         <action
             android:id="@+id/action_personFragment_to_detailsFragment"
-            app:destination="@id/detailsFragment" />
+            app:destination="@id/detailsFragment"
+            app:enterAnim="@anim/grow_fade_in_center"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/grow_fade_out_center" />
     </fragment>
     <activity
         android:id="@+id/videoActivity"

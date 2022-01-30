@@ -12,6 +12,7 @@ import com.ruslangrigoriev.topmovie.R
 import com.ruslangrigoriev.topmovie.databinding.FragmentLoginBinding
 import com.ruslangrigoriev.topmovie.domain.utils.appComponent
 import com.ruslangrigoriev.topmovie.presentation.MyViewModelFactory
+import com.ruslangrigoriev.topmovie.presentation.profile.login.LoginScreenViewState.*
 import javax.inject.Inject
 
 class LoginFragment : Fragment(R.layout.fragment_login) {
@@ -28,9 +29,24 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         subscribeUI()
-        sighInWithLogin("ruljaka", "thLexicon1984")
+       // sighInWithLogin("ruljaka", "thLexicon1984")
+        bindUI()
+    }
+
+    private fun bindUI() {
+        binding.apply {
+            buttonLoginLogin.setOnClickListener {
+                val username = editTextLoginUsername.text.toString()
+                val password = editTextLoginPassword.text.toString()
+                if (username.isNotEmpty() && password.isNotEmpty()
+                ) {
+                    sighInWithLogin(username, password)
+                } else {
+                    showToast("Incorrect login or password")
+                }
+            }
+        }
     }
 
     private fun sighInWithLogin(username: String, password: String) {
@@ -38,33 +54,38 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
     }
 
     private fun subscribeUI() {
-        viewModel.isLoadingLiveData.observe(viewLifecycleOwner, {
-            //TODO
-        })
-        viewModel.isLogged.observe(viewLifecycleOwner, {
+        viewModel.viewState.observe(viewLifecycleOwner, {
             when (it) {
-                true -> {
-                    Toast.makeText(
-                        requireContext(),
-                        "Login successful",
-                        Toast.LENGTH_LONG
-                    )
-                        .show()
-                    findNavController().popBackStack()
+                Loading -> {
+                    showLoading(true)
                 }
-                false -> {
-                    Toast.makeText(
-                        requireContext(),
-                        "Something went wrong",
-                        Toast.LENGTH_LONG
-                    )
-                        .show()
+                is Failure -> {
+                    showToast(it.errorMessage)
+                    showLoading(false)
+                }
+                is Success -> {
+                    showLoading(false)
+                    showToast("Login successful")
+                    findNavController().popBackStack()
                 }
             }
         })
-        viewModel.errorLD.observe(viewLifecycleOwner, {
-            //TODO
-        })
+
+
+    }
+
+    private fun showLoading(loading: Boolean) {
+        if (loading) {
+            binding.progressBarLogin.visibility = View.VISIBLE
+        } else {
+            binding.progressBarLogin.visibility = View.GONE
+        }
+    }
+
+    private fun showToast(message: String?) {
+        Toast.makeText(
+            activity, message ?: "Unknown Error", Toast.LENGTH_SHORT
+        ).show()
     }
 
 }

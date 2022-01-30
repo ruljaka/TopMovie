@@ -3,7 +3,7 @@ package com.ruslangrigoriev.topmovie.domain.model.auth
 
 import com.google.gson.annotations.SerializedName
 
-data class Credentials(
+data class AuthCredentials(
     @SerializedName("username")
     val username: String,
     @SerializedName("password")

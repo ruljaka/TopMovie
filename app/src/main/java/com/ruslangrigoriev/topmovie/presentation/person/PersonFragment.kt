@@ -9,6 +9,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
+import com.ruslangrigoriev.topmovie.MainActivity
 import com.ruslangrigoriev.topmovie.R
 import com.ruslangrigoriev.topmovie.databinding.FragmentPersonBinding
 import com.ruslangrigoriev.topmovie.domain.model.credits.Cast
@@ -37,6 +38,8 @@ class PersonFragment : Fragment(R.layout.fragment_person) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        (requireActivity() as MainActivity).setupToolbar(binding.toolbarPerson.toolbar)
+        (requireActivity() as MainActivity).supportActionBar?.setDisplayShowTitleEnabled(false)
         val personID = arguments?.getInt(PERSON_ID)
         loadData(personID)
         setAdapter(view)
@@ -107,7 +110,7 @@ class PersonFragment : Fragment(R.layout.fragment_person) {
     private fun onListItemClick(movieID: Int) {
         val bundle = Bundle()
         bundle.putInt(MEDIA_ID, movieID)
-        bundle.putString(SOURCE_TYPE, MOVIE_TYPE)
+        bundle.putString(MEDIA_TYPE, MOVIE_TYPE)
         findNavController().navigate(R.id.action_personFragment_to_detailsFragment, bundle)
     }
 
@@ -116,4 +119,6 @@ class PersonFragment : Fragment(R.layout.fragment_person) {
             activity, message ?: "Unknown Error", Toast.LENGTH_SHORT
         ).show()
     }
+
+
 }

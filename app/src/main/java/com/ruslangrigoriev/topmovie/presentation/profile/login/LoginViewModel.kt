@@ -1,14 +1,12 @@
 package com.ruslangrigoriev.topmovie.presentation.profile.login
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ruslangrigoriev.topmovie.data.repository.AuthRepository
-import com.ruslangrigoriev.topmovie.domain.model.auth.Credentials
+import com.ruslangrigoriev.topmovie.domain.model.auth.AuthCredentials
 import com.ruslangrigoriev.topmovie.domain.model.auth.Token
-import com.ruslangrigoriev.topmovie.domain.utils.TAG
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -17,39 +15,30 @@ class LoginViewModel(
     val authRepository: AuthRepository,
 ) : ViewModel() {
 
-    private val _errorLD = MutableLiveData<String>()
-    val errorLD: LiveData<String>
-        get() = _errorLD
-
-    private val _isLoadingLiveData = MutableLiveData<Boolean>()
-    val isLoadingLiveData: LiveData<Boolean>
-        get() = _isLoadingLiveData
-
-    private val _isLogged = MutableLiveData<Boolean>()
-    val isLogged: LiveData<Boolean>
-        get() = _isLogged
+    private val _viewState = MutableLiveData<LoginScreenViewState>()
+    val viewState: LiveData<LoginScreenViewState>
+        get() = _viewState
 
     fun signIn(username: String, password: String) {
-        _isLoadingLiveData.value = true
+        _viewState.postValue(LoginScreenViewState.Loading)
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 var requestToken = authRepository.getRequestToken()
-                Timber.d( "requestToken -> ${requestToken?.success}")
+                Timber.d("requestToken -> ${requestToken?.success}")
                 requestToken?.let { token ->
-                    val credentials = Credentials(username, password, token.requestToken)
+                    val credentials = AuthCredentials(username, password, token.requestToken)
                     requestToken = authRepository.validateRequestToken(credentials)
-                    Timber.d( "validateToken -> ${requestToken?.success}")
+                    Timber.d("validateToken -> ${requestToken?.success}")
                     val session = authRepository.createSession(Token(token.requestToken))
-                    Timber.d("session -> ${session?.success}")
+                    Timber.d("session -> sessionID ${session?.sessionId} ${session?.success}")
                     session?.let {
-                        authRepository.saveSession(it)
-                        _isLogged.postValue(true)
+                        authRepository.saveSession(session.sessionId)
+                        _viewState.postValue(LoginScreenViewState.Success(true))
                     }
                 }
-                _isLoadingLiveData.postValue(false)
-            } catch (e: Exception) {
-                _errorLD.postValue(e.message)
-                _isLoadingLiveData.postValue(false)
+            } catch (e: Throwable) {
+                Timber.d("errorMessage -> ${e.message}")
+                _viewState.postValue(LoginScreenViewState.Failure(e.message))
             }
         }
 

@@ -1,5 +1,7 @@
 package com.ruslangrigoriev.topmovie.data.remote
 
+import com.ruslangrigoriev.topmovie.domain.model.FavoriteCredentials
+import com.ruslangrigoriev.topmovie.domain.model.ResponseObject
 import com.ruslangrigoriev.topmovie.domain.model.auth.*
 import com.ruslangrigoriev.topmovie.domain.model.credits.CreditsResponse
 import com.ruslangrigoriev.topmovie.domain.model.movies.Movie
@@ -116,7 +118,7 @@ interface ApiService {
     @POST("authentication/token/validate_with_login")
     suspend fun validateRequestToken(
         @Query("api_key") apiKey: String = API_KEY,
-        @Body credentials: Credentials
+        @Body authCredentials: AuthCredentials
     ): Response<RequestToken>
 
     @POST("authentication/session/new")
@@ -163,5 +165,12 @@ interface ApiService {
         @Query("page") page: Int = 1,
     ): Response<TvResponse>
 
+    @POST("account/{account_id}/favorite")
+    suspend fun markAsFavorite(
+        @Path("account_id") account_id: Int,
+        @Query("api_key") apiKey: String = API_KEY,
+        @Query("session_id") session_id: String,
+        @Body favoriteCredentials: FavoriteCredentials
+    ) : Response<ResponseObject>
 
 }

@@ -3,11 +3,15 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="app/src/main/res/drawable-night/ic_arrow_back.xml" value="0.303515625" />
+        <entry key="app/src/main/res/drawable-night/ic_search_night.xml" value="0.3" />
+        <entry key="app/src/main/res/drawable-night/ic_settings.xml" value="0.303515625" />
         <entry key="app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.2898148148148148" />
         <entry key="app/src/main/res/drawable/circular.xml" value="0.37538461538461537" />
         <entry key="app/src/main/res/drawable/darkCircle.xml" value="0.37538461538461537" />
         <entry key="app/src/main/res/drawable/dark_circle.xml" value="0.37538461538461537" />
         <entry key="app/src/main/res/drawable/gradient_first.xml" value="0.26296296296296295" />
+        <entry key="app/src/main/res/drawable/ic_arrow_back.xml" value="0.303515625" />
         <entry key="app/src/main/res/drawable/ic_arrow_next.xml" value="0.1875" />
         <entry key="app/src/main/res/drawable/ic_comment_selected.xml" value="0.19446254071661237" />
         <entry key="app/src/main/res/drawable/ic_comment_unselected.xml" value="0.19446254071661237" />
@@ -20,6 +24,12 @@
         <entry key="app/src/main/res/drawable/ic_movies.xml" value="0.3109375" />
         <entry key="app/src/main/res/drawable/ic_movies_fill.xml" value="0.19446254071661237" />
         <entry key="app/src/main/res/drawable/ic_profile.xml" value="0.30615384615384617" />
+        <entry key="app/src/main/res/drawable/ic_search.xml" value="0.303515625" />
+        <entry key="app/src/main/res/drawable/ic_search_light.xml" value="0.303515625" />
+        <entry key="app/src/main/res/drawable/ic_search_night.xml" value="0.3" />
+        <entry key="app/src/main/res/drawable/ic_settings.xml" value="0.303515625" />
+        <entry key="app/src/main/res/drawable/ic_settings_day.xml" value="0.303515625" />
+        <entry key="app/src/main/res/drawable/ic_settings_night.xml" value="0.303515625" />
         <entry key="app/src/main/res/drawable/ic_share.xml" value="0.19446254071661237" />
         <entry key="app/src/main/res/drawable/ic_splash_screen.xml" value="0.26296296296296295" />
         <entry key="app/src/main/res/drawable/ic_star_red.xml" value="0.19638157894736843" />
@@ -37,6 +47,7 @@
         <entry key="app/src/main/res/drawable/round_corner.xml" value="0.3109375" />
         <entry key="app/src/main/res/drawable/round_corner_start_button.xml" value="0.19375" />
         <entry key="app/src/main/res/drawable/selector.xml" value="0.37538461538461537" />
+        <entry key="app/src/main/res/drawable/toolbar_bg.xml" value="0.3" />
         <entry key="app/src/main/res/drawable/tv_selector.xml" value="0.30615384615384617" />
         <entry key="app/src/main/res/drawable/white_circle.xml" value="0.37538461538461537" />
         <entry key="app/src/main/res/drawable/whitecircle.xml" value="0.37538461538461537" />
@@ -48,18 +59,18 @@
         <entry key="app/src/main/res/layout/content_video.xml" value="0.18436482084690553" />
         <entry key="app/src/main/res/layout/details_fragment.xml" value="0.5" />
         <entry key="app/src/main/res/layout/fragment_details.xml" value="0.22" />
-        <entry key="app/src/main/res/layout/fragment_details_new.xml" value="0.15852208585813754" />
+        <entry key="app/src/main/res/layout/fragment_details_new.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_details_old.xml" value="0.18436482084690553" />
         <entry key="app/src/main/res/layout/fragment_favorite.xml" value="0.28072916666666664" />
         <entry key="app/src/main/res/layout/fragment_first.xml" value="0.165" />
         <entry key="app/src/main/res/layout/fragment_first2.xml" value="0.18436482084690553" />
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.3651041666666667" />
-        <entry key="app/src/main/res/layout/fragment_login.xml" value="0.165" />
+        <entry key="app/src/main/res/layout/fragment_login.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_main.xml" value="0.3885416666666667" />
         <entry key="app/src/main/res/layout/fragment_movie.xml" value="0.2203125" />
         <entry key="app/src/main/res/layout/fragment_movies.xml" value="0.1912162162162162" />
         <entry key="app/src/main/res/layout/fragment_movies_new.xml" value="0.25" />
-        <entry key="app/src/main/res/layout/fragment_person.xml" value="0.18520114465167126" />
+        <entry key="app/src/main/res/layout/fragment_person.xml" value="0.24421052631578946" />
         <entry key="app/src/main/res/layout/fragment_profile.xml" value="0.22" />
         <entry key="app/src/main/res/layout/fragment_search.xml" value="0.18618421052631579" />
         <entry key="app/src/main/res/layout/fragment_second.xml" value="0.18929765886287625" />
@@ -88,8 +99,14 @@
         <entry key="app/src/main/res/layout/person_cast_item.xml" value="0.3651041666666667" />
         <entry key="app/src/main/res/layout/person_fragment.xml" value="0.25" />
         <entry key="app/src/main/res/layout/search_fragment.xml" value="0.5" />
+        <entry key="app/src/main/res/layout/toolbar_details.xml" value="0.27684964200477324" />
+        <entry key="app/src/main/res/layout/toolbar_movie_tv.xml" value="0.29140625" />
+        <entry key="app/src/main/res/layout/toolbar_profile.xml" value="0.28803088803088805" />
         <entry key="app/src/main/res/layout/trending_fragment.xml" value="0.3651041666666667" />
         <entry key="app/src/main/res/menu/bottom_menu_nav.xml" value="0.2538779697978804" />
+        <entry key="app/src/main/res/menu/menu_details.xml" value="0.25833333333333336" />
+        <entry key="app/src/main/res/menu/menu_movie_tv.xml" value="0.29140625" />
+        <entry key="app/src/main/res/menu/menu_profile.xml" value="0.29140625" />
         <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.4046875" />
         <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.4046875" />
       </map>

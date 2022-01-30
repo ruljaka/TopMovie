@@ -54,7 +54,7 @@ class MovieViewModel(val repository: Repository) : ViewModel() {
                         listPopular.await()
                     )
                 )
-            } catch (e: Exception) {
+            } catch (e: Throwable) {
                 _viewState.postValue(MovieScreenViewState.Failure(e.message))
             }
         }

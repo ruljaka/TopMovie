@@ -35,7 +35,7 @@ class VideoActivity : AppCompatActivity() {
 
     private fun loadData() {
         mediaID = intent.getIntExtra(MEDIA_ID, 0)
-        sourceType = intent.getStringExtra(SOURCE_TYPE)
+        sourceType = intent.getStringExtra(MEDIA_TYPE)
         if (sourceType == MOVIE_TYPE) {
             viewModel.fetchMovieVideoData(mediaID)
         }

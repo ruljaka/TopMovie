@@ -12,10 +12,18 @@
         tools:layout="@layout/fragment_profile">
         <action
             android:id="@+id/action_profile_fragment_to_loginProfileFragment"
-            app:destination="@id/loginProfileFragment" />
+            app:destination="@id/loginProfileFragment"
+            app:enterAnim="@anim/grow_fade_in_center"
+            app:exitAnim="@anim/grow_fade_out_center"
+            app:popEnterAnim="@anim/grow_fade_in_center"
+            app:popExitAnim="@anim/grow_fade_out_center"/>
         <action
             android:id="@+id/action_profile_fragment_to_details"
-            app:destination="@id/details" />
+            app:destination="@id/details"
+            app:enterAnim="@anim/grow_fade_in_center"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/grow_fade_out_center" />
     </fragment>
     <fragment
         android:id="@+id/loginProfileFragment"

@@ -46,7 +46,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         subscribeQuerySearch()
 
         searchQuery = arguments?.getString(QUERY)
-        searchSource = arguments?.getString(SOURCE_TYPE)
+        searchSource = arguments?.getString(MEDIA_TYPE)
 
         searchQuery?.let {
             if (viewModel.queryFlow.value == "") {
@@ -123,7 +123,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
     private fun onListItemClick(id: Int) {
             val bundle = Bundle()
             bundle.putInt(MEDIA_ID, id)
-            bundle.putString(SOURCE_TYPE, searchSource)
+            bundle.putString(MEDIA_TYPE, searchSource)
         if(searchSource== MOVIE_TYPE){
             findNavController().navigate(R.id.action_searchFragment_to_details, bundle)
         } else{

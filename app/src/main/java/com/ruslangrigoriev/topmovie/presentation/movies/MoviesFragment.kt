@@ -51,13 +51,19 @@ class MoviesFragment : Fragment(R.layout.fragment_movies) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        setHasOptionsMenu(true)
-
         setNowRecView()
         setPopularRecView()
         setupSearch()
         subscribeUi()
+        loadData()
+    }
+
+    private fun loadData() {
+        if (viewModel.viewState.value == null
+            || viewModel.viewState.value is Failure
+        ) {
+            viewModel.fetchMoviesData()
+        }
     }
 
     private fun subscribeUi() {
@@ -148,7 +154,8 @@ class MoviesFragment : Fragment(R.layout.fragment_movies) {
     }
 
     private fun setupSearch() {
-        binding.toolbarMovies.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener,
+        binding.toolbarMovies.searchView.setOnQueryTextListener(object :
+            SearchView.OnQueryTextListener,
             androidx.appcompat.widget.SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 if (TextUtils.isEmpty(query)) {

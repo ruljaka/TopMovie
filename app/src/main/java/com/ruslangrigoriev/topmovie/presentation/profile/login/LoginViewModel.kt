@@ -41,7 +41,5 @@ class LoginViewModel(
                 _viewState.postValue(LoginScreenViewState.Failure(e.message))
             }
         }
-
-
     }
 }

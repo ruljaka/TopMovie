@@ -7,13 +7,11 @@ import com.ruslangrigoriev.topmovie.domain.model.FavoriteCredentials
 import com.ruslangrigoriev.topmovie.domain.model.ResponseObject
 import com.ruslangrigoriev.topmovie.domain.model.credits.Cast
 import com.ruslangrigoriev.topmovie.domain.model.media.Media
-import com.ruslangrigoriev.topmovie.domain.model.movies.Movie
 import com.ruslangrigoriev.topmovie.domain.model.movies.MovieResponse
 import com.ruslangrigoriev.topmovie.domain.model.person.Person
 import com.ruslangrigoriev.topmovie.domain.model.profile.User
 import com.ruslangrigoriev.topmovie.domain.model.tv.TvResponse
 import com.ruslangrigoriev.topmovie.domain.model.video.Video
-import com.ruslangrigoriev.topmovie.domain.model.video.VideoResponse
 import com.ruslangrigoriev.topmovie.domain.utils.*
 import javax.inject.Inject
 
@@ -21,7 +19,6 @@ class RepositoryImpl(private val application: Application) : Repository {
 
     @Inject
     lateinit var apiService: ApiService
-
     @Inject
     lateinit var favoriteDAO: FavoriteDAO
 
@@ -53,7 +50,6 @@ class RepositoryImpl(private val application: Application) : Repository {
             throw Throwable(t.message)
         }
     }
-
 
     override suspend fun getMovieDetails(id: Int): Media {
         val response = apiService.getMovieDetails(id)

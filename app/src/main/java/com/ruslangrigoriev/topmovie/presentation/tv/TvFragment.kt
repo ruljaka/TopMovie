@@ -22,6 +22,7 @@ import com.ruslangrigoriev.topmovie.domain.utils.*
 import com.ruslangrigoriev.topmovie.presentation.MyViewModelFactory
 import com.ruslangrigoriev.topmovie.presentation.adapters.BaseRecyclerAdapter
 import com.ruslangrigoriev.topmovie.presentation.adapters.BindingInterface
+import com.ruslangrigoriev.topmovie.presentation.tv.ResultTvState.*
 import javax.inject.Inject
 
 class TvFragment : Fragment(R.layout.fragment_tv) {
@@ -51,20 +52,29 @@ class TvFragment : Fragment(R.layout.fragment_tv) {
         setPopularRecView()
         setupSearch()
         subscribeUi()
+        loadData()
+    }
+
+    private fun loadData() {
+        if (viewModel.viewState.value == null
+            || viewModel.viewState.value is Failure
+        ) {
+            viewModel.fetchData()
+        }
     }
 
     private fun subscribeUi() {
         lifecycleScope.launchWhenStarted {
             viewModel.viewState.observe(viewLifecycleOwner, {
                 when (it) {
-                    ResultTvState.Loading -> {
+                    Loading -> {
                         showLoading(true)
                     }
-                    is ResultTvState.Failure -> {
+                    is Failure -> {
                         showToast(it.errorMessage)
                         showLoading(false)
                     }
-                    is ResultTvState.Success -> {
+                    is Success -> {
                         showLoading(false)
                         bindUI(it)
                     }
@@ -73,7 +83,7 @@ class TvFragment : Fragment(R.layout.fragment_tv) {
         }
     }
 
-    private fun bindUI(it: ResultTvState.Success) {
+    private fun bindUI(it: Success) {
         nowRecyclerAdapter.updateList(it.nowList)
         popularRecyclerAdapter.updateList(it.popularList)
     }

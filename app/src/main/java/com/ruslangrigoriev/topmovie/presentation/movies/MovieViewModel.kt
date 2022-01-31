@@ -12,6 +12,7 @@ import com.ruslangrigoriev.topmovie.data.paging.MoviePagingSource
 import com.ruslangrigoriev.topmovie.data.repository.Repository
 import com.ruslangrigoriev.topmovie.domain.model.movies.Movie
 import com.ruslangrigoriev.topmovie.domain.utils.PagingType
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
@@ -28,10 +29,8 @@ class MovieViewModel(val repository: Repository) : ViewModel() {
     val viewState: LiveData<ResultMovieState>
         get() = _viewState
 
-    init {
-        if (_viewState.value == null) {
-            fetchMoviesData()
-        }
+    private val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
+        _viewState.postValue(ResultMovieState.Failure(throwable.message))
     }
 
     private fun fetchMoviesTrending() {
@@ -41,22 +40,19 @@ class MovieViewModel(val repository: Repository) : ViewModel() {
             }.flow.cachedIn(viewModelScope)
     }
 
-    private fun fetchMoviesData() {
+    fun fetchMoviesData() {
         Timber.d("fetchMoviesData ")
-        viewModelScope.launch() {
+        viewModelScope.launch(exceptionHandler) {
             _viewState.value = ResultMovieState.Loading
-            try {
-                val listNow = async { repository.getMoviesNow() }
-                val listPopular = async { repository.getMoviesPopular() }
-                _viewState.postValue(
-                    ResultMovieState.Success(
-                        listNow.await(),
-                        listPopular.await()
-                    )
+            val listNow = async { repository.getMoviesNow() }
+            val listPopular = async { repository.getMoviesPopular() }
+            _viewState.postValue(
+                ResultMovieState.Success(
+                    listNow.await(),
+                    listPopular.await()
                 )
-            } catch (e: Throwable) {
-                _viewState.postValue(ResultMovieState.Failure(e.message))
-            }
+            )
+
         }
     }
 

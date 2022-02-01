@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.ruslangrigoriev.topmovie.data.repository.AuthRepository
 import com.ruslangrigoriev.topmovie.domain.model.auth.AuthCredentials
 import com.ruslangrigoriev.topmovie.domain.model.auth.Token
+import com.ruslangrigoriev.topmovie.domain.utils.ResultState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -15,12 +16,12 @@ class LoginViewModel(
     val authRepository: AuthRepository,
 ) : ViewModel() {
 
-    private val _viewState = MutableLiveData<LoginScreenViewState>()
-    val viewState: LiveData<LoginScreenViewState>
+    private val _viewState = MutableLiveData<ResultState>()
+    val viewState: LiveData<ResultState>
         get() = _viewState
 
     fun signIn(username: String, password: String) {
-        _viewState.postValue(LoginScreenViewState.Loading)
+        _viewState.postValue(ResultState.Loading)
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 var requestToken = authRepository.getRequestToken()
@@ -33,12 +34,12 @@ class LoginViewModel(
                     Timber.d("session -> sessionID ${session?.sessionId} ${session?.success}")
                     session?.let {
                         authRepository.saveSession(session.sessionId)
-                        _viewState.postValue(LoginScreenViewState.Success(true))
+                        _viewState.postValue(ResultState.Success(isLogged = true))
                     }
                 }
             } catch (e: Throwable) {
                 Timber.d("errorMessage -> ${e.message}")
-                _viewState.postValue(LoginScreenViewState.Failure(e.message))
+                _viewState.postValue(ResultState.Failure(e.message))
             }
         }
     }

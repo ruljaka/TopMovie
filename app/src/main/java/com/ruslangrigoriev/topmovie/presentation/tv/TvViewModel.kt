@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ruslangrigoriev.topmovie.data.repository.Repository
+import com.ruslangrigoriev.topmovie.domain.utils.ResultState
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
@@ -12,24 +13,24 @@ import timber.log.Timber
 
 class TvViewModel(val repository: Repository) : ViewModel() {
 
-    private val _viewState = MutableLiveData<ResultTvState>()
-    val viewState: LiveData<ResultTvState>
+    private val _viewState = MutableLiveData<ResultState>()
+    val viewState: LiveData<ResultState>
         get() = _viewState
 
     private val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
-        _viewState.postValue(ResultTvState.Failure(throwable.message))
+        _viewState.postValue(ResultState.Failure(throwable.message))
     }
 
-     fun fetchData() {
+    fun fetchData() {
         viewModelScope.launch(exceptionHandler) {
             Timber.d("fetchData")
-            _viewState.value = ResultTvState.Loading
+            _viewState.value = ResultState.Loading
             val listNow = async { repository.getTvNow() }
             val listPopular = async { repository.getTvPopular() }
             _viewState.postValue(
-                ResultTvState.Success(
-                    listNow.await(),
-                    listPopular.await()
+                ResultState.Success(
+                    listNow = listNow.await(),
+                    listPopular = listPopular.await()
                 )
             )
         }

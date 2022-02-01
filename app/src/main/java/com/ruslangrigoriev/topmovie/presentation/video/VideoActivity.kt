@@ -10,9 +10,9 @@ import com.ruslangrigoriev.topmovie.R
 import com.ruslangrigoriev.topmovie.databinding.ActivityVideoBinding
 import com.ruslangrigoriev.topmovie.domain.utils.MEDIA_ID
 import com.ruslangrigoriev.topmovie.domain.utils.MEDIA_TYPE
+import com.ruslangrigoriev.topmovie.domain.utils.ResultState.*
 import com.ruslangrigoriev.topmovie.domain.utils.appComponent
 import com.ruslangrigoriev.topmovie.presentation.MyViewModelFactory
-import com.ruslangrigoriev.topmovie.presentation.video.ResultVideoState.*
 import kr.co.prnd.YouTubePlayerView
 import javax.inject.Inject
 
@@ -63,13 +63,15 @@ class VideoActivity : AppCompatActivity(R.layout.activity_video) {
 
     private fun bindUI(it: Success) {
         youTubePlayerView = findViewById(R.id.you_tube_player_view)
-        if (it.listVideo.isNotEmpty()) {
-            videoLink = it.listVideo[0].key
-            videoLink?.let {
-                youTubePlayerView.play(it)
+        it.listVideo?.let { list ->
+            if (list.isNotEmpty()) {
+                videoLink = list[0].key
+                videoLink?.let {
+                    youTubePlayerView.play(it)
+                }
+            } else {
+                showToast("No videos")
             }
-        } else {
-            showToast("No videos")
         }
     }
 

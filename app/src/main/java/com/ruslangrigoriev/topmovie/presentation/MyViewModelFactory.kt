@@ -9,6 +9,7 @@ import com.ruslangrigoriev.topmovie.presentation.movies.MovieViewModel
 import com.ruslangrigoriev.topmovie.presentation.person.PersonViewModel
 import com.ruslangrigoriev.topmovie.presentation.profile.ProfileViewModel
 import com.ruslangrigoriev.topmovie.presentation.profile.login.LoginViewModel
+import com.ruslangrigoriev.topmovie.presentation.profile.settings.SettingsViewModel
 import com.ruslangrigoriev.topmovie.presentation.search.SearchViewModel
 import com.ruslangrigoriev.topmovie.presentation.tv.TvViewModel
 import com.ruslangrigoriev.topmovie.presentation.video.VideoViewModel
@@ -54,6 +55,13 @@ class MyViewModelFactory @Inject constructor(
                     authRepository = authRepository
                 ) as T
             }
+            modelClass.isAssignableFrom(SettingsViewModel::class.java) -> {
+                @Suppress("UNCHECKED_CAST")
+                return SettingsViewModel(
+                    authRepository = authRepository
+                ) as T
+            }
+
             modelClass.isAssignableFrom(VideoViewModel::class.java) -> {
                 @Suppress("UNCHECKED_CAST")
                 return VideoViewModel(repository = repository) as T

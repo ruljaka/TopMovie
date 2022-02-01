@@ -12,6 +12,7 @@ import com.ruslangrigoriev.topmovie.data.paging.MoviePagingSource
 import com.ruslangrigoriev.topmovie.data.repository.Repository
 import com.ruslangrigoriev.topmovie.domain.model.movies.Movie
 import com.ruslangrigoriev.topmovie.domain.utils.PagingType
+import com.ruslangrigoriev.topmovie.domain.utils.ResultState
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
@@ -25,12 +26,12 @@ class MovieViewModel(val repository: Repository) : ViewModel() {
     val trendingFlowData: Flow<PagingData<Movie>>
         get() = _trendingFlowData
 
-    private val _viewState = MutableLiveData<ResultMovieState>()
-    val viewState: LiveData<ResultMovieState>
+    private val _viewState = MutableLiveData<ResultState>()
+    val viewState: LiveData<ResultState>
         get() = _viewState
 
     private val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
-        _viewState.postValue(ResultMovieState.Failure(throwable.message))
+        _viewState.postValue(ResultState.Failure(throwable.message))
     }
 
     private fun fetchMoviesTrending() {
@@ -43,13 +44,13 @@ class MovieViewModel(val repository: Repository) : ViewModel() {
     fun fetchMoviesData() {
         Timber.d("fetchMoviesData ")
         viewModelScope.launch(exceptionHandler) {
-            _viewState.value = ResultMovieState.Loading
+            _viewState.value = ResultState.Loading
             val listNow = async { repository.getMoviesNow() }
             val listPopular = async { repository.getMoviesPopular() }
             _viewState.postValue(
-                ResultMovieState.Success(
-                    listNow.await(),
-                    listPopular.await()
+                ResultState.Success(
+                    listNow = listNow.await(),
+                    listPopular= listPopular.await()
                 )
             )
 

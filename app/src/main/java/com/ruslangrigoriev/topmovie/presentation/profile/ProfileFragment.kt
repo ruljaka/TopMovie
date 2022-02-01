@@ -21,21 +21,19 @@ import com.ruslangrigoriev.topmovie.MainActivity
 import com.ruslangrigoriev.topmovie.R
 import com.ruslangrigoriev.topmovie.data.remote.ApiService
 import com.ruslangrigoriev.topmovie.databinding.FragmentProfileBinding
-import com.ruslangrigoriev.topmovie.domain.model.ContentType
-import com.ruslangrigoriev.topmovie.domain.model.movies.Movie
-import com.ruslangrigoriev.topmovie.domain.model.tv.TvShow
+import com.ruslangrigoriev.topmovie.domain.model.media.Media
 import com.ruslangrigoriev.topmovie.domain.utils.*
+import com.ruslangrigoriev.topmovie.domain.utils.ResultState.*
 import com.ruslangrigoriev.topmovie.presentation.MyViewModelFactory
 import com.ruslangrigoriev.topmovie.presentation.adapters.BaseRecyclerAdapter
 import com.ruslangrigoriev.topmovie.presentation.adapters.BindingInterface
 import com.ruslangrigoriev.topmovie.presentation.adapters.ItemOffsetDecoration
-import com.ruslangrigoriev.topmovie.presentation.profile.ProfileScreenViewState.*
 import javax.inject.Inject
 
 
 class ProfileFragment : Fragment(R.layout.fragment_profile) {
     private val binding by viewBinding(FragmentProfileBinding::bind)
-    private lateinit var favoriteRecAdapter: BaseRecyclerAdapter<ContentType>
+    private lateinit var favoriteRecAdapter: BaseRecyclerAdapter<Media>
 
     @Inject
     lateinit var apiService: ApiService
@@ -88,46 +86,42 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
     }
 
     private fun bindUI(it: Success) {
-        binding.apply {
-            if (it.user.name.isEmpty()) {
-                textViewUsername.text = it.user.username
-            } else {
-                textViewUsername.text = it.user.name
+        it.user?.let { user ->
+            binding.apply {
+                if (user.name.isEmpty()) {
+                    textViewUsername.text = user.username
+                } else {
+                    textViewUsername.text = user.name
+                }
+                if (it.user.avatar.tmdb.avatarPath != null) {
+                    Glide.with(requireContext())
+                        .load(IMAGE_URL_AVATAR + user.avatar.tmdb.avatarPath)
+                        .apply(RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL))
+                        .placeholder(R.drawable.placeholder)
+                        .into(this.imageViewUserAvatar)
+                } else {
+                    Glide.with(requireContext())
+                        .load(IMAGE_URL_GRAVATAR + user.avatar.gravatar.hash + ".jpg?s=200")
+                        .apply(RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL))
+                        .placeholder(R.drawable.placeholder)
+                        .into(this.imageViewUserAvatar)
+                }
+                textViewProfileLikeCount.text = it.counters?.countLike.toString()
+                textViewProfileFavoriteCount.text = it.counters?.countFavorite.toString()
+                textViewProfileCommentsCount.text = "0"
             }
-            if (it.user.avatar.tmdb.avatarPath != null) {
-                Glide.with(requireContext())
-                    .load(IMAGE_URL_AVATAR + it.user.avatar.tmdb.avatarPath)
-                    .apply(RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL))
-                    .placeholder(R.drawable.placeholder)
-                    .into(this.imageViewUserAvatar)
-            } else {
-                Glide.with(requireContext())
-                    .load(IMAGE_URL_GRAVATAR + it.user.avatar.gravatar.hash + ".jpg?s=200")
-                    .apply(RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL))
-                    .placeholder(R.drawable.placeholder)
-                    .into(this.imageViewUserAvatar)
-            }
-            textViewProfileLikeCount.text = it.counters.countLike.toString()
-            textViewProfileFavoriteCount.text = it.counters.countFavorite.toString()
-            textViewProfileCommentsCount.text = "0"
         }
-        favoriteRecAdapter.updateList(it.favoriteList)
+
+        it.favoriteList?.let { list -> favoriteRecAdapter.updateList(list) }
     }
 
     private fun setFavoriteRecView() {
-        val bindingInterface = object : BindingInterface<ContentType> {
-            override fun bindData(item: ContentType, view: View) {
+        val bindingInterface = object : BindingInterface<Media> {
+            override fun bindData(item: Media, view: View) {
                 val poster = view.findViewById<ImageView>(R.id.imageView_favorite_poster)
-                if (item.getType() == ContentType.TYPE_MOVIE) {
-                    (item as Movie).posterPath?.loadPosterSmall(poster)
-                    view.setOnClickListener {
-                        onListItemClick(item.id, MOVIE_TYPE)
-                    }
-                } else {
-                    (item as TvShow).posterPath?.loadPosterSmall(poster)
-                    view.setOnClickListener {
-                        onListItemClick(item.id, TV_TYPE)
-                    }
+                item.posterPath?.loadPosterSmall(poster)
+                view.setOnClickListener {
+                    onListItemClick(item.id, item.mediaType)
                 }
             }
         }
@@ -164,10 +158,10 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
     }
 
 
-    private fun onListItemClick(id: Int, sourceType: String) {
+    private fun onListItemClick(id: Int, mediaType: String) {
         val bundle = Bundle()
         bundle.putInt(MEDIA_ID, id)
-        bundle.putString(MEDIA_TYPE, sourceType)
+        bundle.putString(MEDIA_TYPE, mediaType)
         findNavController().navigate(R.id.action_profile_fragment_to_details, bundle)
     }
 
@@ -185,7 +179,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.settings -> {
-                showToast("Settings will be there")
+                findNavController().navigate(R.id.action_profile_fragment_to_settingsProfileFragment)
             }
         }
         return super.onOptionsItemSelected(item)

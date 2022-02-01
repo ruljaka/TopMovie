@@ -10,9 +10,10 @@ import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.ruslangrigoriev.topmovie.R
 import com.ruslangrigoriev.topmovie.databinding.FragmentLoginBinding
+import com.ruslangrigoriev.topmovie.domain.utils.ResultState
+import com.ruslangrigoriev.topmovie.domain.utils.ResultState.*
 import com.ruslangrigoriev.topmovie.domain.utils.appComponent
 import com.ruslangrigoriev.topmovie.presentation.MyViewModelFactory
-import com.ruslangrigoriev.topmovie.presentation.profile.login.LoginScreenViewState.*
 import javax.inject.Inject
 
 class LoginFragment : Fragment(R.layout.fragment_login) {

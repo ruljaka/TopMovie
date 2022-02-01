@@ -20,6 +20,8 @@ import com.ruslangrigoriev.topmovie.domain.model.credits.Cast
 import com.ruslangrigoriev.topmovie.domain.model.media.Media
 import com.ruslangrigoriev.topmovie.domain.model.movies.Movie
 import com.ruslangrigoriev.topmovie.domain.model.tv.TvShow
+import com.ruslangrigoriev.topmovie.domain.utils.mappers.MovieMapper
+import com.ruslangrigoriev.topmovie.domain.utils.mappers.TvMapper
 import retrofit2.Response
 import timber.log.Timber
 import java.time.LocalDate

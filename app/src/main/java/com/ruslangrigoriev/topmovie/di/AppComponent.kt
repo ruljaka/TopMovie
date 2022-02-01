@@ -7,6 +7,7 @@ import com.ruslangrigoriev.topmovie.presentation.movies.MoviesFragment
 import com.ruslangrigoriev.topmovie.presentation.person.PersonFragment
 import com.ruslangrigoriev.topmovie.presentation.profile.ProfileFragment
 import com.ruslangrigoriev.topmovie.presentation.profile.login.LoginFragment
+import com.ruslangrigoriev.topmovie.presentation.profile.settings.SettingsFragment
 import com.ruslangrigoriev.topmovie.presentation.search.SearchFragment
 import com.ruslangrigoriev.topmovie.presentation.tv.TvFragment
 import com.ruslangrigoriev.topmovie.presentation.video.VideoActivity
@@ -24,6 +25,7 @@ interface AppComponent {
     fun inject(searchFragment: SearchFragment)
     fun inject(profileFragment: ProfileFragment)
     fun inject(loginFragment: LoginFragment)
+    fun inject(settingsFragment: SettingsFragment)
     fun inject(videoActivity: VideoActivity)
 
     fun inject(repositoryImpl: RepositoryImpl)

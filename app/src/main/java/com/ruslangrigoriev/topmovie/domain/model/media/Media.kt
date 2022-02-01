@@ -14,5 +14,6 @@ data class Media(
     val popularity: Double,
     val releaseDate: String?,
     val voteAverage: Double,
-    val voteCount: Int
+    val voteCount: Int,
+    val mediaType: String
 )

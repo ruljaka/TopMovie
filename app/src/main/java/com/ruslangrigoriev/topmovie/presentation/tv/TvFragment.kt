@@ -19,10 +19,10 @@ import com.ruslangrigoriev.topmovie.R
 import com.ruslangrigoriev.topmovie.databinding.FragmentTvBinding
 import com.ruslangrigoriev.topmovie.domain.model.media.Media
 import com.ruslangrigoriev.topmovie.domain.utils.*
+import com.ruslangrigoriev.topmovie.domain.utils.ResultState.*
 import com.ruslangrigoriev.topmovie.presentation.MyViewModelFactory
 import com.ruslangrigoriev.topmovie.presentation.adapters.BaseRecyclerAdapter
 import com.ruslangrigoriev.topmovie.presentation.adapters.BindingInterface
-import com.ruslangrigoriev.topmovie.presentation.tv.ResultTvState.*
 import javax.inject.Inject
 
 class TvFragment : Fragment(R.layout.fragment_tv) {
@@ -84,8 +84,8 @@ class TvFragment : Fragment(R.layout.fragment_tv) {
     }
 
     private fun bindUI(it: Success) {
-        nowRecyclerAdapter.updateList(it.nowList)
-        popularRecyclerAdapter.updateList(it.popularList)
+        it.listNow?.let { now -> nowRecyclerAdapter.updateList(now) }
+        it.listPopular?.let { popular -> popularRecyclerAdapter.updateList(popular) }
     }
 
     private fun setNowRecView() {

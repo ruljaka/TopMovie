@@ -15,13 +15,13 @@ interface Repository {
     suspend fun getMoviesTrending(page: Int): MovieResponse?
     suspend fun getMoviesNow(): List<Media>
     suspend fun getMoviesPopular(): List<Media>
-    suspend fun getMovieDetails(id: Int): Media
+    suspend fun getMovieDetails(id: Int): Media?
     suspend fun getMovieCredits(id: Int): List<Cast>
     suspend fun searchMovies(query: String, page: Int): MovieResponse?
 
     suspend fun getTvNow(): List<Media>
     suspend fun getTvPopular(): List<Media>
-    suspend fun getTvDetails(id: Int): Media
+    suspend fun getTvDetails(id: Int): Media?
     suspend fun getTvCredits(id: Int): List<Cast>
     suspend fun getSearchTvPagedResult(query: String, page: Int): TvResponse?
 
@@ -34,8 +34,8 @@ interface Repository {
     suspend fun getUserData(): User?
     suspend fun getRatedMovies(accountID: Int): MovieResponse?
     suspend fun getRatedTvShows(accountID: Int): TvResponse?
-    suspend fun getFavoriteMovies(accountID: Int): MovieResponse?
-    suspend fun getFavoriteTvShows(accountID: Int): TvResponse?
+    suspend fun getFavoriteMovies(accountID: Int): List<Media>?
+    suspend fun getFavoriteTvShows(accountID: Int): List<Media>?
 
     fun saveUserID(userID: Int)
     suspend fun markFavorite(favoriteCredentials: FavoriteCredentials): ResponseObject?

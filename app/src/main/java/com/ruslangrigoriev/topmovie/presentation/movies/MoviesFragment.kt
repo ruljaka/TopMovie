@@ -20,11 +20,11 @@ import com.ruslangrigoriev.topmovie.R
 import com.ruslangrigoriev.topmovie.databinding.FragmentMoviesBinding
 import com.ruslangrigoriev.topmovie.domain.model.media.Media
 import com.ruslangrigoriev.topmovie.domain.utils.*
+import com.ruslangrigoriev.topmovie.domain.utils.ResultState.*
 import com.ruslangrigoriev.topmovie.presentation.MyViewModelFactory
 import com.ruslangrigoriev.topmovie.presentation.adapters.BaseRecyclerAdapter
 import com.ruslangrigoriev.topmovie.presentation.adapters.BindingInterface
 import com.ruslangrigoriev.topmovie.presentation.adapters.MyPagingAdapter
-import com.ruslangrigoriev.topmovie.presentation.movies.ResultMovieState.*
 import javax.inject.Inject
 
 class MoviesFragment : Fragment(R.layout.fragment_movies) {
@@ -87,8 +87,8 @@ class MoviesFragment : Fragment(R.layout.fragment_movies) {
     }
 
     private fun bindUI(it: Success) {
-        nowRecyclerAdapter.updateList(it.nowList)
-        popularRecyclerAdapter.updateList(it.popularList)
+        it.listNow?.let { now -> nowRecyclerAdapter.updateList(now) }
+        it.listPopular?.let { popular -> popularRecyclerAdapter.updateList(popular) }
     }
 
     private fun setNowRecView() {

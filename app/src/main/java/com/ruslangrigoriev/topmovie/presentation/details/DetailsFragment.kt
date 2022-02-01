@@ -23,10 +23,10 @@ import com.ruslangrigoriev.topmovie.R
 import com.ruslangrigoriev.topmovie.databinding.FragmentDetailsNewBinding
 import com.ruslangrigoriev.topmovie.domain.model.credits.Cast
 import com.ruslangrigoriev.topmovie.domain.utils.*
+import com.ruslangrigoriev.topmovie.domain.utils.ResultState.*
 import com.ruslangrigoriev.topmovie.presentation.MyViewModelFactory
 import com.ruslangrigoriev.topmovie.presentation.adapters.BaseRecyclerAdapter
 import com.ruslangrigoriev.topmovie.presentation.adapters.BindingInterface
-import com.ruslangrigoriev.topmovie.presentation.details.ResultDetailsState.*
 import com.ruslangrigoriev.topmovie.presentation.video.VideoActivity
 import javax.inject.Inject
 
@@ -86,7 +86,7 @@ class DetailsFragment : Fragment(R.layout.fragment_details_new) {
     }
 
     private fun bindUI(success: Success) {
-        success.details.let { media ->
+        success.details?.let { media ->
             binding.apply {
                 toolbar.title = media.title
                 textViewDetailsGenre.text = media.genres?.let { getNamesFromGenre(it) }

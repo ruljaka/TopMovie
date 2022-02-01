@@ -49,4 +49,8 @@ class AuthRepository(private val application: Application) {
         application.applicationContext.saveSessionID(sessionID)
     }
 
+    fun logout() {
+        application.applicationContext.saveSessionID("")
+    }
+
 }

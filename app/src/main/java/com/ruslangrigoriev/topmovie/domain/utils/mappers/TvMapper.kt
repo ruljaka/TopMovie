@@ -1,10 +1,10 @@
-package com.ruslangrigoriev.topmovie.domain.utils
+package com.ruslangrigoriev.topmovie.domain.utils.mappers
 
 import com.ruslangrigoriev.topmovie.domain.model.media.Media
-import com.ruslangrigoriev.topmovie.domain.model.movies.Movie
 import com.ruslangrigoriev.topmovie.domain.model.tv.TvShow
+import com.ruslangrigoriev.topmovie.domain.utils.TV_TYPE
 
-object TvMapper : Mapper<TvShow,Media> {
+object TvMapper : Mapper<TvShow, Media> {
     override fun map(input: TvShow): Media {
         return Media(
             id = input.id,
@@ -17,7 +17,8 @@ object TvMapper : Mapper<TvShow,Media> {
             popularity = input.popularity,
             releaseDate = input.firstAirDate,
             voteAverage = input.voteAverage,
-            voteCount = input.voteCount
+            voteCount = input.voteCount,
+            mediaType = TV_TYPE
         )
     }
 

@@ -16,10 +16,10 @@ import com.ruslangrigoriev.topmovie.R
 import com.ruslangrigoriev.topmovie.databinding.FragmentPersonBinding
 import com.ruslangrigoriev.topmovie.domain.model.media.Media
 import com.ruslangrigoriev.topmovie.domain.utils.*
+import com.ruslangrigoriev.topmovie.domain.utils.ResultState.*
 import com.ruslangrigoriev.topmovie.presentation.MyViewModelFactory
 import com.ruslangrigoriev.topmovie.presentation.adapters.BaseRecyclerAdapter
 import com.ruslangrigoriev.topmovie.presentation.adapters.BindingInterface
-import com.ruslangrigoriev.topmovie.presentation.person.PersonScreenViewState.*
 import javax.inject.Inject
 
 
@@ -90,7 +90,7 @@ class PersonFragment : Fragment(R.layout.fragment_person) {
                 it.profilePath?.loadPosterLarge(imageviewPersonPoster)
             }
         }
-        castRecAdapter.updateList(it.personCastList.getTopPersonCasts())
+        it.personCastList?.let { castList -> castRecAdapter.updateList(castList.getTopPersonCasts()) }
     }
 
     private fun setCastRecView() {

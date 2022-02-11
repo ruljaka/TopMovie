@@ -22,6 +22,7 @@ import com.ruslangrigoriev.topmovie.MainActivity
 import com.ruslangrigoriev.topmovie.R
 import com.ruslangrigoriev.topmovie.databinding.FragmentDetailsNewBinding
 import com.ruslangrigoriev.topmovie.domain.model.credits.Cast
+import com.ruslangrigoriev.topmovie.domain.model.media.Media
 import com.ruslangrigoriev.topmovie.domain.utils.*
 import com.ruslangrigoriev.topmovie.domain.utils.ResultState.*
 import com.ruslangrigoriev.topmovie.presentation.MyViewModelFactory
@@ -56,6 +57,7 @@ class DetailsFragment : Fragment(R.layout.fragment_details_new) {
         setCastRecView()
         setupPlayBtn()
         subscribeUI()
+        setBtnFavorite()
         loadData()
     }
 
@@ -86,6 +88,9 @@ class DetailsFragment : Fragment(R.layout.fragment_details_new) {
     }
 
     private fun bindUI(success: Success) {
+        success.listCast?.let {
+            castRecAdapter.updateList(it.getTopCast())
+        }
         success.details?.let { media ->
             binding.apply {
                 toolbar.title = media.title
@@ -95,11 +100,44 @@ class DetailsFragment : Fragment(R.layout.fragment_details_new) {
                 textViewDetailsVoteAverage.text = media.voteAverage.toString()
                 media.posterPath?.loadPosterSmall(imageViewDetailsPoster)
                 media.backdropPath?.loadBackDropImage(imageViewDetailsBackPoster)
-                markFavorite()
+                setupRate(media)
+
+//                appbarDetails.addOnOffsetChangedListener(object : AppBarStateChangeListener() {
+//                    override fun onStateChanged(appBarLayout: AppBarLayout?, state: State?) {
+//                        when (state) {
+//                            State.EXPANDED -> {
+//
+//                            }
+//                            State.COLLAPSED -> {
+//
+//                            }
+//                            State.IDLE -> {
+//
+//                            }
+//                        }
+//                    }
+//
+//                })
             }
         }
-        success.listCast?.let {
-            castRecAdapter.updateList(it.getTopCast())
+    }
+
+    private fun setupRate(media: Media) {
+        val vote = media.voteAverage
+        if (vote > 0.0) {
+            binding.detailsRate1.setImageResource(R.drawable.ic_star_red)
+        }
+        if (vote > 3.0) {
+            binding.detailsRate2.setImageResource(R.drawable.ic_star_red)
+        }
+        if (vote > 6.0) {
+            binding.detailsRate3.setImageResource(R.drawable.ic_star_red)
+        }
+        if (vote > 7.0) {
+            binding.detailsRate4.setImageResource(R.drawable.ic_star_red)
+        }
+        if (vote > 9.0) {
+            binding.detailsRate5.setImageResource(R.drawable.ic_star_red)
         }
     }
 
@@ -156,7 +194,7 @@ class DetailsFragment : Fragment(R.layout.fragment_details_new) {
         )
     }
 
-    private fun markFavorite() {
+    private fun setBtnFavorite() {
         binding.imageButtonDetailsFavorite.setOnClickListener {
             viewModel.markFavorite(mediaType, mediaID)
         }

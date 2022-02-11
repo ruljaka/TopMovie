@@ -16,7 +16,7 @@ import com.ruslangrigoriev.topmovie.R
 import com.ruslangrigoriev.topmovie.databinding.FragmentSearchBinding
 import com.ruslangrigoriev.topmovie.domain.utils.*
 import com.ruslangrigoriev.topmovie.presentation.MyViewModelFactory
-import com.ruslangrigoriev.topmovie.presentation.adapters.MyPagingAdapter
+import com.ruslangrigoriev.topmovie.presentation.adapters.MediaPagingAdapter
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collectLatest
 import javax.inject.Inject
@@ -27,11 +27,10 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
     @Inject
     lateinit var factory: MyViewModelFactory
     private val viewModel: SearchViewModel by viewModels { factory }
-    private lateinit var myPagingAdapter: MyPagingAdapter
+    private lateinit var mediaPagingAdapter: MediaPagingAdapter
 
     private var searchQuery: String? = null
-    private var tvQuery: String? = null
-    private var mediaType: String? = null
+    private lateinit var mediaType: String
 
     override fun onAttach(context: Context) {
         context.appComponent.inject(this)
@@ -46,34 +45,21 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         subscribeQuerySearch()
 
         searchQuery = arguments?.getString(QUERY)
-        mediaType = arguments?.getString(MEDIA_TYPE)
+        mediaType = arguments?.getString(MEDIA_TYPE) ?: ""
 
         searchQuery?.let {
             if (viewModel.queryFlow.value == "") {
                 viewModel.setQuery(it)
             }
-            if(mediaType == MOVIE_TYPE){
-                subscribeMovieSearch()
-            } else{
-                subscribeTvSearch()
-            }
         }
+        subscribeMovieSearch()
     }
 
     @ExperimentalCoroutinesApi
     private fun subscribeMovieSearch() {
         lifecycleScope.launchWhenStarted {
-            viewModel.getSearchMoviesFlowData().collectLatest { pagingData ->
-                myPagingAdapter.submitData(pagingData)
-            }
-        }
-    }
-
-    @ExperimentalCoroutinesApi
-    private fun subscribeTvSearch() {
-        lifecycleScope.launchWhenStarted {
-            viewModel.searchTvFlowData.collectLatest { pagingData ->
-                myPagingAdapter.submitData(pagingData)
+            viewModel.getSearchMoviesFlowData(mediaType).collectLatest { pagingData ->
+                mediaPagingAdapter.submitData(pagingData)
             }
         }
     }
@@ -87,7 +73,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
     }
 
     private fun setMovieRecView() {
-        myPagingAdapter = MyPagingAdapter { id -> onListItemClick(id) }
+        mediaPagingAdapter = MediaPagingAdapter { id -> onListItemClick(id) }
         val gridLM = GridLayoutManager(
             activity,
             2,
@@ -96,7 +82,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         )
         binding.recyclerView.apply {
             layoutManager = gridLM
-            adapter = myPagingAdapter
+            adapter = mediaPagingAdapter
             setHasFixedSize(true)
         }
     }
@@ -121,12 +107,12 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
     }
 
     private fun onListItemClick(id: Int) {
-            val bundle = Bundle()
-            bundle.putInt(MEDIA_ID, id)
-            bundle.putString(MEDIA_TYPE, mediaType)
-        if(mediaType== MOVIE_TYPE){
+        val bundle = Bundle()
+        bundle.putInt(MEDIA_ID, id)
+        bundle.putString(MEDIA_TYPE, mediaType)
+        if (mediaType == MOVIE_TYPE) {
             findNavController().navigate(R.id.action_searchFragment_to_details, bundle)
-        } else{
+        } else {
             findNavController().navigate(R.id.action_searchTvFragment_to_details, bundle)
         }
     }

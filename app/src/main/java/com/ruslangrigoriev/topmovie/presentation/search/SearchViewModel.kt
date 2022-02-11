@@ -13,6 +13,7 @@ import com.ruslangrigoriev.topmovie.domain.model.movies.Movie
 import com.ruslangrigoriev.topmovie.domain.model.tv.TvShow
 import com.ruslangrigoriev.topmovie.data.paging.MoviePagingSource
 import com.ruslangrigoriev.topmovie.domain.model.ContentType
+import com.ruslangrigoriev.topmovie.domain.model.media.Media
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -26,24 +27,22 @@ class SearchViewModel(val repository: Repository) : ViewModel() {
         queryFlow.value = query
     }
 
-
-    //TODO  change ContentType to MEDIA by mediaType
     @ExperimentalCoroutinesApi
-    fun getSearchMoviesFlowData(): Flow<PagingData<ContentType>> =
+    fun getSearchMoviesFlowData(type: String): Flow<PagingData<Media>> =
         queryFlow.flatMapLatest { query ->
             Pager(PagingConfig(pageSize = 20)) {
-                MoviePagingSource<ContentType>(
+                MoviePagingSource(
                     query = query,
-                    type = MOVIE_SEARCH,
+                    type = type,
                     repository = repository
                 )
             }.flow.cachedIn(viewModelScope)
         }
 
-    @ExperimentalCoroutinesApi
-    val searchTvFlowData = queryFlow.flatMapLatest { query ->
-        Pager(PagingConfig(pageSize = 20)) {
-            MoviePagingSource<ContentType>(query = query, type = TV_SEARCH, repository = repository)
-        }.flow.cachedIn(viewModelScope)
-    }
+//    @ExperimentalCoroutinesApi
+//    val searchTvFlowData = queryFlow.flatMapLatest { query ->
+//        Pager(PagingConfig(pageSize = 20)) {
+//            MoviePagingSource(query = query, type = TV_SEARCH, repository = repository)
+//        }.flow.cachedIn(viewModelScope)
+//    }
 }

@@ -3,71 +3,51 @@ package com.ruslangrigoriev.topmovie.data.paging
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.ruslangrigoriev.topmovie.data.repository.Repository
+import com.ruslangrigoriev.topmovie.domain.model.media.Media
+import com.ruslangrigoriev.topmovie.domain.utils.MOVIE_TYPE
 import com.ruslangrigoriev.topmovie.domain.utils.PagingType
 import com.ruslangrigoriev.topmovie.domain.utils.TAG
+import com.ruslangrigoriev.topmovie.domain.utils.TV_TYPE
 import timber.log.Timber
 
-class MoviePagingSource<T : Any>(
+class MoviePagingSource(
     private val query: String = "",
-    private val type: PagingType,
+    private val type: String,
     private val repository: Repository,
-) : PagingSource<Int, T>() {
+) : PagingSource<Int, Media>() {
 
-    private lateinit var responseData: MutableList<T>
+    private lateinit var responseData: MutableList<Media>
 
-    override fun getRefreshKey(state: PagingState<Int, T>): Int? {
+    override fun getRefreshKey(state: PagingState<Int, Media>): Int? {
         return null
     }
 
-    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, T> {
+    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Media> {
         return try {
             val currentPage = params.key ?: 1
             when (type) {
-                (PagingType.MOVIE_SEARCH) -> {
-                    val data =
-                        (repository.searchMovies(
-                            query = query, page = currentPage
-                        )
-                            ?.movies ?: emptyList()) as MutableList<T>
-                    responseData = data
-                    Timber.d( " page $currentPage responsedata = " + responseData.toString())
-                }
-                (PagingType.TV_SEARCH) -> {
-                    val data = (repository.getSearchTvPagedResult(
+                (MOVIE_TYPE) -> {
+                    val data = repository.searchMoviesPaged(
                         query = query, page = currentPage
                     )
-                        ?.tvShows ?: emptyList()) as MutableList<T>
-                    responseData = data
+                    responseData = data.toMutableList()
+                    Timber.d(" page $currentPage responseData = $responseData")
                 }
-                (PagingType.MOVIE_FLOW) -> {
-                    val data = (repository.getMoviesTrending(currentPage)?.movies
-                        ?: emptyList()) as MutableList<T>
-                    responseData = data
-                    Timber.d(TAG, " page $currentPage responsedata = " + responseData.toString())
+                (TV_TYPE) -> {
+                    val data = repository.searchTvPaged(
+                        query = query, page = currentPage
+                    )
+                    responseData = data.toMutableList()
                 }
-//                (PagingType.FAVORITE_FLOW) -> {
-//                    val favoriteMovieList = (repository.getFavoriteMovies(
-//                        page = currentPage,
-//                        accountID = query.toInt()
-//                    )?.movies
-//                        ?: emptyList()) as List<T>
-//                    val favoriteTvShowList = (repository.getFavoriteTvShows(
-//                        page = currentPage,
-//                        accountID = query.toInt()
-//                    )?.tvShows
-//                        ?: emptyList()) as List<T>
-//                    responseData = mutableListOf<T>()
-//                    responseData.addAll(favoriteMovieList)
-//                    responseData.addAll(favoriteTvShowList)
-//                    Log.d(TAG, " page $currentPage,  responsedata size = ${responseData.size}  = " + responseData.toString())
+//                (PagingType.MOVIE_FLOW) -> {
+//                    val data = repository.getMoviesTrending(currentPage)
+//                    responseData = data.toMutableList()
+//                    Timber.d(TAG, " page $currentPage responseData = $responseData")
 //                }
-
-                else -> {
-                    //TODO
-                }
+//                else -> {
+//                    //TODO
+//                }
             }
-
-
             LoadResult.Page(
                 data = responseData,
                 prevKey = if (currentPage == 1) null else -1,

@@ -29,8 +29,6 @@ const val YOUTUBE_API_KEY = "AIzaSyAXwVXAQQoSwXLB5GErbLkJPxml1Jf9Kpc"
 
 
 const val QUERY: String = "query"
-const val MOVIE_QUERY: String = "movie_query"
-const val TV_QUERY: String = "tv_query"
 
 const val FAVORITES: String = "favorites"
 const val SHARED_PREF: String = "sharedPref"

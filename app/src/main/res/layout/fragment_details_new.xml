@@ -9,7 +9,7 @@
     tools:context=".presentation.details.DetailsFragment">
 
     <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/main.appbar"
+        android:id="@+id/appbar_details"
         android:layout_width="match_parent"
         android:layout_height="300dp"
         android:fitsSystemWindows="true">
@@ -144,7 +144,7 @@
                         android:id="@+id/imageButton_details_like"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
-                        android:src="@drawable/ic_like_selected" />
+                        android:src="@drawable/ic_like_unselected" />
 
                 </androidx.cardview.widget.CardView>
 
@@ -164,7 +164,7 @@
                         android:id="@+id/imageButton_details_favorite"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
-                        android:src="@drawable/ic_favorite_selected"
+                        android:src="@drawable/ic_favorite_unselected"
                         android:contentDescription="button_mark_favorite" />
 
                 </androidx.cardview.widget.CardView>
@@ -185,7 +185,7 @@
                         android:id="@+id/imageButton_details_comment"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
-                        android:src="@drawable/ic_comment_selected" />
+                        android:src="@drawable/ic_comment_unselected" />
 
                 </androidx.cardview.widget.CardView>
 
@@ -214,26 +214,31 @@
                 app:layout_constraintTop_toTopOf="@+id/textView_details_vote_average">
 
                 <ImageView
+                    android:id="@+id/details_rate1"
                     android:layout_width="25dp"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_star_red" />
+                    android:src="@drawable/ic_star_grey" />
 
                 <ImageView
+                    android:id="@+id/details_rate2"
                     android:layout_width="25dp"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_star_red" />
+                    android:src="@drawable/ic_star_grey" />
 
                 <ImageView
+                    android:id="@+id/details_rate3"
                     android:layout_width="25dp"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_star_red" />
+                    android:src="@drawable/ic_star_grey" />
 
                 <ImageView
+                    android:id="@+id/details_rate4"
                     android:layout_width="25dp"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_star_red" />
+                    android:src="@drawable/ic_star_grey" />
 
                 <ImageView
+                    android:id="@+id/details_rate5"
                     android:layout_width="25dp"
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_star_grey" />

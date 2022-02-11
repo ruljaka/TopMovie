@@ -23,11 +23,11 @@ class DetailsViewModel(val repository: Repository) : ViewModel() {
         _viewState.postValue(ResultState.Failure(throwable.message))
     }
 
-    fun fetchDetailsData(mediaID: Int, sourceType: String) {
+    fun fetchDetailsData(mediaID: Int, mediaType: String) {
         Timber.d("fetchDetailsData ID: $mediaID ")
         viewModelScope.launch(exceptionHandler) {
             _viewState.value = ResultState.Loading
-            if (sourceType == MOVIE_TYPE) {
+            if (mediaType == MOVIE_TYPE) {
                 val details = async { repository.getMovieDetails(mediaID) }
                 val listCast = async { repository.getMovieCredits(mediaID) }
                 _viewState.postValue(

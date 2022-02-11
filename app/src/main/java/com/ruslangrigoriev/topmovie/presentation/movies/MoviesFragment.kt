@@ -24,7 +24,7 @@ import com.ruslangrigoriev.topmovie.domain.utils.ResultState.*
 import com.ruslangrigoriev.topmovie.presentation.MyViewModelFactory
 import com.ruslangrigoriev.topmovie.presentation.adapters.BaseRecyclerAdapter
 import com.ruslangrigoriev.topmovie.presentation.adapters.BindingInterface
-import com.ruslangrigoriev.topmovie.presentation.adapters.MyPagingAdapter
+import com.ruslangrigoriev.topmovie.presentation.adapters.MediaPagingAdapter
 import javax.inject.Inject
 
 class MoviesFragment : Fragment(R.layout.fragment_movies) {
@@ -34,7 +34,7 @@ class MoviesFragment : Fragment(R.layout.fragment_movies) {
     lateinit var factory: MyViewModelFactory
     private val viewModel: MovieViewModel by viewModels { factory }
 
-    private lateinit var pagingAdapter: MyPagingAdapter
+    private lateinit var pagingAdapter: MediaPagingAdapter
     private lateinit var nowRecyclerAdapter: BaseRecyclerAdapter<Media>
     private lateinit var popularRecyclerAdapter: BaseRecyclerAdapter<Media>
 

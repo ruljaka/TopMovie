@@ -12,18 +12,18 @@ import com.ruslangrigoriev.topmovie.domain.model.video.Video
 import com.ruslangrigoriev.topmovie.domain.model.video.VideoResponse
 
 interface Repository {
-    suspend fun getMoviesTrending(page: Int): MovieResponse?
+    suspend fun getMoviesTrending(page: Int): List<Media>
     suspend fun getMoviesNow(): List<Media>
     suspend fun getMoviesPopular(): List<Media>
     suspend fun getMovieDetails(id: Int): Media?
     suspend fun getMovieCredits(id: Int): List<Cast>
-    suspend fun searchMovies(query: String, page: Int): MovieResponse?
+    suspend fun searchMoviesPaged(query: String, page: Int): List<Media>
 
     suspend fun getTvNow(): List<Media>
     suspend fun getTvPopular(): List<Media>
     suspend fun getTvDetails(id: Int): Media?
     suspend fun getTvCredits(id: Int): List<Cast>
-    suspend fun getSearchTvPagedResult(query: String, page: Int): TvResponse?
+    suspend fun searchTvPaged(query: String, page: Int): List<Media>
 
     suspend fun getPerson(person_id: Int): Person?
     suspend fun getPersonCredits(person_id: Int): List<Media>

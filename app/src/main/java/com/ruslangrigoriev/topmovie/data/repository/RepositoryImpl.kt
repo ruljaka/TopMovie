@@ -29,9 +29,10 @@ class RepositoryImpl(private val application: Application) : Repository {
         application.appComponent.inject(this)
     }
 
-    override suspend fun getMoviesTrending(page: Int): MovieResponse? {
+    override suspend fun getMoviesTrending(page: Int): List<Media> {
         val response = apiService.getTrending(page = page)
-        return getResultOrError(response)
+        val trendingList =  getResultOrError(response)?.movies
+        return mapMovieToMedia(trendingList)
     }
 
     override suspend fun getMoviesNow(): List<Media> {
@@ -59,9 +60,10 @@ class RepositoryImpl(private val application: Application) : Repository {
         return getResultOrError(response)?.cast ?: emptyList()
     }
 
-    override suspend fun searchMovies(query: String, page: Int): MovieResponse? {
+    override suspend fun searchMoviesPaged(query: String, page: Int): List<Media> {
         val response = apiService.searchPagedMovie(query = query, page = page)
-        return getResultOrError(response)
+        val searchList = getResultOrError(response)?.movies
+        return mapMovieToMedia(searchList)
     }
 
     override suspend fun getTvNow(): List<Media> {
@@ -89,9 +91,10 @@ class RepositoryImpl(private val application: Application) : Repository {
         return getResultOrError(response)?.cast ?: emptyList()
     }
 
-    override suspend fun getSearchTvPagedResult(query: String, page: Int): TvResponse? {
+    override suspend fun searchTvPaged(query: String, page: Int): List<Media> {
         val response = apiService.searchPagedTvShow(query = query, page = page)
-        return getResultOrError(response)
+        val searchList = getResultOrError(response)?.tvShows
+        return mapTvShowToMedia(searchList)
     }
 
     override suspend fun getPerson(person_id: Int): Person? {

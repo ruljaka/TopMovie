@@ -10,6 +10,7 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.ruslangrigoriev.topmovie.data.paging.MoviePagingSource
 import com.ruslangrigoriev.topmovie.data.repository.Repository
+import com.ruslangrigoriev.topmovie.domain.model.media.Media
 import com.ruslangrigoriev.topmovie.domain.model.movies.Movie
 import com.ruslangrigoriev.topmovie.domain.utils.PagingType
 import com.ruslangrigoriev.topmovie.domain.utils.ResultState
@@ -22,8 +23,8 @@ import timber.log.Timber
 
 class MovieViewModel(val repository: Repository) : ViewModel() {
 
-    private lateinit var _trendingFlowData: Flow<PagingData<Movie>>
-    val trendingFlowData: Flow<PagingData<Movie>>
+    private lateinit var _trendingFlowData: Flow<PagingData<Media>>
+    val trendingFlowData: Flow<PagingData<Media>>
         get() = _trendingFlowData
 
     private val _viewState = MutableLiveData<ResultState>()
@@ -34,12 +35,12 @@ class MovieViewModel(val repository: Repository) : ViewModel() {
         _viewState.postValue(ResultState.Failure(throwable.message))
     }
 
-    private fun fetchMoviesTrending() {
-        _trendingFlowData =
-            Pager(PagingConfig(pageSize = 20)) {
-                MoviePagingSource<Movie>(repository = repository, type = PagingType.MOVIE_FLOW)
-            }.flow.cachedIn(viewModelScope)
-    }
+//    private fun fetchMoviesTrending() {
+//        _trendingFlowData =
+//            Pager(PagingConfig(pageSize = 20)) {
+//                MoviePagingSource(repository = repository, type = PagingType.MOVIE_FLOW)
+//            }.flow.cachedIn(viewModelScope)
+//    }
 
     fun fetchMoviesData() {
         Timber.d("fetchMoviesData ")

@@ -5,6 +5,7 @@ import android.os.Build
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
@@ -27,6 +28,7 @@ import timber.log.Timber
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.*
+import kotlin.properties.ReadOnlyProperty
 
 
 val Context.appComponent: AppComponent
@@ -34,6 +36,22 @@ val Context.appComponent: AppComponent
         is App -> appComponent
         else -> applicationContext.appComponent
     }
+
+fun stringArgs(key: String): ReadOnlyProperty<Fragment, String> {
+    return ReadOnlyProperty { thisRef, _ ->
+        val args = thisRef.requireArguments()
+        require(args.containsKey(key)) { "Arguments don't contain key '$key'" }
+        requireNotNull(args.getString(key))
+    }
+}
+
+fun intArgs(key: String): ReadOnlyProperty<Fragment, Int> {
+    return ReadOnlyProperty { thisRef, _ ->
+        val args = thisRef.requireArguments()
+        require(args.containsKey(key)) { "Arguments don't contain key '$key'" }
+        requireNotNull(args.getInt(key))
+    }
+}
 
 fun getNamesFromGenre(genres: List<Genre>): String {
     val listGenreNames: List<String> = genres.map { it.name }

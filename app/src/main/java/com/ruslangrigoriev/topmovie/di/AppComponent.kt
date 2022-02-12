@@ -1,6 +1,6 @@
 package com.ruslangrigoriev.topmovie.di
 
-import com.ruslangrigoriev.topmovie.data.repository.AuthRepository
+import com.ruslangrigoriev.topmovie.data.repository.AuthRepositoryImpl
 import com.ruslangrigoriev.topmovie.data.repository.RepositoryImpl
 import com.ruslangrigoriev.topmovie.presentation.details.DetailsFragment
 import com.ruslangrigoriev.topmovie.presentation.movies.MoviesFragment
@@ -29,6 +29,6 @@ interface AppComponent {
     fun inject(videoActivity: VideoActivity)
 
     fun inject(repositoryImpl: RepositoryImpl)
-    fun inject(authRepository: AuthRepository)
+    fun inject(authRepositoryImpl: AuthRepositoryImpl)
 
 }

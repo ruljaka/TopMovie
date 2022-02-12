@@ -23,14 +23,12 @@ import javax.inject.Inject
 
 class SearchFragment : Fragment(R.layout.fragment_search) {
     private val binding by viewBinding(FragmentSearchBinding::bind)
-
     @Inject
     lateinit var factory: MyViewModelFactory
     private val viewModel: SearchViewModel by viewModels { factory }
+    private val searchQuery: String by stringArgs(QUERY)
+    private val mediaType: String by stringArgs(MEDIA_TYPE)
     private lateinit var mediaPagingAdapter: MediaPagingAdapter
-
-    private var searchQuery: String? = null
-    private lateinit var mediaType: String
 
     override fun onAttach(context: Context) {
         context.appComponent.inject(this)
@@ -39,20 +37,17 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         setMovieRecView()
         setupSearch()
         subscribeQuerySearch()
-
-        searchQuery = arguments?.getString(QUERY)
-        mediaType = arguments?.getString(MEDIA_TYPE) ?: ""
-
-        searchQuery?.let {
-            if (viewModel.queryFlow.value == "") {
-                viewModel.setQuery(it)
-            }
-        }
         subscribeMovieSearch()
+        loadData()
+    }
+
+    private fun loadData() {
+        if (viewModel.queryFlow.value == "") {
+            viewModel.setQuery(searchQuery)
+        }
     }
 
     @ExperimentalCoroutinesApi

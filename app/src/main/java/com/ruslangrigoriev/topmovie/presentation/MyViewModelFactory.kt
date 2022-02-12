@@ -58,7 +58,7 @@ class MyViewModelFactory @Inject constructor(
             modelClass.isAssignableFrom(SettingsViewModel::class.java) -> {
                 @Suppress("UNCHECKED_CAST")
                 return SettingsViewModel(
-                    authRepository = authRepository
+                    authRepositoryImpl = authRepository
                 ) as T
             }
 

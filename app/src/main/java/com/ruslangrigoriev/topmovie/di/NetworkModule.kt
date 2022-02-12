@@ -48,7 +48,7 @@ class NetworkModule {
     @Provides
     fun provideRetrofit(tmdbClient: OkHttpClient): Retrofit {
         return Retrofit.Builder()
-            //.client(tmdbClient)
+            .client(tmdbClient)
             .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()

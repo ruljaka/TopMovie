@@ -18,6 +18,7 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
+import com.google.android.material.appbar.AppBarLayout
 import com.ruslangrigoriev.topmovie.MainActivity
 import com.ruslangrigoriev.topmovie.R
 import com.ruslangrigoriev.topmovie.databinding.FragmentDetailsNewBinding
@@ -34,14 +35,13 @@ import javax.inject.Inject
 
 class DetailsFragment : Fragment(R.layout.fragment_details_new) {
     private val binding by viewBinding(FragmentDetailsNewBinding::bind)
-    private lateinit var castRecAdapter: BaseRecyclerAdapter<Cast>
-
-    private var mediaID = 0
-    private var mediaType: String = ""
+    private val mediaID: Int by intArgs(MEDIA_ID)
+    private val mediaType: String by stringArgs(MEDIA_TYPE)
 
     @Inject
     lateinit var factory: MyViewModelFactory
     private val viewModel: DetailsViewModel by viewModels { factory }
+    private lateinit var castRecAdapter: BaseRecyclerAdapter<Cast>
 
     override fun onAttach(context: Context) {
         context.appComponent.inject(this)
@@ -50,7 +50,6 @@ class DetailsFragment : Fragment(R.layout.fragment_details_new) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         (requireActivity() as MainActivity).setupToolbar(binding.toolbar)
         setHasOptionsMenu(true)
 
@@ -62,9 +61,9 @@ class DetailsFragment : Fragment(R.layout.fragment_details_new) {
     }
 
     private fun loadData() {
-        mediaID = arguments?.getInt(MEDIA_ID) ?: 0
-        mediaType = arguments?.getString(MEDIA_TYPE) ?: ""
-        if ((mediaType.isNotEmpty()) && (viewModel.viewState.value == null)) {
+        if (viewModel.viewState.value == null
+            || viewModel.viewState.value is Failure
+        ) {
             viewModel.fetchDetailsData(mediaID, mediaType)
         }
     }
@@ -102,22 +101,22 @@ class DetailsFragment : Fragment(R.layout.fragment_details_new) {
                 media.backdropPath?.loadBackDropImage(imageViewDetailsBackPoster)
                 setupRate(media)
 
-//                appbarDetails.addOnOffsetChangedListener(object : AppBarStateChangeListener() {
-//                    override fun onStateChanged(appBarLayout: AppBarLayout?, state: State?) {
-//                        when (state) {
-//                            State.EXPANDED -> {
-//
-//                            }
-//                            State.COLLAPSED -> {
-//
-//                            }
-//                            State.IDLE -> {
-//
-//                            }
-//                        }
-//                    }
-//
-//                })
+                appbarDetails.addOnOffsetChangedListener(object : AppBarStateChangeListener() {
+                    override fun onStateChanged(appBarLayout: AppBarLayout?, state: State?) {
+                        when (state) {
+                            State.EXPANDED -> {
+
+                            }
+                            State.COLLAPSED -> {
+
+                            }
+                            State.IDLE -> {
+
+                            }
+                        }
+                    }
+
+                })
             }
         }
     }

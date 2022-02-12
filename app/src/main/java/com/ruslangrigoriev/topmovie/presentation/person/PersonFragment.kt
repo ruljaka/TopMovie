@@ -25,11 +25,10 @@ import javax.inject.Inject
 
 class PersonFragment : Fragment(R.layout.fragment_person) {
     private val binding by viewBinding(FragmentPersonBinding::bind)
-
     @Inject
     lateinit var factory: MyViewModelFactory
     private val viewModel: PersonViewModel by viewModels { factory }
-
+    private val personID: Int by intArgs(PERSON_ID)
     private lateinit var castRecAdapter: BaseRecyclerAdapter<Media>
 
     override fun onAttach(context: Context) {
@@ -41,18 +40,14 @@ class PersonFragment : Fragment(R.layout.fragment_person) {
         super.onViewCreated(view, savedInstanceState)
         (requireActivity() as MainActivity).setupToolbar(binding.toolbarPerson.toolbar)
         (requireActivity() as MainActivity).supportActionBar?.setDisplayShowTitleEnabled(false)
-
-        val personID = arguments?.getInt(PERSON_ID)
-        loadData(personID)
         setCastRecView()
         subscribeUI()
+        loadData()
     }
 
-    private fun loadData(personID: Int?) {
-        personID?.let {
-            if (viewModel.viewState.value == null) {
-                viewModel.fetchData(personID)
-            }
+    private fun loadData() {
+        if (viewModel.viewState.value == null) {
+            viewModel.fetchData(personID)
         }
     }
 

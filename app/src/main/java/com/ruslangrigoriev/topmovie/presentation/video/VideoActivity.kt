@@ -11,18 +11,13 @@ import com.ruslangrigoriev.topmovie.databinding.ActivityVideoBinding
 import com.ruslangrigoriev.topmovie.domain.utils.MEDIA_ID
 import com.ruslangrigoriev.topmovie.domain.utils.MEDIA_TYPE
 import com.ruslangrigoriev.topmovie.domain.utils.ResultState.*
-import com.ruslangrigoriev.topmovie.domain.utils.appComponent
-import com.ruslangrigoriev.topmovie.presentation.MyViewModelFactory
+import dagger.hilt.android.AndroidEntryPoint
 import kr.co.prnd.YouTubePlayerView
-import javax.inject.Inject
 
-
+@AndroidEntryPoint
 class VideoActivity : AppCompatActivity(R.layout.activity_video) {
     private val binding by viewBinding(ActivityVideoBinding::bind)
-
-    @Inject
-    lateinit var factory: MyViewModelFactory
-    private val viewModel: VideoViewModel by viewModels { factory }
+    private val viewModel: VideoViewModel by viewModels()
 
     private var mediaID = 0
     private lateinit var mediaType: String
@@ -31,8 +26,6 @@ class VideoActivity : AppCompatActivity(R.layout.activity_video) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        appComponent.inject(this)
-
         subscribeUI()
         loadData()
     }

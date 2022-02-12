@@ -1,6 +1,5 @@
 package com.ruslangrigoriev.topmovie.presentation.profile.login
 
-import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -10,23 +9,13 @@ import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.ruslangrigoriev.topmovie.R
 import com.ruslangrigoriev.topmovie.databinding.FragmentLoginBinding
-import com.ruslangrigoriev.topmovie.domain.utils.ResultState
 import com.ruslangrigoriev.topmovie.domain.utils.ResultState.*
-import com.ruslangrigoriev.topmovie.domain.utils.appComponent
-import com.ruslangrigoriev.topmovie.presentation.MyViewModelFactory
-import javax.inject.Inject
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class LoginFragment : Fragment(R.layout.fragment_login) {
     private val binding by viewBinding(FragmentLoginBinding::bind)
-
-    @Inject
-    lateinit var factory: MyViewModelFactory
-    private val viewModel: LoginViewModel by viewModels { factory }
-
-    override fun onAttach(context: Context) {
-        context.appComponent.inject(this)
-        super.onAttach(context)
-    }
+    private val viewModel: LoginViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

@@ -8,12 +8,17 @@ import com.ruslangrigoriev.topmovie.data.repository.Repository
 import com.ruslangrigoriev.topmovie.domain.model.FavoriteCredentials
 import com.ruslangrigoriev.topmovie.domain.utils.MOVIE_TYPE
 import com.ruslangrigoriev.topmovie.domain.utils.ResultState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import javax.inject.Inject
 
-class DetailsViewModel(val repository: Repository) : ViewModel() {
+@HiltViewModel
+class DetailsViewModel
+@Inject constructor
+    (val repository: Repository) : ViewModel() {
 
     private val _viewState = MutableLiveData<ResultState>()
     val viewState: LiveData<ResultState>

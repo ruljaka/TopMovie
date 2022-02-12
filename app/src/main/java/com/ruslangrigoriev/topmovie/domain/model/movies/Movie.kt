@@ -2,9 +2,7 @@ package com.ruslangrigoriev.topmovie.domain.model.movies
 
 
 import com.google.gson.annotations.SerializedName
-import com.ruslangrigoriev.topmovie.domain.model.ContentType
 import com.ruslangrigoriev.topmovie.domain.model.Genre
-import com.ruslangrigoriev.topmovie.domain.model.media.Media
 
 data class Movie(
     @SerializedName("id")
@@ -42,10 +40,6 @@ data class Movie(
 
     @SerializedName("vote_count")
     val voteCount: Int
-) : ContentType {
+)
 
-    override fun getType(): Int {
-        return ContentType.TYPE_MOVIE
-    }
 
-}

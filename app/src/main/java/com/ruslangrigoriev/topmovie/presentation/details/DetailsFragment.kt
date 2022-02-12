@@ -1,6 +1,5 @@
 package com.ruslangrigoriev.topmovie.presentation.details
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
@@ -19,34 +18,25 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.appbar.AppBarLayout
-import com.ruslangrigoriev.topmovie.MainActivity
+import com.ruslangrigoriev.topmovie.presentation.MainActivity
 import com.ruslangrigoriev.topmovie.R
 import com.ruslangrigoriev.topmovie.databinding.FragmentDetailsNewBinding
 import com.ruslangrigoriev.topmovie.domain.model.credits.Cast
 import com.ruslangrigoriev.topmovie.domain.model.media.Media
 import com.ruslangrigoriev.topmovie.domain.utils.*
 import com.ruslangrigoriev.topmovie.domain.utils.ResultState.*
-import com.ruslangrigoriev.topmovie.presentation.MyViewModelFactory
 import com.ruslangrigoriev.topmovie.presentation.adapters.BaseRecyclerAdapter
 import com.ruslangrigoriev.topmovie.presentation.adapters.BindingInterface
 import com.ruslangrigoriev.topmovie.presentation.video.VideoActivity
-import javax.inject.Inject
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class DetailsFragment : Fragment(R.layout.fragment_details_new) {
     private val binding by viewBinding(FragmentDetailsNewBinding::bind)
     private val mediaID: Int by intArgs(MEDIA_ID)
     private val mediaType: String by stringArgs(MEDIA_TYPE)
-
-    @Inject
-    lateinit var factory: MyViewModelFactory
-    private val viewModel: DetailsViewModel by viewModels { factory }
+    private val viewModel: DetailsViewModel by viewModels()
     private lateinit var castRecAdapter: BaseRecyclerAdapter<Cast>
-
-    override fun onAttach(context: Context) {
-        context.appComponent.inject(this)
-        super.onAttach(context)
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

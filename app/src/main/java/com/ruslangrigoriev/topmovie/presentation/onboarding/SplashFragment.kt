@@ -8,7 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.ruslangrigoriev.topmovie.MainActivity
+import com.ruslangrigoriev.topmovie.presentation.MainActivity
 import com.ruslangrigoriev.topmovie.R
 import com.ruslangrigoriev.topmovie.domain.utils.onBoardingFinished
 import com.ruslangrigoriev.topmovie.domain.utils.onBoardingIsFinished

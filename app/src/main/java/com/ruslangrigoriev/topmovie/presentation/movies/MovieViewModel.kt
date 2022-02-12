@@ -4,24 +4,21 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.paging.Pager
-import androidx.paging.PagingConfig
 import androidx.paging.PagingData
-import androidx.paging.cachedIn
-import com.ruslangrigoriev.topmovie.data.paging.MoviePagingSource
 import com.ruslangrigoriev.topmovie.data.repository.Repository
 import com.ruslangrigoriev.topmovie.domain.model.media.Media
-import com.ruslangrigoriev.topmovie.domain.model.movies.Movie
-import com.ruslangrigoriev.topmovie.domain.utils.PagingType
 import com.ruslangrigoriev.topmovie.domain.utils.ResultState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import javax.inject.Inject
 
-
-class MovieViewModel(val repository: Repository) : ViewModel() {
+@HiltViewModel
+class MovieViewModel @Inject constructor
+    (val repository: Repository) : ViewModel() {
 
     private lateinit var _trendingFlowData: Flow<PagingData<Media>>
     val trendingFlowData: Flow<PagingData<Media>>
@@ -51,7 +48,7 @@ class MovieViewModel(val repository: Repository) : ViewModel() {
             _viewState.postValue(
                 ResultState.Success(
                     listNow = listNow.await(),
-                    listPopular= listPopular.await()
+                    listPopular = listPopular.await()
                 )
             )
 

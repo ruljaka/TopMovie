@@ -1,6 +1,5 @@
 package com.ruslangrigoriev.topmovie.presentation.search
 
-import android.content.Context
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
@@ -15,25 +14,18 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.ruslangrigoriev.topmovie.R
 import com.ruslangrigoriev.topmovie.databinding.FragmentSearchBinding
 import com.ruslangrigoriev.topmovie.domain.utils.*
-import com.ruslangrigoriev.topmovie.presentation.MyViewModelFactory
 import com.ruslangrigoriev.topmovie.presentation.adapters.MediaPagingAdapter
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collectLatest
-import javax.inject.Inject
 
+@AndroidEntryPoint
 class SearchFragment : Fragment(R.layout.fragment_search) {
     private val binding by viewBinding(FragmentSearchBinding::bind)
-    @Inject
-    lateinit var factory: MyViewModelFactory
-    private val viewModel: SearchViewModel by viewModels { factory }
+    private val viewModel: SearchViewModel by viewModels()
     private val searchQuery: String by stringArgs(QUERY)
     private val mediaType: String by stringArgs(MEDIA_TYPE)
     private lateinit var mediaPagingAdapter: MediaPagingAdapter
-
-    override fun onAttach(context: Context) {
-        context.appComponent.inject(this)
-        super.onAttach(context)
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

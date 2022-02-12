@@ -1,4 +1,4 @@
-package com.ruslangrigoriev.topmovie
+package com.ruslangrigoriev.topmovie.presentation
 
 import android.os.Bundle
 import android.view.View
@@ -9,8 +9,11 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.*
 import by.kirich1409.viewbindingdelegate.viewBinding
+import com.ruslangrigoriev.topmovie.R
 import com.ruslangrigoriev.topmovie.databinding.ActivityMainBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity(R.layout.activity_main) {
     private val binding by viewBinding(ActivityMainBinding::bind)
 
@@ -35,7 +38,11 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         supportActionBar?.setDisplayHomeAsUpEnabled(true);
         supportActionBar?.setDisplayShowHomeEnabled(true);
         supportActionBar?.setDisplayShowTitleEnabled(false)
-        appBarConfiguration = AppBarConfiguration(setOf(R.id.movies_fragment, R.id.tv_fragment, R.id.profile_fragment))
+        appBarConfiguration = AppBarConfiguration(setOf(
+            R.id.movies_fragment,
+            R.id.tv_fragment,
+            R.id.profile_fragment
+        ))
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navController = navHostFragment.navController

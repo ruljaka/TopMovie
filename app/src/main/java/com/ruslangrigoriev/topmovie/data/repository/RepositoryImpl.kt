@@ -1,7 +1,6 @@
 package com.ruslangrigoriev.topmovie.data.repository
 
-import android.app.Application
-import com.ruslangrigoriev.topmovie.data.local.FavoriteDAO
+import android.content.Context
 import com.ruslangrigoriev.topmovie.data.remote.ApiService
 import com.ruslangrigoriev.topmovie.domain.model.FavoriteCredentials
 import com.ruslangrigoriev.topmovie.domain.model.ResponseObject
@@ -17,21 +16,16 @@ import com.ruslangrigoriev.topmovie.domain.utils.mappers.MovieMapper
 import com.ruslangrigoriev.topmovie.domain.utils.mappers.TvMapper
 import javax.inject.Inject
 
-class RepositoryImpl(private val application: Application) : Repository {
-
-    @Inject
-    lateinit var apiService: ApiService
-
-    @Inject
-    lateinit var favoriteDAO: FavoriteDAO
-
-    init {
-        application.appComponent.inject(this)
-    }
+class RepositoryImpl
+@Inject
+constructor(
+     private val appContext: Context,
+    private val apiService: ApiService
+) : Repository {
 
     override suspend fun getMoviesTrending(page: Int): List<Media> {
         val response = apiService.getTrending(page = page)
-        val trendingList =  getResultOrError(response)?.movies
+        val trendingList = getResultOrError(response)?.movies
         return mapMovieToMedia(trendingList)
     }
 
@@ -119,7 +113,7 @@ class RepositoryImpl(private val application: Application) : Repository {
     }
 
     override suspend fun getUserData(): User? {
-        val session = application.applicationContext.getSessionID()
+        val session = appContext.getSessionID()
         session?.let {
             return getResultOrError(
                 apiService.getUser(
@@ -131,7 +125,7 @@ class RepositoryImpl(private val application: Application) : Repository {
     }
 
     override suspend fun getRatedMovies(accountID: Int): MovieResponse? {
-        val session = application.applicationContext.getSessionID()
+        val session = appContext.getSessionID()
         session?.let {
             return getResultOrError(
                 apiService.getRatedMovies(
@@ -144,7 +138,7 @@ class RepositoryImpl(private val application: Application) : Repository {
     }
 
     override suspend fun getRatedTvShows(accountID: Int): TvResponse? {
-        val session = application.applicationContext.getSessionID()
+        val session = appContext.getSessionID()
         session?.let {
             return getResultOrError(
                 apiService.getRatedTvShow(
@@ -157,20 +151,20 @@ class RepositoryImpl(private val application: Application) : Repository {
     }
 
     override suspend fun getFavoriteMovies(accountID: Int): List<Media>? {
-        val session = application.applicationContext.getSessionID()
+        val session = appContext.getSessionID()
         return session?.let {
-            val movieList =  getResultOrError(
+            val movieList = getResultOrError(
                 apiService.getFavoriteMovies(
                     account_id = accountID,
                     session_id = it
                 )
             )?.movies
-             mapMovieToMedia(movieList)
+            mapMovieToMedia(movieList)
         }
     }
 
     override suspend fun getFavoriteTvShows(accountID: Int): List<Media>? {
-        val session = application.applicationContext.getSessionID()
+        val session = appContext.getSessionID()
         return session?.let {
             val tvShowList = getResultOrError(
                 apiService.getFavoriteTvShow(
@@ -185,8 +179,8 @@ class RepositoryImpl(private val application: Application) : Repository {
     override suspend fun markFavorite(
         favoriteCredentials: FavoriteCredentials
     ): ResponseObject? {
-        val session = application.applicationContext.getSessionID()
-        val userID = application.applicationContext.getUserID()
+        val session = appContext.getSessionID()
+        val userID = appContext.getUserID()
         session?.let {
             return getResultOrError(
                 apiService.markAsFavorite(
@@ -200,7 +194,7 @@ class RepositoryImpl(private val application: Application) : Repository {
     }
 
     override fun saveUserID(userID: Int) {
-        application.applicationContext.saveUserID(userID)
+        appContext.saveUserID(userID)
     }
 
 

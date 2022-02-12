@@ -8,10 +8,13 @@ import com.ruslangrigoriev.topmovie.data.repository.Repository
 import com.ruslangrigoriev.topmovie.domain.utils.MOVIE_TYPE
 import com.ruslangrigoriev.topmovie.domain.utils.ResultState
 import com.ruslangrigoriev.topmovie.domain.utils.TV_TYPE
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import javax.inject.Inject
 
-class VideoViewModel(val repository: Repository) : ViewModel() {
+@HiltViewModel
+class VideoViewModel @Inject constructor(val repository: Repository) : ViewModel() {
 
     private val _viewState = MutableLiveData<ResultState>()
     val viewState: LiveData<ResultState>

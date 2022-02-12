@@ -1,19 +1,16 @@
 package com.ruslangrigoriev.topmovie.data.repository
 
-import android.app.Application
+import android.content.Context
 import com.ruslangrigoriev.topmovie.data.remote.ApiService
 import com.ruslangrigoriev.topmovie.domain.model.auth.*
 import com.ruslangrigoriev.topmovie.domain.utils.*
+import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
-class AuthRepositoryImpl(private val application: Application) : AuthRepository {
-
-    @Inject
-    lateinit var apiService: ApiService
-
-    init {
-        application.appComponent.inject(this)
-    }
+class AuthRepositoryImpl(
+    private val appContext: Context,
+    private val apiService: ApiService
+) : AuthRepository {
 
     override suspend fun getRequestToken(): RequestToken? {
         return getResultOrError(
@@ -38,7 +35,7 @@ class AuthRepositoryImpl(private val application: Application) : AuthRepository 
     }
 
     override fun checkIsUserIsAuthenticated(): Boolean {
-        val session = application.applicationContext.getSessionID()
+        val session = appContext.getSessionID()
 
         if (!session.isNullOrEmpty()) {
             return true
@@ -47,11 +44,11 @@ class AuthRepositoryImpl(private val application: Application) : AuthRepository 
     }
 
     override fun saveSession(sessionID: String) {
-        application.applicationContext.saveSessionID(sessionID)
+        appContext.saveSessionID(sessionID)
     }
 
     override fun logout() {
-        application.applicationContext.saveSessionID("")
+        appContext.saveSessionID("")
     }
 
 }

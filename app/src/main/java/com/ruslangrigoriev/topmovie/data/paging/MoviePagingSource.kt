@@ -5,8 +5,6 @@ import androidx.paging.PagingState
 import com.ruslangrigoriev.topmovie.data.repository.Repository
 import com.ruslangrigoriev.topmovie.domain.model.media.Media
 import com.ruslangrigoriev.topmovie.domain.utils.MOVIE_TYPE
-import com.ruslangrigoriev.topmovie.domain.utils.PagingType
-import com.ruslangrigoriev.topmovie.domain.utils.TAG
 import com.ruslangrigoriev.topmovie.domain.utils.TV_TYPE
 import timber.log.Timber
 

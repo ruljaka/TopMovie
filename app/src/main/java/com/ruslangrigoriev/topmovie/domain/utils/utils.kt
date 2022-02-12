@@ -13,7 +13,6 @@ import com.bumptech.glide.request.RequestOptions
 import com.google.gson.Gson
 import com.ruslangrigoriev.topmovie.App
 import com.ruslangrigoriev.topmovie.R
-import com.ruslangrigoriev.topmovie.di.AppComponent
 import com.ruslangrigoriev.topmovie.domain.model.Genre
 import com.ruslangrigoriev.topmovie.domain.model.ResponseObject
 import com.ruslangrigoriev.topmovie.domain.model.auth.RequestToken
@@ -31,11 +30,11 @@ import java.util.*
 import kotlin.properties.ReadOnlyProperty
 
 
-val Context.appComponent: AppComponent
-    get() = when (this) {
-        is App -> appComponent
-        else -> applicationContext.appComponent
-    }
+//val Context.appComponent: AppComponent
+//    get() = when (this) {
+//        is App -> appComponent
+//        else -> applicationContext.appComponent
+//    }
 
 fun stringArgs(key: String): ReadOnlyProperty<Fragment, String> {
     return ReadOnlyProperty { thisRef, _ ->

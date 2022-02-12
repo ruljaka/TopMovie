@@ -1,6 +1,5 @@
 package com.ruslangrigoriev.topmovie.presentation.movies
 
-import android.content.Context
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
@@ -15,33 +14,24 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
-import com.ruslangrigoriev.topmovie.MainActivity
+import com.ruslangrigoriev.topmovie.presentation.MainActivity
 import com.ruslangrigoriev.topmovie.R
 import com.ruslangrigoriev.topmovie.databinding.FragmentMoviesBinding
 import com.ruslangrigoriev.topmovie.domain.model.media.Media
 import com.ruslangrigoriev.topmovie.domain.utils.*
 import com.ruslangrigoriev.topmovie.domain.utils.ResultState.*
-import com.ruslangrigoriev.topmovie.presentation.MyViewModelFactory
 import com.ruslangrigoriev.topmovie.presentation.adapters.BaseRecyclerAdapter
 import com.ruslangrigoriev.topmovie.presentation.adapters.BindingInterface
 import com.ruslangrigoriev.topmovie.presentation.adapters.MediaPagingAdapter
-import javax.inject.Inject
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MoviesFragment : Fragment(R.layout.fragment_movies) {
     private val binding by viewBinding(FragmentMoviesBinding::bind)
-
-    @Inject
-    lateinit var factory: MyViewModelFactory
-    private val viewModel: MovieViewModel by viewModels { factory }
-
+    private val viewModel: MovieViewModel by viewModels()
     private lateinit var pagingAdapter: MediaPagingAdapter
     private lateinit var nowRecyclerAdapter: BaseRecyclerAdapter<Media>
     private lateinit var popularRecyclerAdapter: BaseRecyclerAdapter<Media>
-
-    override fun onAttach(context: Context) {
-        context.appComponent.inject(this)
-        super.onAttach(context)
-    }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)

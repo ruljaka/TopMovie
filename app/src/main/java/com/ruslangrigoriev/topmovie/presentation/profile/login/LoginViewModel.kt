@@ -8,11 +8,14 @@ import com.ruslangrigoriev.topmovie.data.repository.AuthRepository
 import com.ruslangrigoriev.topmovie.domain.model.auth.AuthCredentials
 import com.ruslangrigoriev.topmovie.domain.model.auth.Token
 import com.ruslangrigoriev.topmovie.domain.utils.ResultState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import javax.inject.Inject
 
-class LoginViewModel(
+@HiltViewModel
+class LoginViewModel @Inject constructor(
     val authRepository: AuthRepository,
 ) : ViewModel() {
 

@@ -1,6 +1,5 @@
 package com.ruslangrigoriev.topmovie.presentation.tv
 
-import android.content.Context
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
@@ -14,31 +13,22 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
-import com.ruslangrigoriev.topmovie.MainActivity
+import com.ruslangrigoriev.topmovie.presentation.MainActivity
 import com.ruslangrigoriev.topmovie.R
 import com.ruslangrigoriev.topmovie.databinding.FragmentTvBinding
 import com.ruslangrigoriev.topmovie.domain.model.media.Media
 import com.ruslangrigoriev.topmovie.domain.utils.*
 import com.ruslangrigoriev.topmovie.domain.utils.ResultState.*
-import com.ruslangrigoriev.topmovie.presentation.MyViewModelFactory
 import com.ruslangrigoriev.topmovie.presentation.adapters.BaseRecyclerAdapter
 import com.ruslangrigoriev.topmovie.presentation.adapters.BindingInterface
-import javax.inject.Inject
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class TvFragment : Fragment(R.layout.fragment_tv) {
     private val binding by viewBinding(FragmentTvBinding::bind)
-
-    @Inject
-    lateinit var factory: MyViewModelFactory
-    private val viewModel: TvViewModel by viewModels { factory }
-
+    private val viewModel: TvViewModel by viewModels()
     private lateinit var nowRecyclerAdapter: BaseRecyclerAdapter<Media>
     private lateinit var popularRecyclerAdapter: BaseRecyclerAdapter<Media>
-
-    override fun onAttach(context: Context) {
-        context.appComponent.inject(this)
-        super.onAttach(context)
-    }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)

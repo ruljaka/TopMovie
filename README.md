@@ -21,7 +21,7 @@ This app is still under development but serves its main purpose.
 * [Retrofit](https://square.github.io/retrofit/)
 * [Courotines](https://developer.android.com/kotlin/coroutines?gclid=EAIaIQobChMIqZC4jo-i8gIVsAZ7Ch1rOASzEAAYASAAEgKAwvD_BwE&gclsrc=aw.ds)
 * [Paging 3](https://developer.android.com/topic/libraries/architecture/paging/v3-overview)
-* [Dagger](https://github.com/google/dagger)
+* [Dagger Hilt](https://dagger.dev/hilt)
 * [Jetpack libraries](https://developer.android.com/jetpack)
 * [Timber](https://github.com/JakeWharton/timber)
 * [Glide](https://github.com/bumptech/glide)

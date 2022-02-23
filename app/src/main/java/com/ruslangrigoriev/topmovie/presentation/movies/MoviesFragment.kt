@@ -9,17 +9,16 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
-import com.ruslangrigoriev.topmovie.presentation.MainActivity
 import com.ruslangrigoriev.topmovie.R
 import com.ruslangrigoriev.topmovie.databinding.FragmentMoviesBinding
 import com.ruslangrigoriev.topmovie.domain.model.media.Media
 import com.ruslangrigoriev.topmovie.domain.utils.*
 import com.ruslangrigoriev.topmovie.domain.utils.ResultState.*
+import com.ruslangrigoriev.topmovie.presentation.MainActivity
 import com.ruslangrigoriev.topmovie.presentation.adapters.BaseRecyclerAdapter
 import com.ruslangrigoriev.topmovie.presentation.adapters.BindingInterface
 import com.ruslangrigoriev.topmovie.presentation.adapters.MediaPagingAdapter
@@ -57,23 +56,21 @@ class MoviesFragment : Fragment(R.layout.fragment_movies) {
     }
 
     private fun subscribeUi() {
-        lifecycleScope.launchWhenStarted {
-            viewModel.viewState.observe(viewLifecycleOwner, {
-                when (it) {
-                    Loading -> {
-                        showLoading(true)
-                    }
-                    is Failure -> {
-                        showToast(it.errorMessage)
-                        showLoading(false)
-                    }
-                    is Success -> {
-                        showLoading(false)
-                        bindUI(it)
-                    }
+        viewModel.viewState.observe(viewLifecycleOwner, {
+            when (it) {
+                Loading -> {
+                    showLoading(true)
                 }
-            })
-        }
+                is Failure -> {
+                    showToast(it.errorMessage)
+                    showLoading(false)
+                }
+                is Success -> {
+                    showLoading(false)
+                    bindUI(it)
+                }
+            }
+        })
     }
 
     private fun bindUI(it: Success) {

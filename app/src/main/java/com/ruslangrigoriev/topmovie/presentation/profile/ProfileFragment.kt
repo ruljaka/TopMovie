@@ -9,19 +9,18 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
-import com.ruslangrigoriev.topmovie.presentation.MainActivity
 import com.ruslangrigoriev.topmovie.R
 import com.ruslangrigoriev.topmovie.databinding.FragmentProfileBinding
 import com.ruslangrigoriev.topmovie.domain.model.media.Media
 import com.ruslangrigoriev.topmovie.domain.utils.*
 import com.ruslangrigoriev.topmovie.domain.utils.ResultState.*
+import com.ruslangrigoriev.topmovie.presentation.MainActivity
 import com.ruslangrigoriev.topmovie.presentation.adapters.BaseRecyclerAdapter
 import com.ruslangrigoriev.topmovie.presentation.adapters.BindingInterface
 import com.ruslangrigoriev.topmovie.presentation.adapters.ItemOffsetDecoration
@@ -52,23 +51,21 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
     }
 
     private fun subscribeUI() {
-        lifecycleScope.launchWhenStarted {
-            viewModel.viewState.observe(viewLifecycleOwner, {
-                when (it) {
-                    Loading -> {
-                        showLoading(true)
-                    }
-                    is Failure -> {
-                        showToast(it.errorMessage)
-                        showLoading(false)
-                    }
-                    is Success -> {
-                        showLoading(false)
-                        bindUI(it)
-                    }
+        viewModel.viewState.observe(viewLifecycleOwner, {
+            when (it) {
+                Loading -> {
+                    showLoading(true)
                 }
-            })
-        }
+                is Failure -> {
+                    showToast(it.errorMessage)
+                    showLoading(false)
+                }
+                is Success -> {
+                    showLoading(false)
+                    bindUI(it)
+                }
+            }
+        })
     }
 
     private fun bindUI(it: Success) {

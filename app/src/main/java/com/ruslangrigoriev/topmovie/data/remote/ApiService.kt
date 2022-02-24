@@ -2,19 +2,19 @@ package com.ruslangrigoriev.topmovie.data.remote
 
 import com.ruslangrigoriev.topmovie.domain.model.FavoriteCredentials
 import com.ruslangrigoriev.topmovie.domain.model.ResponseObject
-import com.ruslangrigoriev.topmovie.domain.model.auth.AuthCredentials
-import com.ruslangrigoriev.topmovie.domain.model.auth.RequestToken
-import com.ruslangrigoriev.topmovie.domain.model.auth.Session
-import com.ruslangrigoriev.topmovie.domain.model.auth.Token
-import com.ruslangrigoriev.topmovie.domain.model.credits.CreditsResponse
-import com.ruslangrigoriev.topmovie.domain.model.movies.Movie
-import com.ruslangrigoriev.topmovie.domain.model.movies.MovieResponse
-import com.ruslangrigoriev.topmovie.domain.model.person.Person
-import com.ruslangrigoriev.topmovie.domain.model.person.PersonCreditsResponse
-import com.ruslangrigoriev.topmovie.domain.model.profile.User
-import com.ruslangrigoriev.topmovie.domain.model.tv.TvResponse
-import com.ruslangrigoriev.topmovie.domain.model.tv.TvShow
-import com.ruslangrigoriev.topmovie.domain.model.video.VideoResponse
+import com.ruslangrigoriev.topmovie.domain.dto.auth.AuthCredentials
+import com.ruslangrigoriev.topmovie.domain.dto.auth.RequestToken
+import com.ruslangrigoriev.topmovie.domain.dto.auth.Session
+import com.ruslangrigoriev.topmovie.domain.dto.auth.Token
+import com.ruslangrigoriev.topmovie.domain.dto.credits.CreditsResponse
+import com.ruslangrigoriev.topmovie.domain.dto.movies.Movie
+import com.ruslangrigoriev.topmovie.domain.dto.movies.MovieResponse
+import com.ruslangrigoriev.topmovie.domain.dto.person.Person
+import com.ruslangrigoriev.topmovie.domain.dto.person.PersonCreditsResponse
+import com.ruslangrigoriev.topmovie.domain.dto.profile.User
+import com.ruslangrigoriev.topmovie.domain.dto.tv.TvResponse
+import com.ruslangrigoriev.topmovie.domain.dto.tv.TvShow
+import com.ruslangrigoriev.topmovie.domain.dto.video.VideoResponse
 import retrofit2.Response
 import retrofit2.http.*
 

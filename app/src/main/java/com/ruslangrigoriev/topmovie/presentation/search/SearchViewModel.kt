@@ -7,7 +7,8 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.ruslangrigoriev.topmovie.data.paging.MoviePagingSource
-import com.ruslangrigoriev.topmovie.data.repository.Repository
+import com.ruslangrigoriev.topmovie.data.repository.MovieRepository
+import com.ruslangrigoriev.topmovie.data.repository.TvShowRepository
 import com.ruslangrigoriev.topmovie.domain.model.media.Media
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -17,8 +18,11 @@ import kotlinx.coroutines.flow.flatMapLatest
 import javax.inject.Inject
 
 @HiltViewModel
-class SearchViewModel @Inject constructor
-    (val repository: Repository) : ViewModel() {
+class SearchViewModel
+@Inject constructor(
+    val movieRepository: MovieRepository,
+    private val tvShowRepository: TvShowRepository
+) : ViewModel() {
 
     val queryFlow = MutableStateFlow("")
 
@@ -33,7 +37,8 @@ class SearchViewModel @Inject constructor
                 MoviePagingSource(
                     query = query,
                     type = type,
-                    repository = repository
+                    movieRepository = movieRepository,
+                    tvShowRepository = tvShowRepository
                 )
             }.flow.cachedIn(viewModelScope)
         }

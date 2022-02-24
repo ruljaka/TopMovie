@@ -5,8 +5,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ruslangrigoriev.topmovie.data.repository.AuthRepository
-import com.ruslangrigoriev.topmovie.domain.model.auth.AuthCredentials
-import com.ruslangrigoriev.topmovie.domain.model.auth.Token
+import com.ruslangrigoriev.topmovie.domain.dto.auth.AuthCredentials
+import com.ruslangrigoriev.topmovie.domain.dto.auth.Token
 import com.ruslangrigoriev.topmovie.domain.utils.ResultState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers

@@ -1,9 +1,15 @@
 package com.ruslangrigoriev.topmovie.domain.model.media
 
-import com.google.gson.annotations.SerializedName
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import androidx.room.TypeConverters
 import com.ruslangrigoriev.topmovie.domain.model.Genre
+import com.ruslangrigoriev.topmovie.domain.utils.GenreListConverter
+
+@Entity
 
 data class Media(
+    @PrimaryKey
     val id: Int,
     val title: String,
     val originalTitle: String,

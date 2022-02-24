@@ -4,8 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.ruslangrigoriev.topmovie.data.repository.Repository
-import com.ruslangrigoriev.topmovie.domain.model.FavoriteCredentials
+import com.ruslangrigoriev.topmovie.data.repository.MovieRepository
+import com.ruslangrigoriev.topmovie.data.repository.TvShowRepository
+import com.ruslangrigoriev.topmovie.data.repository.UserRepository
 import com.ruslangrigoriev.topmovie.domain.utils.MOVIE_TYPE
 import com.ruslangrigoriev.topmovie.domain.utils.ResultState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -17,8 +18,11 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DetailsViewModel
-@Inject constructor
-    (val repository: Repository) : ViewModel() {
+@Inject constructor(
+    private val movieRepository: MovieRepository,
+    private val tvShowRepository: TvShowRepository,
+    private val userRepository: UserRepository
+) : ViewModel() {
 
     private val _viewState = MutableLiveData<ResultState>()
     val viewState: LiveData<ResultState>
@@ -33,8 +37,8 @@ class DetailsViewModel
         viewModelScope.launch(exceptionHandler) {
             _viewState.value = ResultState.Loading
             if (mediaType == MOVIE_TYPE) {
-                val details = async { repository.getMovieDetails(mediaID) }
-                val listCast = async { repository.getMovieCredits(mediaID) }
+                val details = async { movieRepository.getMovieDetails(mediaID) }
+                val listCast = async { movieRepository.getMovieCredits(mediaID) }
                 _viewState.postValue(
                     ResultState.Success(
                         details = details.await(),
@@ -42,8 +46,8 @@ class DetailsViewModel
                     )
                 )
             } else {
-                val details = async { repository.getTvDetails(mediaID) }
-                val listCast = async { repository.getTvCredits(mediaID) }
+                val details = async { tvShowRepository.getTvDetails(mediaID) }
+                val listCast = async { tvShowRepository.getTvCredits(mediaID) }
                 _viewState.postValue(
                     ResultState.Success(
                         details = details.await(),
@@ -56,18 +60,9 @@ class DetailsViewModel
 
     fun markFavorite(mediaType: String, media_id: Int) {
         Timber.d("markFavorite ID: $media_id ")
-        viewModelScope.launch {
-            try {
-                val favoriteCredentials = FavoriteCredentials(
-                    mediaType = mediaType,
-                    mediaId = media_id,
-                    favorite = true
-                )
-                val response = repository.markFavorite(favoriteCredentials)
-                Timber.d(response?.statusMessage)
-            } catch (e: Throwable) {
-                _viewState.postValue(ResultState.Failure(e.message))
-            }
+        viewModelScope.launch(exceptionHandler) {
+            val response = userRepository.markFavorite(mediaType, media_id)
+            Timber.d(response?.statusMessage)
         }
     }
 }

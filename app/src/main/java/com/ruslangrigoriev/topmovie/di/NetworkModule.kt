@@ -25,24 +25,6 @@ class NetworkModule {
 
     @Singleton
     @Provides
-    fun provideRepository(
-        @ApplicationContext appContext: Context,
-        apiService: ApiService
-    ): Repository {
-        return RepositoryImpl(appContext, apiService)
-    }
-
-    @Singleton
-    @Provides
-    fun provideAuthRepository(
-        @ApplicationContext appContext: Context,
-        apiService: ApiService
-    ): AuthRepository {
-        return AuthRepositoryImpl(appContext, apiService)
-    }
-
-    @Singleton
-    @Provides
     fun provideApiService(retrofit: Retrofit): ApiService {
         return retrofit.create(ApiService::class.java)
     }

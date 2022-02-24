@@ -2,7 +2,9 @@ package com.ruslangrigoriev.topmovie.data.paging
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
+import com.ruslangrigoriev.topmovie.data.repository.MovieRepository
 import com.ruslangrigoriev.topmovie.data.repository.Repository
+import com.ruslangrigoriev.topmovie.data.repository.TvShowRepository
 import com.ruslangrigoriev.topmovie.domain.model.media.Media
 import com.ruslangrigoriev.topmovie.domain.utils.MOVIE_TYPE
 import com.ruslangrigoriev.topmovie.domain.utils.TV_TYPE
@@ -11,7 +13,8 @@ import timber.log.Timber
 class MoviePagingSource(
     private val query: String = "",
     private val type: String,
-    private val repository: Repository,
+    private val movieRepository: MovieRepository,
+    private val tvShowRepository: TvShowRepository
 ) : PagingSource<Int, Media>() {
 
     private lateinit var responseData: MutableList<Media>
@@ -25,14 +28,14 @@ class MoviePagingSource(
             val currentPage = params.key ?: 1
             when (type) {
                 (MOVIE_TYPE) -> {
-                    val data = repository.searchMoviesPaged(
+                    val data = movieRepository.searchMoviesPaged(
                         query = query, page = currentPage
                     )
                     responseData = data.toMutableList()
                     Timber.d(" page $currentPage responseData = $responseData")
                 }
                 (TV_TYPE) -> {
-                    val data = repository.searchTvPaged(
+                    val data = tvShowRepository.searchTvPaged(
                         query = query, page = currentPage
                     )
                     responseData = data.toMutableList()

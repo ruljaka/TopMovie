@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
+import com.ruslangrigoriev.topmovie.data.repository.MovieRepository
 import com.ruslangrigoriev.topmovie.data.repository.Repository
 import com.ruslangrigoriev.topmovie.domain.model.media.Media
 import com.ruslangrigoriev.topmovie.domain.utils.ResultState
@@ -18,7 +19,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MovieViewModel @Inject constructor
-    (val repository: Repository) : ViewModel() {
+    (private val movieRepository: MovieRepository) : ViewModel() {
 
     private lateinit var _trendingFlowData: Flow<PagingData<Media>>
     val trendingFlowData: Flow<PagingData<Media>>
@@ -43,8 +44,8 @@ class MovieViewModel @Inject constructor
         Timber.d("fetchMoviesData ")
         viewModelScope.launch(exceptionHandler) {
             _viewState.value = ResultState.Loading
-            val listNow = async { repository.getMoviesNow() }
-            val listPopular = async { repository.getMoviesPopular() }
+            val listNow = async { movieRepository.getMoviesNow() }
+            val listPopular = async { movieRepository.getMoviesPopular() }
             _viewState.postValue(
                 ResultState.Success(
                     listNow = listNow.await(),

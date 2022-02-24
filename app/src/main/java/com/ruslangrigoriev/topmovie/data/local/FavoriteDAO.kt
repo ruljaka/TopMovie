@@ -1,23 +1,22 @@
 package com.ruslangrigoriev.topmovie.data.local
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
-import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
-import com.ruslangrigoriev.topmovie.domain.model.favorite.Favorite
-import kotlinx.coroutines.flow.Flow
+import com.ruslangrigoriev.topmovie.domain.model.media.Media
 
 @Dao
 interface FavoriteDAO {
     @Insert
-    suspend fun insertFavorite(favorite: Favorite)
+    suspend fun insertFavorite(media: Media)
 
-    @Query("DELETE FROM favorites WHERE id = :id")
-    suspend fun removeFavorite(id: Int)
+    @Insert
+    suspend fun insertFavoriteList(mediaList: List<Media>)
 
-    @Query("SELECT * FROM favorites")
-    fun getFavoriteList(): Flow<List<Favorite>>
+    @Query("DELETE FROM Media WHERE id = :media_id")
+    suspend fun removeFavorite(media_id: Int)
 
-    @Delete
-    suspend fun deleteFavorite(favorite: Favorite)
+    @Query("SELECT * FROM Media")
+    fun getFavoriteList(): LiveData<List<Media>>
 }

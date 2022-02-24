@@ -1,7 +1,7 @@
 package com.ruslangrigoriev.topmovie.domain.utils.mappers
 
 import com.ruslangrigoriev.topmovie.domain.model.media.Media
-import com.ruslangrigoriev.topmovie.domain.model.tv.TvShow
+import com.ruslangrigoriev.topmovie.domain.dto.tv.TvShow
 import com.ruslangrigoriev.topmovie.domain.utils.TV_TYPE
 
 object TvMapper : Mapper<TvShow, Media> {

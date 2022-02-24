@@ -1,11 +1,11 @@
 package com.ruslangrigoriev.topmovie.domain.utils
 
-import com.ruslangrigoriev.topmovie.domain.model.credits.Cast
+import com.ruslangrigoriev.topmovie.domain.dto.credits.Cast
 import com.ruslangrigoriev.topmovie.domain.model.media.Media
-import com.ruslangrigoriev.topmovie.domain.model.person.Person
-import com.ruslangrigoriev.topmovie.domain.model.profile.CounterLikeFavorite
-import com.ruslangrigoriev.topmovie.domain.model.profile.User
-import com.ruslangrigoriev.topmovie.domain.model.video.Video
+import com.ruslangrigoriev.topmovie.domain.dto.person.Person
+import com.ruslangrigoriev.topmovie.domain.dto.profile.CounterLikeFavorite
+import com.ruslangrigoriev.topmovie.domain.dto.profile.User
+import com.ruslangrigoriev.topmovie.domain.dto.video.Video
 
 sealed class ResultState {
     object Loading : ResultState()

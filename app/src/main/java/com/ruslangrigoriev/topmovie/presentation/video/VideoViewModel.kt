@@ -14,7 +14,10 @@ import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
-class VideoViewModel @Inject constructor(val repository: Repository) : ViewModel() {
+class VideoViewModel
+@Inject constructor(
+    val repository: Repository
+) : ViewModel() {
 
     private val _viewState = MutableLiveData<ResultState>()
     val viewState: LiveData<ResultState>

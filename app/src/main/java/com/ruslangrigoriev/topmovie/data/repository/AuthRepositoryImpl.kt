@@ -2,10 +2,8 @@ package com.ruslangrigoriev.topmovie.data.repository
 
 import android.content.Context
 import com.ruslangrigoriev.topmovie.data.remote.ApiService
-import com.ruslangrigoriev.topmovie.domain.model.auth.*
+import com.ruslangrigoriev.topmovie.domain.dto.auth.*
 import com.ruslangrigoriev.topmovie.domain.utils.*
-import dagger.hilt.android.qualifiers.ApplicationContext
-import javax.inject.Inject
 
 class AuthRepositoryImpl(
     private val appContext: Context,

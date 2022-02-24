@@ -1,9 +1,9 @@
 package com.ruslangrigoriev.topmovie.data.repository
 
-import com.ruslangrigoriev.topmovie.domain.model.auth.AuthCredentials
-import com.ruslangrigoriev.topmovie.domain.model.auth.RequestToken
-import com.ruslangrigoriev.topmovie.domain.model.auth.Session
-import com.ruslangrigoriev.topmovie.domain.model.auth.Token
+import com.ruslangrigoriev.topmovie.domain.dto.auth.AuthCredentials
+import com.ruslangrigoriev.topmovie.domain.dto.auth.RequestToken
+import com.ruslangrigoriev.topmovie.domain.dto.auth.Session
+import com.ruslangrigoriev.topmovie.domain.dto.auth.Token
 
 interface AuthRepository {
     suspend fun getRequestToken(): RequestToken?

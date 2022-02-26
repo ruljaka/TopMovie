@@ -1,17 +1,11 @@
 package com.ruslangrigoriev.topmovie.di
 
-import android.content.Context
 import com.ruslangrigoriev.topmovie.data.remote.ApiService
-import com.ruslangrigoriev.topmovie.data.repository.AuthRepository
-import com.ruslangrigoriev.topmovie.data.repository.AuthRepositoryImpl
-import com.ruslangrigoriev.topmovie.data.repository.Repository
-import com.ruslangrigoriev.topmovie.data.repository.RepositoryImpl
 import com.ruslangrigoriev.topmovie.domain.utils.API_KEY
 import com.ruslangrigoriev.topmovie.domain.utils.BASE_URL
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient

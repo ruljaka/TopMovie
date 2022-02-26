@@ -4,7 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.ruslangrigoriev.topmovie.data.repository.Repository
+import com.ruslangrigoriev.topmovie.data.repository.MovieRepository
+import com.ruslangrigoriev.topmovie.data.repository.TvShowRepository
 import com.ruslangrigoriev.topmovie.domain.utils.MOVIE_TYPE
 import com.ruslangrigoriev.topmovie.domain.utils.ResultState
 import com.ruslangrigoriev.topmovie.domain.utils.TV_TYPE
@@ -16,7 +17,8 @@ import javax.inject.Inject
 @HiltViewModel
 class VideoViewModel
 @Inject constructor(
-    val repository: Repository
+    private val movieRepository: MovieRepository,
+    private val tvShowRepository: TvShowRepository
 ) : ViewModel() {
 
     private val _viewState = MutableLiveData<ResultState>()
@@ -32,14 +34,14 @@ class VideoViewModel
                     MOVIE_TYPE -> {
                         _viewState.postValue(
                             ResultState.Success(
-                                listVideo = repository.getMovieVideo(id)
+                                listVideo = movieRepository.getMovieVideo(id)
                             )
                         )
                     }
                     TV_TYPE -> {
                         _viewState.postValue(
                             ResultState.Success(
-                                listVideo = repository.getTvVideo(id)
+                                listVideo = tvShowRepository.getTvVideo(id)
                             )
                         )
                     }

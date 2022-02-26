@@ -89,8 +89,8 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                         .placeholder(R.drawable.placeholder)
                         .into(this.imageViewUserAvatar)
                 }
-                textViewProfileLikeCount.text = it.counters?.countLike.toString()
-                textViewProfileFavoriteCount.text = it.counters?.countFavorite.toString()
+                textViewProfileLikeCount.text = it.ratedList?.size.toString()
+                textViewProfileFavoriteCount.text = it.favoriteList?.size.toString()
                 textViewProfileCommentsCount.text = "0"
             }
         }

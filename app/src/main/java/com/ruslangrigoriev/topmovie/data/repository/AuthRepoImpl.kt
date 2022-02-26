@@ -5,7 +5,7 @@ import com.ruslangrigoriev.topmovie.data.remote.ApiService
 import com.ruslangrigoriev.topmovie.domain.dto.auth.*
 import com.ruslangrigoriev.topmovie.domain.utils.*
 
-class AuthRepositoryImpl(
+class AuthRepoImpl(
     private val appContext: Context,
     private val apiService: ApiService
 ) : AuthRepository {

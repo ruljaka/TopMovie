@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ruslangrigoriev.topmovie.data.repository.AuthRepository
 import com.ruslangrigoriev.topmovie.data.repository.UserRepository
-import com.ruslangrigoriev.topmovie.domain.dto.profile.CounterLikeFavorite
 import com.ruslangrigoriev.topmovie.domain.model.media.Media
 import com.ruslangrigoriev.topmovie.domain.utils.ResultState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -39,36 +38,38 @@ class ProfileViewModel @Inject constructor(
         Timber.d("fetchUserData")
         viewModelScope.launch(exceptionHandler) {
             _viewState.value = ResultState.Loading
+            //val favoriteList = userRepository.getFavoriteList(this)
             val user = userRepository.getUserData()
-            user?.let { user ->
-                userRepository.saveUserID(user.id)
-                val listRatedMoviesSize = async {
-                    userRepository.getRatedMovies(user.id)?.totalResults ?: 0
+            user?.let {
+                userRepository.saveUserID(it.id)
+                val listRatedMovies = async {
+                    userRepository.getRatedMovies(it.id)
                 }
-                val listRatedTvShowsSize = async {
-                    userRepository.getRatedTvShows(user.id)?.totalResults ?: 0
+                val listRatedTvShows = async {
+                    userRepository.getRatedTvShows(it.id)
                 }
                 val listFavoriteMovies = async {
-                    userRepository.getFavoriteMovies(user.id)
+                    userRepository.getFavoriteMovies(it.id)
                 }
                 val listFavoriteTvShows = async {
-                    userRepository.getFavoriteTvShows(user.id)
+                    userRepository.getFavoriteTvShows(it.id)
                 }
-                val counter = CounterLikeFavorite(
-                    countLike = listRatedMoviesSize.await() + listRatedTvShowsSize.await(),
-                    countFavorite = (listFavoriteMovies.await()?.size ?: 0)
-                            + (listFavoriteTvShows.await()?.size ?: 0)
-                )
+                val ratedList = mutableListOf<Media>().apply {
+                    listRatedMovies.await()?.let { it -> addAll(it) }
+                    listRatedTvShows.await()?.let { it -> addAll(it) }
+                }
                 val favoriteList = mutableListOf<Media>().apply {
                     listFavoriteMovies.await()?.let { it -> addAll(it) }
                     listFavoriteTvShows.await()?.let { it -> addAll(it) }
                 }
                 _viewState.postValue(
                     ResultState.Success(
-                        user = user, counters = counter, favoriteList = favoriteList
+                        user = user, favoriteList = favoriteList, ratedList = ratedList
                     )
                 )
             }
         }
     }
+
+
 }

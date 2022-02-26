@@ -2,6 +2,7 @@ package com.ruslangrigoriev.topmovie.data.repository
 
 import com.ruslangrigoriev.topmovie.data.remote.ApiService
 import com.ruslangrigoriev.topmovie.domain.dto.credits.Cast
+import com.ruslangrigoriev.topmovie.domain.dto.video.Video
 import com.ruslangrigoriev.topmovie.domain.model.media.Media
 import com.ruslangrigoriev.topmovie.domain.utils.getResultOrError
 import com.ruslangrigoriev.topmovie.domain.utils.mapTvShowToMedia
@@ -36,6 +37,11 @@ class TvShowRepoImpl
     override suspend fun getTvCredits(id: Int): List<Cast> {
         val response = apiService.getTvCredits(id)
         return getResultOrError(response)?.cast ?: emptyList()
+    }
+
+    override suspend fun getTvVideo(tv_id: Int): List<Video> {
+        val response = apiService.getTvVideos(tv_id)
+        return getResultOrError(response)?.videos ?: emptyList()
     }
 
     override suspend fun searchTvPaged(query: String, page: Int): List<Media> {

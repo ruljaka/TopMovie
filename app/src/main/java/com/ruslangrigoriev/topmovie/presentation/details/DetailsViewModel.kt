@@ -4,9 +4,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.ruslangrigoriev.topmovie.data.local.FavoriteDAO
 import com.ruslangrigoriev.topmovie.data.repository.MovieRepository
 import com.ruslangrigoriev.topmovie.data.repository.TvShowRepository
 import com.ruslangrigoriev.topmovie.data.repository.UserRepository
+import com.ruslangrigoriev.topmovie.domain.model.media.Media
 import com.ruslangrigoriev.topmovie.domain.utils.MOVIE_TYPE
 import com.ruslangrigoriev.topmovie.domain.utils.ResultState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -58,10 +60,11 @@ class DetailsViewModel
         }
     }
 
-    fun markFavorite(mediaType: String, media_id: Int) {
+    fun markFavorite(mediaType: String, media_id: Int,) {
         Timber.d("markFavorite ID: $media_id ")
         viewModelScope.launch(exceptionHandler) {
-            val response = userRepository.markFavorite(mediaType, media_id)
+            val favoriteMedia = (viewState.value as ResultState.Success).details
+            val response = userRepository.markFavorite(mediaType, media_id, favoriteMedia)
             Timber.d(response?.statusMessage)
         }
     }

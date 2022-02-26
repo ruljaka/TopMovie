@@ -17,12 +17,10 @@ class AppModule {
 
     @Singleton
     @Provides
-    fun provideRepository(
-        @ApplicationContext appContext: Context,
-        apiService: ApiService,
-        favoriteDAO: FavoriteDAO
-    ): Repository {
-        return RepositoryImpl(appContext, apiService, favoriteDAO)
+    fun providePersonRepository(
+        apiService: ApiService
+    ): PersonRepository {
+        return PersonRepoImpl(apiService)
     }
 
     @Singleton
@@ -31,7 +29,7 @@ class AppModule {
         @ApplicationContext appContext: Context,
         apiService: ApiService
     ): AuthRepository {
-        return AuthRepositoryImpl(appContext, apiService)
+        return AuthRepoImpl(appContext, apiService)
     }
 
     @Singleton

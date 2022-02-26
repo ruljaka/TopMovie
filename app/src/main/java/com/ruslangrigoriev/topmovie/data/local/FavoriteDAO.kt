@@ -3,15 +3,16 @@ package com.ruslangrigoriev.topmovie.data.local
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.ruslangrigoriev.topmovie.domain.model.media.Media
 
 @Dao
 interface FavoriteDAO {
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertFavorite(media: Media)
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertFavoriteList(mediaList: List<Media>)
 
     @Query("DELETE FROM Media WHERE id = :media_id")

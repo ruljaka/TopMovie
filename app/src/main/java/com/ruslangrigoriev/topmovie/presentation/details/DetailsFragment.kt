@@ -18,13 +18,13 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.appbar.AppBarLayout
-import com.ruslangrigoriev.topmovie.presentation.MainActivity
 import com.ruslangrigoriev.topmovie.R
 import com.ruslangrigoriev.topmovie.databinding.FragmentDetailsNewBinding
 import com.ruslangrigoriev.topmovie.domain.dto.credits.Cast
 import com.ruslangrigoriev.topmovie.domain.model.media.Media
 import com.ruslangrigoriev.topmovie.domain.utils.*
 import com.ruslangrigoriev.topmovie.domain.utils.ResultState.*
+import com.ruslangrigoriev.topmovie.presentation.MainActivity
 import com.ruslangrigoriev.topmovie.presentation.adapters.BaseRecyclerAdapter
 import com.ruslangrigoriev.topmovie.presentation.adapters.BindingInterface
 import com.ruslangrigoriev.topmovie.presentation.video.VideoActivity
@@ -51,6 +51,7 @@ class DetailsFragment : Fragment(R.layout.fragment_details_new) {
     }
 
     private fun loadData() {
+        viewModel.checkIsFavorite(mediaID)
         if (viewModel.viewState.value == null
             || viewModel.viewState.value is Failure
         ) {
@@ -72,6 +73,16 @@ class DetailsFragment : Fragment(R.layout.fragment_details_new) {
                     showLoading(false)
                     bindUI(it)
                 }
+            }
+        })
+        viewModel.isFavorite.observe(viewLifecycleOwner, {
+            when (it) {
+                true ->
+                    binding.imageButtonDetailsFavorite
+                        .setImageResource(R.drawable.ic_favorite_selected)
+                false ->
+                    binding.imageButtonDetailsFavorite
+                        .setImageResource(R.drawable.ic_favorite_unselected)
             }
         })
     }

@@ -30,7 +30,7 @@ class UserRepoImpl
 
     override suspend fun getRatedMovies(accountID: Int): List<Media>? {
         val session = appContext.getSessionID()
-        val listRatedMovies =  session?.let {
+        val listRatedMovies = session?.let {
             val listMovies = getResultOrError(
                 apiService.getRatedMovies(
                     account_id = accountID,
@@ -45,8 +45,8 @@ class UserRepoImpl
 
     override suspend fun getRatedTvShows(accountID: Int): List<Media>? {
         val session = appContext.getSessionID()
-        val listRatedTvShows =  session?.let {
-             val tvList = getResultOrError(
+        val listRatedTvShows = session?.let {
+            val tvList = getResultOrError(
                 apiService.getRatedTvShow(
                     account_id = accountID,
                     session_id = it
@@ -59,6 +59,7 @@ class UserRepoImpl
     }
 
     override suspend fun getFavoriteMovies(accountID: Int): List<Media>? {
+        val id = getUserData()?.id
         val session = appContext.getSessionID()
         val listFavoriteMovies = session?.let {
             val movieList = getResultOrError(
@@ -75,20 +76,10 @@ class UserRepoImpl
         return listFavoriteMovies
     }
 
-//    override suspend fun getFavoriteList(coroutineScope: CoroutineScope): List<Media>? {
-//        val user = getUserData()
-//        user?.let { user ->
-//            saveUserID(user.id)
-//            coroutineScope.async {
-//                getFavoriteMovies(user.id)?.let { favoriteDAO.insertFavoriteList(it) }
-//            }
-//             coroutineScope.async {
-//               getFavoriteTvShows(user.id)?.let { favoriteDAO.insertFavoriteList(it) }
-//            }
-//
-//
-//            return favoriteDAO.getFavoriteList()
-//    }
+    override suspend fun checkIsFavorite(mediaID: Int): Boolean {
+        val listFavoriteIds = favoriteDAO.getFavoriteList().map { it.id }
+        return listFavoriteIds.contains(mediaID)
+    }
 
     override suspend fun getFavoriteTvShows(accountID: Int): List<Media>? {
         val session = appContext.getSessionID()
@@ -108,14 +99,15 @@ class UserRepoImpl
     }
 
     override suspend fun markFavorite(
-        mediaType: String, media_id: Int,media: Media?
+        mediaType: String, media_id: Int, media: Media?
     ): ResponseObject? {
         val session = appContext.getSessionID()
         val userID = appContext.getUserID()
+        val isFavorite = checkIsFavorite(media_id)
         val favoriteCredentials = FavoriteCredentials(
             mediaType = mediaType,
             mediaId = media_id,
-            favorite = true
+            favorite = !isFavorite
         )
         val response = session?.let {
             getResultOrError(
@@ -126,8 +118,11 @@ class UserRepoImpl
                 )
             )
         }
-        if (media != null) {
-            favoriteDAO.insertFavorite(media)
+        media?.let {
+            when (isFavorite) {
+                false -> favoriteDAO.insertFavorite(media)
+                true -> favoriteDAO.removeFavorite(media_id)
+            }
         }
         return response
     }

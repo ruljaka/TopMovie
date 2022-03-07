@@ -38,7 +38,6 @@ class ProfileViewModel @Inject constructor(
         Timber.d("fetchUserData")
         viewModelScope.launch(exceptionHandler) {
             _viewState.value = ResultState.Loading
-            //val favoriteList = userRepository.getFavoriteList(this)
             val user = userRepository.getUserData()
             user?.let {
                 userRepository.saveUserID(it.id)
@@ -70,6 +69,9 @@ class ProfileViewModel @Inject constructor(
             }
         }
     }
+
+
+
 
 
 }

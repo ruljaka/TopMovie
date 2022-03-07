@@ -6,6 +6,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.ruslangrigoriev.topmovie.domain.model.media.Media
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface FavoriteDAO {
@@ -19,5 +20,6 @@ interface FavoriteDAO {
     suspend fun removeFavorite(media_id: Int)
 
     @Query("SELECT * FROM Media")
-    fun getFavoriteList(): LiveData<List<Media>>
+    suspend fun getFavoriteList(): List<Media>
+
 }

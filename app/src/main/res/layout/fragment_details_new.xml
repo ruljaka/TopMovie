@@ -164,7 +164,7 @@
                         android:id="@+id/imageButton_details_favorite"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
-                        android:src="@drawable/ic_favorite_unselected"
+                        tools:src="@drawable/ic_favorite_unselected"
                         android:contentDescription="button_mark_favorite" />
 
                 </androidx.cardview.widget.CardView>

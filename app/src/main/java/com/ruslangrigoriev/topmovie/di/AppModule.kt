@@ -1,7 +1,7 @@
 package com.ruslangrigoriev.topmovie.di
 
 import android.content.Context
-import com.ruslangrigoriev.topmovie.data.local.FavoriteDAO
+import com.ruslangrigoriev.topmovie.data.local.UserDataDAO
 import com.ruslangrigoriev.topmovie.data.remote.ApiService
 import com.ruslangrigoriev.topmovie.data.repository.*
 import dagger.Module
@@ -53,8 +53,8 @@ class AppModule {
     fun provideUserRepository(
         @ApplicationContext appContext: Context,
         apiService: ApiService,
-        favoriteDAO: FavoriteDAO
+        userDataDAO: UserDataDAO
     ): UserRepository {
-        return UserRepoImpl(appContext, apiService, favoriteDAO)
+        return UserRepoImpl(appContext, apiService, userDataDAO)
     }
 }

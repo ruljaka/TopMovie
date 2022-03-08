@@ -8,6 +8,9 @@
         <entry key="app/src/main/res/drawable-night/ic_settings.xml" value="0.303515625" />
         <entry key="app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.2898148148148148" />
         <entry key="app/src/main/res/drawable/circular.xml" value="0.37538461538461537" />
+        <entry key="app/src/main/res/drawable/custom_ratingbar.xml" value="0.2875" />
+        <entry key="app/src/main/res/drawable/custom_ratingbar_empty.xml" value="0.2875" />
+        <entry key="app/src/main/res/drawable/custom_ratingbar_filled.xml" value="0.2875" />
         <entry key="app/src/main/res/drawable/darkCircle.xml" value="0.37538461538461537" />
         <entry key="app/src/main/res/drawable/dark_circle.xml" value="0.37538461538461537" />
         <entry key="app/src/main/res/drawable/gradient_first.xml" value="0.26296296296296295" />
@@ -33,6 +36,7 @@
         <entry key="app/src/main/res/drawable/ic_settings_night.xml" value="0.303515625" />
         <entry key="app/src/main/res/drawable/ic_share.xml" value="0.19446254071661237" />
         <entry key="app/src/main/res/drawable/ic_splash_screen.xml" value="0.26296296296296295" />
+        <entry key="app/src/main/res/drawable/ic_star_grey.xml" value="0.2875" />
         <entry key="app/src/main/res/drawable/ic_star_red.xml" value="0.19638157894736843" />
         <entry key="app/src/main/res/drawable/item_bottom_nav_back.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/item_gradient.xml" value="0.19638157894736843" />

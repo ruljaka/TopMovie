@@ -5,6 +5,7 @@ import android.text.TextUtils
 import android.view.View
 import android.widget.SearchView
 import android.widget.Toast
+import androidx.appcompat.widget.SearchView.OnQueryTextListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -14,6 +15,7 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.ruslangrigoriev.topmovie.R
 import com.ruslangrigoriev.topmovie.databinding.FragmentSearchBinding
 import com.ruslangrigoriev.topmovie.domain.utils.*
+import com.ruslangrigoriev.topmovie.presentation.MainActivity
 import com.ruslangrigoriev.topmovie.presentation.adapters.MediaPagingAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -29,6 +31,9 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        (requireActivity() as MainActivity).setupToolbar(binding.toolbarSearch.toolbar)
+        binding.toolbarSearch.toolbarTitle.text = "Search"
+
         setMovieRecView()
         setupSearch()
         subscribeQuerySearch()
@@ -54,7 +59,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
     private fun subscribeQuerySearch() {
         lifecycleScope.launchWhenStarted {
             viewModel.queryFlow.collectLatest {
-                binding.textViewSearchQuery.text = "for  '${it}'"
+                binding.textViewSearchQuery.text = "results for  '${it}'"
             }
         }
     }
@@ -75,22 +80,24 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
     }
 
     private fun setupSearch() {
-        binding.searchViewSearch.setOnQueryTextListener(
-            object : SearchView.OnQueryTextListener {
-                override fun onQueryTextSubmit(query: String): Boolean {
-                    binding.searchViewSearch.clearFocus()
-                    if (TextUtils.isEmpty(query)) {
-                        Toast.makeText(activity, "Enter your request", Toast.LENGTH_SHORT).show()
-                    } else {
-                        viewModel.setQuery(query)
-                    }
-                    return false
+        binding.toolbarSearch.searchView.visibility = View.VISIBLE
+        binding.toolbarSearch.searchView.setOnQueryTextListener(
+            object : SearchView.OnQueryTextListener,
+            OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String): Boolean {
+                binding.toolbarSearch.searchView.clearFocus()
+                if (TextUtils.isEmpty(query)) {
+                    Toast.makeText(activity, "Enter your request", Toast.LENGTH_SHORT).show()
+                } else {
+                    viewModel.setQuery(query)
                 }
+                return false
+            }
 
-                override fun onQueryTextChange(newText: String?): Boolean {
-                    return false
-                }
-            })
+            override fun onQueryTextChange(newText: String?): Boolean {
+                return false
+            }
+        })
     }
 
     private fun onListItemClick(id: Int) {

@@ -1,7 +1,6 @@
 package com.ruslangrigoriev.topmovie.data.remote
 
-import com.ruslangrigoriev.topmovie.domain.model.FavoriteCredentials
-import com.ruslangrigoriev.topmovie.domain.model.ResponseObject
+import com.google.gson.JsonObject
 import com.ruslangrigoriev.topmovie.domain.dto.auth.AuthCredentials
 import com.ruslangrigoriev.topmovie.domain.dto.auth.RequestToken
 import com.ruslangrigoriev.topmovie.domain.dto.auth.Session
@@ -15,6 +14,8 @@ import com.ruslangrigoriev.topmovie.domain.dto.profile.User
 import com.ruslangrigoriev.topmovie.domain.dto.tv.TvResponse
 import com.ruslangrigoriev.topmovie.domain.dto.tv.TvShow
 import com.ruslangrigoriev.topmovie.domain.dto.video.VideoResponse
+import com.ruslangrigoriev.topmovie.domain.model.FavoriteCredentials
+import com.ruslangrigoriev.topmovie.domain.model.ResponseObject
 import retrofit2.Response
 import retrofit2.http.*
 
@@ -150,5 +151,20 @@ interface ApiService {
         @Query("session_id") session_id: String,
         @Body favoriteCredentials: FavoriteCredentials
     ): Response<ResponseObject>
+
+    @POST("movie/{movie_id}/rating")
+    suspend fun markAsRatedMovie(
+        @Path("movie_id") movie_id: Int,
+        @Query("session_id") session_id: String,
+        @Body body: JsonObject
+    ): Response<ResponseObject>
+
+    @POST("tv/{tv_id}/rating")
+    suspend fun markAsRatedTvShow(
+        @Path("tv_id") tv_id: Int,
+        @Query("session_id") session_id: String,
+        @Body body: JsonObject
+    ): Response<ResponseObject>
+
 
 }

@@ -1,20 +1,23 @@
 package com.ruslangrigoriev.topmovie.data.repository
 
 import android.content.Context
-import com.ruslangrigoriev.topmovie.data.local.FavoriteDAO
+import com.google.gson.JsonObject
+import com.ruslangrigoriev.topmovie.data.local.UserDataDAO
 import com.ruslangrigoriev.topmovie.data.remote.ApiService
 import com.ruslangrigoriev.topmovie.domain.dto.profile.User
 import com.ruslangrigoriev.topmovie.domain.model.FavoriteCredentials
 import com.ruslangrigoriev.topmovie.domain.model.ResponseObject
+import com.ruslangrigoriev.topmovie.domain.model.UserDataEntity
 import com.ruslangrigoriev.topmovie.domain.model.media.Media
 import com.ruslangrigoriev.topmovie.domain.utils.*
 import javax.inject.Inject
+
 
 class UserRepoImpl
 @Inject constructor(
     private val appContext: Context,
     private val apiService: ApiService,
-    private val favoriteDAO: FavoriteDAO
+    private val userDataDAO: UserDataDAO
 ) : UserRepository {
 
     override suspend fun getUserData(): User? {
@@ -39,7 +42,7 @@ class UserRepoImpl
             )?.movies
             mapMovieToMedia(listMovies)
         }
-        //TODO save to DB
+        saveRatedToDB(listRatedMovies)
         return listRatedMovies
     }
 
@@ -54,8 +57,21 @@ class UserRepoImpl
             )?.tvShows
             mapTvShowToMedia(tvList)
         }
-        //TODO save to DB
+        saveRatedToDB(listRatedTvShows)
         return listRatedTvShows
+    }
+
+    private suspend fun saveRatedToDB(listRated: List<Media>?) {
+        listRated?.let { list ->
+            val ratedIdsList = list.map { UserDataEntity(id = it.id, isRated = true) }
+            for (entity in ratedIdsList) {
+                if (userDataDAO.exists(entity.id)) {
+                    userDataDAO.markRated(entity.id)
+                } else {
+                    userDataDAO.insertEntity(entity)
+                }
+            }
+        }
     }
 
     override suspend fun getFavoriteMovies(accountID: Int): List<Media>? {
@@ -70,15 +86,8 @@ class UserRepoImpl
             )?.movies
             mapMovieToMedia(movieList)
         }
-        listFavoriteMovies?.let {
-            favoriteDAO.insertFavoriteList(listFavoriteMovies)
-        }
+        saveFavoriteToDB(listFavoriteMovies)
         return listFavoriteMovies
-    }
-
-    override suspend fun checkIsFavorite(mediaID: Int): Boolean {
-        val listFavoriteIds = favoriteDAO.getFavoriteList().map { it.id }
-        return listFavoriteIds.contains(mediaID)
     }
 
     override suspend fun getFavoriteTvShows(accountID: Int): List<Media>? {
@@ -92,21 +101,71 @@ class UserRepoImpl
             )?.tvShows
             mapTvShowToMedia(tvShowList)
         }
-        listFavoriteTvShows?.let {
-            favoriteDAO.insertFavoriteList(listFavoriteTvShows)
-        }
+        saveFavoriteToDB(listFavoriteTvShows)
         return listFavoriteTvShows
     }
 
+    private suspend fun saveFavoriteToDB(listFavorite: List<Media>?) {
+        listFavorite?.let { list ->
+            val favoriteIdsList = list.map { UserDataEntity(id = it.id, isFavorite = true) }
+            for (entity in favoriteIdsList) {
+                if (userDataDAO.exists(entity.id)) {
+                    userDataDAO.markFavorite(entity.id)
+                } else {
+                    userDataDAO.insertEntity(entity)
+                }
+            }
+        }
+    }
+
+    override suspend fun markRated(
+        mediaType: String,
+        mediaID: Int,
+        value: String
+    ): ResponseObject? {
+        val session = appContext.getSessionID()
+        val requestBody = JsonObject()
+        requestBody.addProperty("value", value)
+        val response = session?.let {
+            if (mediaType == MOVIE_TYPE) {
+                getResultOrError(
+                    apiService.markAsRatedMovie(
+                        movie_id = mediaID,
+                        session_id = it,
+                        body = requestBody
+                    )
+                )
+            } else {
+                getResultOrError(
+                    apiService.markAsRatedTvShow(
+                        tv_id = mediaID,
+                        session_id = it,
+                        body = requestBody
+                    )
+                )
+            }
+        }
+        updateRatedDB(mediaID)
+        return response
+    }
+
+    private suspend fun updateRatedDB(mediaID: Int) {
+        if (userDataDAO.exists(mediaID)) {
+            userDataDAO.markRated(mediaID)
+        } else {
+            userDataDAO.insertEntity(UserDataEntity(id = mediaID, isRated = true))
+        }
+    }
+
     override suspend fun markFavorite(
-        mediaType: String, media_id: Int, media: Media?
+        mediaType: String, mediaID: Int
     ): ResponseObject? {
         val session = appContext.getSessionID()
         val userID = appContext.getUserID()
-        val isFavorite = checkIsFavorite(media_id)
+        val isFavorite = checkIsFavorite(mediaID)
         val favoriteCredentials = FavoriteCredentials(
             mediaType = mediaType,
-            mediaId = media_id,
+            mediaId = mediaID,
             favorite = !isFavorite
         )
         val response = session?.let {
@@ -118,17 +177,36 @@ class UserRepoImpl
                 )
             )
         }
-        media?.let {
-            when (isFavorite) {
-                false -> favoriteDAO.insertFavorite(media)
-                true -> favoriteDAO.removeFavorite(media_id)
+        updateFavoriteDB(isFavorite, mediaID)
+        return response
+    }
+
+    private suspend fun updateFavoriteDB(isFavorite: Boolean, mediaID: Int) {
+        when (isFavorite) {
+            true -> userDataDAO.unmarkFavorite(mediaID)
+            false -> {
+                if (userDataDAO.exists(mediaID)) {
+                    userDataDAO.markFavorite(mediaID)
+                } else {
+                    userDataDAO.insertEntity(UserDataEntity(id = mediaID, isFavorite = true))
+                }
             }
         }
-        return response
     }
 
     override fun saveUserID(userID: Int) {
         appContext.saveUserID(userID)
     }
+
+    override suspend fun checkIsFavorite(mediaID: Int): Boolean {
+        val listFavoriteIds = userDataDAO.getFavoriteList().map { it.id }
+        return listFavoriteIds.contains(mediaID)
+    }
+
+    override suspend fun checkIsRated(mediaID: Int): Boolean {
+        val listRatedIds = userDataDAO.getRatedList().map { it.id }
+        return listRatedIds.contains(mediaID)
+    }
+
 
 }

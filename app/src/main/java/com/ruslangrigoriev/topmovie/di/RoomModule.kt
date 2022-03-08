@@ -3,7 +3,7 @@ package com.ruslangrigoriev.topmovie.di
 import android.content.Context
 import androidx.room.Room
 import com.ruslangrigoriev.topmovie.data.local.AppDatabase
-import com.ruslangrigoriev.topmovie.data.local.FavoriteDAO
+import com.ruslangrigoriev.topmovie.data.local.UserDataDAO
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -29,7 +29,7 @@ class RoomModule {
 
     @Singleton
     @Provides
-    fun provideFavoriteDAO(appDatabase: AppDatabase): FavoriteDAO {
-        return appDatabase.getFavoriteDAO()
+    fun provideFavoriteDAO(appDatabase: AppDatabase): UserDataDAO {
+        return appDatabase.getUserDataDAO()
     }
 }

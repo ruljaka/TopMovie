@@ -141,6 +141,7 @@ class MoviesFragment : Fragment(R.layout.fragment_movies) {
     }
 
     private fun setupSearch() {
+        binding.toolbarMovies.searchView.visibility = View.VISIBLE
         binding.toolbarMovies.searchView.setOnQueryTextListener(object :
             SearchView.OnQueryTextListener,
             androidx.appcompat.widget.SearchView.OnQueryTextListener {

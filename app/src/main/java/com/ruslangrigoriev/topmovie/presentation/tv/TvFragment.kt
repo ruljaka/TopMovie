@@ -7,6 +7,7 @@ import android.widget.ImageView
 import android.widget.SearchView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.widget.SearchView.OnQueryTextListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -140,8 +141,10 @@ class TvFragment : Fragment(R.layout.fragment_tv) {
     }
 
     private fun setupSearch() {
-        binding.toolbarTv.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener,
-            androidx.appcompat.widget.SearchView.OnQueryTextListener {
+        binding.toolbarTv.searchView.visibility = View.VISIBLE
+        binding.toolbarTv.searchView.setOnQueryTextListener(
+            object : SearchView.OnQueryTextListener,
+            OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 if (TextUtils.isEmpty(query)) {
                     showToast("Enter your request")

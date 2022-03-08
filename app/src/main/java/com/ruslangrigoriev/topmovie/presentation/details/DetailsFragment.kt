@@ -51,7 +51,7 @@ class DetailsFragment : Fragment(R.layout.fragment_details_new) {
     }
 
     private fun loadData() {
-        viewModel.checkIsFavorite(mediaID)
+        viewModel.checkIsFavoriteAndRated(mediaID)
         if (viewModel.viewState.value == null
             || viewModel.viewState.value is Failure
         ) {
@@ -83,6 +83,16 @@ class DetailsFragment : Fragment(R.layout.fragment_details_new) {
                 false ->
                     binding.imageButtonDetailsFavorite
                         .setImageResource(R.drawable.ic_favorite_unselected)
+            }
+        })
+        viewModel.isRated.observe(viewLifecycleOwner, {
+            when (it) {
+                true ->
+                    binding.imageButtonDetailsLike
+                        .setImageResource(R.drawable.ic_like_selected)
+                false ->
+                    binding.imageButtonDetailsLike
+                        .setImageResource(R.drawable.ic_like_unselected)
             }
         })
     }
@@ -124,21 +134,22 @@ class DetailsFragment : Fragment(R.layout.fragment_details_new) {
 
     private fun setupRate(media: Media) {
         val vote = media.voteAverage
-        if (vote > 0.0) {
-            binding.detailsRate1.setImageResource(R.drawable.ic_star_red)
-        }
-        if (vote > 3.0) {
-            binding.detailsRate2.setImageResource(R.drawable.ic_star_red)
-        }
-        if (vote > 6.0) {
-            binding.detailsRate3.setImageResource(R.drawable.ic_star_red)
-        }
-        if (vote > 7.0) {
-            binding.detailsRate4.setImageResource(R.drawable.ic_star_red)
-        }
-        if (vote > 9.0) {
-            binding.detailsRate5.setImageResource(R.drawable.ic_star_red)
-        }
+        binding.ratingBar.progress = vote.toInt()
+//        if (vote > 0.0) {
+//            binding.detailsRate1.setImageResource(R.drawable.ic_star_red)
+//        }
+//        if (vote > 3.0) {
+//            binding.detailsRate2.setImageResource(R.drawable.ic_star_red)
+//        }
+//        if (vote > 6.0) {
+//            binding.detailsRate3.setImageResource(R.drawable.ic_star_red)
+//        }
+//        if (vote > 7.0) {
+//            binding.detailsRate4.setImageResource(R.drawable.ic_star_red)
+//        }
+//        if (vote > 9.0) {
+//            binding.detailsRate5.setImageResource(R.drawable.ic_star_red)
+//        }
     }
 
     private fun setCastRecView() {
@@ -199,6 +210,13 @@ class DetailsFragment : Fragment(R.layout.fragment_details_new) {
             viewModel.markFavorite(mediaType, mediaID)
         }
     }
+
+    private fun setBtnRate() {
+        binding.imageButtonDetailsLike.setOnClickListener {
+            //TODO
+        }
+    }
+
 
     private fun setupPlayBtn() {
         binding.imageButtonDetailsPlay.setOnClickListener {

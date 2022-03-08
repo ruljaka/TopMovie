@@ -32,6 +32,10 @@ class DetailsViewModel
     val isFavorite: LiveData<Boolean>
         get() = _isFavorite
 
+    private val _isRated = MutableLiveData<Boolean>()
+    val isRated: LiveData<Boolean>
+        get() = _isRated
+
 
     private val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
         _viewState.postValue(ResultState.Failure(throwable.message))
@@ -63,19 +67,28 @@ class DetailsViewModel
         }
     }
 
-    fun markFavorite(mediaType: String, media_id: Int) {
-        Timber.d("markFavorite ID: $media_id ")
+    fun markFavorite(mediaType: String, mediaID: Int) {
+        Timber.d("markFavorite ID: $mediaID ")
         viewModelScope.launch(exceptionHandler) {
-            val favoriteMedia = (viewState.value as ResultState.Success).details
-            val response = userRepository.markFavorite(mediaType, media_id, favoriteMedia)
-            checkIsFavorite(media_id)
+            val response = userRepository.markFavorite(mediaType, mediaID)
+            checkIsFavoriteAndRated(mediaID)
             Timber.d(response?.statusMessage)
         }
     }
 
-    fun checkIsFavorite(mediaID :Int){
+    fun markRated(mediaType: String, mediaID: Int, value: String) {
+        Timber.d("markRated ID: $mediaID ")
+        viewModelScope.launch(exceptionHandler) {
+            val response = userRepository.markRated(mediaType, mediaID,value)
+            _isRated.postValue(true)
+            Timber.d(response?.statusMessage)
+        }
+    }
+
+    fun checkIsFavoriteAndRated(mediaID :Int){
         viewModelScope.launch {
             _isFavorite.postValue(userRepository.checkIsFavorite(mediaID))
+            _isRated.postValue(userRepository.checkIsRated(mediaID))
         }
     }
 }

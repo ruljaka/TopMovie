@@ -4,9 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.ruslangrigoriev.topmovie.data.repository.MovieRepository
-import com.ruslangrigoriev.topmovie.data.repository.TvShowRepository
-import com.ruslangrigoriev.topmovie.data.repository.UserRepository
+import com.ruslangrigoriev.topmovie.domain.repository.MovieRepository
+import com.ruslangrigoriev.topmovie.domain.repository.TvShowRepository
+import com.ruslangrigoriev.topmovie.domain.repository.UserRepository
 import com.ruslangrigoriev.topmovie.domain.utils.MOVIE_TYPE
 import com.ruslangrigoriev.topmovie.domain.utils.ResultState
 import dagger.hilt.android.lifecycle.HiltViewModel

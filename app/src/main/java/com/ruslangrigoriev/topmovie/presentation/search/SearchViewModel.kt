@@ -7,9 +7,9 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.ruslangrigoriev.topmovie.data.paging.MoviePagingSource
-import com.ruslangrigoriev.topmovie.data.repository.MovieRepository
-import com.ruslangrigoriev.topmovie.data.repository.TvShowRepository
-import com.ruslangrigoriev.topmovie.domain.model.media.Media
+import com.ruslangrigoriev.topmovie.domain.repository.MovieRepository
+import com.ruslangrigoriev.topmovie.domain.repository.TvShowRepository
+import com.ruslangrigoriev.topmovie.domain.model.Media
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow

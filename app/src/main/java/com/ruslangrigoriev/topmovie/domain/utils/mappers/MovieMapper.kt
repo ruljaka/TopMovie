@@ -1,7 +1,7 @@
 package com.ruslangrigoriev.topmovie.domain.utils.mappers
 
-import com.ruslangrigoriev.topmovie.domain.model.media.Media
-import com.ruslangrigoriev.topmovie.domain.dto.movies.Movie
+import com.ruslangrigoriev.topmovie.domain.model.Media
+import com.ruslangrigoriev.topmovie.data.api.dto.movies.Movie
 import com.ruslangrigoriev.topmovie.domain.utils.MOVIE_TYPE
 
 object MovieMapper : Mapper<Movie, Media> {

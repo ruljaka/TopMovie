@@ -1,10 +1,10 @@
 package com.ruslangrigoriev.topmovie.domain.utils
 
-import com.ruslangrigoriev.topmovie.domain.dto.credits.Cast
-import com.ruslangrigoriev.topmovie.domain.dto.person.Person
-import com.ruslangrigoriev.topmovie.domain.dto.profile.User
-import com.ruslangrigoriev.topmovie.domain.dto.video.Video
-import com.ruslangrigoriev.topmovie.domain.model.media.Media
+import com.ruslangrigoriev.topmovie.data.api.dto.credits.Cast
+import com.ruslangrigoriev.topmovie.data.api.dto.person.Person
+import com.ruslangrigoriev.topmovie.data.api.dto.profile.User
+import com.ruslangrigoriev.topmovie.data.api.dto.video.Video
+import com.ruslangrigoriev.topmovie.domain.model.Media
 
 sealed class ResultState {
     object Loading : ResultState()

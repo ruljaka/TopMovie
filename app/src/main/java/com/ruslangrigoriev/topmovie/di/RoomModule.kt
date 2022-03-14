@@ -2,8 +2,8 @@ package com.ruslangrigoriev.topmovie.di
 
 import android.content.Context
 import androidx.room.Room
-import com.ruslangrigoriev.topmovie.data.local.AppDatabase
-import com.ruslangrigoriev.topmovie.data.local.UserDataDAO
+import com.ruslangrigoriev.topmovie.data.database.AppDatabase
+import com.ruslangrigoriev.topmovie.data.database.UserDataDAO
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

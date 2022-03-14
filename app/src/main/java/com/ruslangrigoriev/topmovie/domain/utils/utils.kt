@@ -12,17 +12,16 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.google.gson.Gson
 import com.ruslangrigoriev.topmovie.R
-import com.ruslangrigoriev.topmovie.domain.model.Genre
-import com.ruslangrigoriev.topmovie.domain.model.ResponseObject
-import com.ruslangrigoriev.topmovie.domain.dto.auth.RequestToken
-import com.ruslangrigoriev.topmovie.domain.dto.credits.Cast
-import com.ruslangrigoriev.topmovie.domain.model.media.Media
-import com.ruslangrigoriev.topmovie.domain.dto.movies.Movie
-import com.ruslangrigoriev.topmovie.domain.dto.tv.TvShow
+import com.ruslangrigoriev.topmovie.data.api.dto.Genre
+import com.ruslangrigoriev.topmovie.data.api.dto.favorite.FavoriteResponse
+import com.ruslangrigoriev.topmovie.data.api.dto.auth.RequestToken
+import com.ruslangrigoriev.topmovie.data.api.dto.credits.Cast
+import com.ruslangrigoriev.topmovie.domain.model.Media
+import com.ruslangrigoriev.topmovie.data.api.dto.movies.Movie
+import com.ruslangrigoriev.topmovie.data.api.dto.tv.TvShow
 import com.ruslangrigoriev.topmovie.domain.utils.mappers.MovieMapper
 import com.ruslangrigoriev.topmovie.domain.utils.mappers.TvMapper
 import retrofit2.Response
-import timber.log.Timber
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.*
@@ -180,7 +179,7 @@ fun <T : Any> getResultOrError(response: Response<T>): T? {
         try {
             val responseError = Gson().fromJson(
                 response.errorBody()?.string(),
-                ResponseObject::class.java
+                FavoriteResponse::class.java
             )
             throw Throwable(responseError.statusMessage)
         } catch (e: Exception) {

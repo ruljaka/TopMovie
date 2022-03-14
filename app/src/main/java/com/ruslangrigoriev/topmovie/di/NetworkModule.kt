@@ -1,6 +1,6 @@
 package com.ruslangrigoriev.topmovie.di
 
-import com.ruslangrigoriev.topmovie.data.remote.ApiService
+import com.ruslangrigoriev.topmovie.data.api.ApiService
 import com.ruslangrigoriev.topmovie.domain.utils.API_KEY
 import com.ruslangrigoriev.topmovie.domain.utils.BASE_URL
 import dagger.Module

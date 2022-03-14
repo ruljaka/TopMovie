@@ -3,7 +3,7 @@ package com.ruslangrigoriev.topmovie.domain.utils
 import androidx.room.TypeConverter
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.ruslangrigoriev.topmovie.domain.model.Genre
+import com.ruslangrigoriev.topmovie.data.api.dto.Genre
 
 class GenreListConverter {
     private val gson = Gson()

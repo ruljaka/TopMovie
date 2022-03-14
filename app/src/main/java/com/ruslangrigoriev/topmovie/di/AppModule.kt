@@ -1,9 +1,10 @@
 package com.ruslangrigoriev.topmovie.di
 
 import android.content.Context
-import com.ruslangrigoriev.topmovie.data.local.UserDataDAO
-import com.ruslangrigoriev.topmovie.data.remote.ApiService
-import com.ruslangrigoriev.topmovie.data.repository.*
+import com.ruslangrigoriev.topmovie.data.database.UserDataDAO
+import com.ruslangrigoriev.topmovie.data.api.ApiService
+import com.ruslangrigoriev.topmovie.data.repositoryImpl.*
+import com.ruslangrigoriev.topmovie.domain.repository.*
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

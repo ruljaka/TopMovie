@@ -5,6 +5,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.recyclerview.widget.RecyclerView
+import com.ruslangrigoriev.topmovie.domain.utils.FOOTER_VIEW_TYPE
+import com.ruslangrigoriev.topmovie.domain.utils.REGULAR_VIEW_TYPE
 
 class BaseRecyclerAdapter<T : Any>(
     private var dataSet: List<T>,
@@ -13,10 +15,8 @@ class BaseRecyclerAdapter<T : Any>(
 ) :
     RecyclerView.Adapter<BaseRecyclerAdapter.ViewHolder>() {
 
-
-
     class ViewHolder(
-        val view: View,
+        val view: View
     ) : RecyclerView.ViewHolder(view) {
 
         fun <T : Any> bind(
@@ -42,8 +42,9 @@ class BaseRecyclerAdapter<T : Any>(
         this.dataSet = list
         notifyDataSetChanged()
     }
+
+    override fun getItemViewType(position: Int): Int {
+        return if (position == dataSet.size) FOOTER_VIEW_TYPE else REGULAR_VIEW_TYPE
+    }
 }
 
-interface BindingInterface<T : Any> {
-    fun bindData(item: T, view: View)
-}

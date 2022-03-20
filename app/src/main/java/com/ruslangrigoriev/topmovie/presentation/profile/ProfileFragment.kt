@@ -140,7 +140,6 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         }
     }
 
-
     private fun onListItemClick(id: Int, mediaType: String) {
         val bundle = Bundle()
         bundle.putInt(MEDIA_ID, id)

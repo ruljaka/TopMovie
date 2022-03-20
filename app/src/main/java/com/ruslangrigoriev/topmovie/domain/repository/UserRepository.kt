@@ -12,7 +12,7 @@ interface UserRepository {
     suspend fun getFavoriteTvShows(accountID: Int): List<Media>?
 
     fun saveUserID(userID: Int)
-    suspend fun markFavorite(mediaType: String, media_id: Int): FavoriteResponse?
+    suspend fun markFavorite(mediaType: String, mediaID: Int): FavoriteResponse?
     suspend fun markRated(mediaType: String, mediaID: Int, value: String): FavoriteResponse?
     suspend fun checkIsFavorite(mediaID: Int): Boolean
     suspend fun checkIsRated(mediaID: Int): Boolean

@@ -3,9 +3,7 @@ package com.ruslangrigoriev.topmovie.presentation.movies
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
-import android.widget.ImageView
 import android.widget.SearchView
-import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -15,12 +13,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.ruslangrigoriev.topmovie.R
 import com.ruslangrigoriev.topmovie.databinding.FragmentMoviesBinding
-import com.ruslangrigoriev.topmovie.domain.model.Media
-import com.ruslangrigoriev.topmovie.domain.utils.*
+import com.ruslangrigoriev.topmovie.domain.utils.MEDIA_ID
+import com.ruslangrigoriev.topmovie.domain.utils.MEDIA_TYPE
+import com.ruslangrigoriev.topmovie.domain.utils.MOVIE_TYPE
+import com.ruslangrigoriev.topmovie.domain.utils.QUERY
 import com.ruslangrigoriev.topmovie.domain.utils.ResultState.*
 import com.ruslangrigoriev.topmovie.presentation.MainActivity
-import com.ruslangrigoriev.topmovie.presentation.adapters.BaseRecyclerAdapter
-import com.ruslangrigoriev.topmovie.presentation.adapters.BindingInterface
+import com.ruslangrigoriev.topmovie.presentation.adapters.MainTabsRecyclerAdapter
 import com.ruslangrigoriev.topmovie.presentation.adapters.MediaPagingAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -29,8 +28,8 @@ class MoviesFragment : Fragment(R.layout.fragment_movies) {
     private val binding by viewBinding(FragmentMoviesBinding::bind)
     private val viewModel: MovieViewModel by viewModels()
     private lateinit var pagingAdapter: MediaPagingAdapter
-    private lateinit var nowRecyclerAdapter: BaseRecyclerAdapter<Media>
-    private lateinit var popularRecyclerAdapter: BaseRecyclerAdapter<Media>
+    private lateinit var nowRecyclerAdapter: MainTabsRecyclerAdapter
+    private lateinit var popularRecyclerAdapter: MainTabsRecyclerAdapter
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -40,8 +39,6 @@ class MoviesFragment : Fragment(R.layout.fragment_movies) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setNowRecView()
-        setPopularRecView()
         setupSearch()
         subscribeUi()
         loadData()
@@ -74,70 +71,28 @@ class MoviesFragment : Fragment(R.layout.fragment_movies) {
     }
 
     private fun bindUI(it: Success) {
-        it.listNow?.let { now -> nowRecyclerAdapter.updateList(now) }
-        it.listPopular?.let { popular -> popularRecyclerAdapter.updateList(popular) }
-    }
-
-    private fun setNowRecView() {
-        val bindingInterface = object : BindingInterface<Media> {
-            override fun bindData(item: Media, view: View) {
-                val title: TextView = view.findViewById(R.id.textView_now_title)
-                title.text = item.title
-                val poster: ImageView = view.findViewById(R.id.imageView_now_poster)
-                item.posterPath?.loadPosterLarge(poster)
-                view.setOnClickListener {
-                    onListItemClick(item.id)
-                }
-            }
+        it.listNow?.let {
+            nowRecyclerAdapter = MainTabsRecyclerAdapter(it) { id -> onListItemClick(id) }
+            binding.recyclerViewNow.layoutManager =
+                LinearLayoutManager(
+                    activity,
+                    LinearLayoutManager.HORIZONTAL,
+                    false
+                )
+            binding.recyclerViewNow.adapter = nowRecyclerAdapter
         }
-        nowRecyclerAdapter =
-            BaseRecyclerAdapter(
-                emptyList(),
-                R.layout.item_movie_now,
-                bindingInterface
-            )
-        binding.recyclerViewNow.layoutManager =
-            LinearLayoutManager(
-                activity,
-                LinearLayoutManager.HORIZONTAL,
-                false
-            )
-        binding.recyclerViewNow.adapter = nowRecyclerAdapter
-    }
-
-    private fun setPopularRecView() {
-        val bindingInterface = object : BindingInterface<Media> {
-            override fun bindData(item: Media, view: View) {
-                val title: TextView = view.findViewById(R.id.textView_popular_title)
-                title.text = item.title
-                val date: TextView = view.findViewById(R.id.textView_popular_date)
-                date.text = item.releaseDate?.formatDate()
-                val vote: TextView = view.findViewById(R.id.textView_popular_score)
-                vote.text = item.voteAverage.toString()
-                val poster: ImageView = view.findViewById(R.id.imageView_popular_poster)
-                item.posterPath?.loadPosterLarge(poster)
-                view.setOnClickListener {
-                    onListItemClick(item.id)
-                }
-            }
-        }
-        popularRecyclerAdapter = BaseRecyclerAdapter(
-            emptyList(),
-            R.layout.item_movie_popular,
-            bindingInterface,
-        )
-        binding.apply {
-            recyclerViewPopular.layoutManager =
+        it.listPopular?.let {
+            popularRecyclerAdapter = MainTabsRecyclerAdapter(it) { id -> onListItemClick(id) }
+            binding.recyclerViewPopular.layoutManager =
                 GridLayoutManager(
                     activity,
                     2,
                     GridLayoutManager.HORIZONTAL,
                     false
                 )
-            recyclerViewPopular.adapter = popularRecyclerAdapter
-            recyclerViewPopular.setHasFixedSize(true)
+            binding.recyclerViewPopular.adapter = popularRecyclerAdapter
+            binding.recyclerViewPopular.setHasFixedSize(true)
         }
-
     }
 
     private fun setupSearch() {

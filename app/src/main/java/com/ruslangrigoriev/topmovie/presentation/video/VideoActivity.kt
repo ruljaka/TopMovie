@@ -18,11 +18,9 @@ import kr.co.prnd.YouTubePlayerView
 class VideoActivity : AppCompatActivity(R.layout.activity_video) {
     private val binding by viewBinding(ActivityVideoBinding::bind)
     private val viewModel: VideoViewModel by viewModels()
-
     private var mediaID = 0
     private lateinit var mediaType: String
     private var videoLink: String? = null
-    private lateinit var youTubePlayerView: YouTubePlayerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,12 +53,11 @@ class VideoActivity : AppCompatActivity(R.layout.activity_video) {
     }
 
     private fun bindUI(it: Success) {
-        youTubePlayerView = findViewById(R.id.you_tube_player_view)
         it.listVideo?.let { list ->
             if (list.isNotEmpty()) {
                 videoLink = list[0].key
                 videoLink?.let {
-                    youTubePlayerView.play(it)
+                    binding.youTubePlayerView.play(it)
                 }
             } else {
                 showToast("No videos")

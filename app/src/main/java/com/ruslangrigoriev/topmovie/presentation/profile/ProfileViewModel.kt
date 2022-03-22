@@ -5,10 +5,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.ruslangrigoriev.topmovie.data.repository.AuthRepository
-import com.ruslangrigoriev.topmovie.data.repository.Repository
-import com.ruslangrigoriev.topmovie.domain.model.media.Media
-import com.ruslangrigoriev.topmovie.domain.model.profile.CounterLikeFavorite
+import com.ruslangrigoriev.topmovie.domain.repository.AuthRepository
+import com.ruslangrigoriev.topmovie.domain.repository.UserRepository
+import com.ruslangrigoriev.topmovie.domain.model.Media
 import com.ruslangrigoriev.topmovie.domain.utils.ResultState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
@@ -18,9 +17,9 @@ import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
-class ProfileViewModel @Inject constructor (
-    val authRepository: AuthRepository,
-    val repository: Repository
+class ProfileViewModel @Inject constructor(
+    private val authRepository: AuthRepository,
+    private val userRepository: UserRepository
 ) : ViewModel() {
 
     private val _viewState = MutableLiveData<ResultState>()
@@ -39,36 +38,40 @@ class ProfileViewModel @Inject constructor (
         Timber.d("fetchUserData")
         viewModelScope.launch(exceptionHandler) {
             _viewState.value = ResultState.Loading
-            val user = repository.getUserData()
-            user?.let { user ->
-                repository.saveUserID(user.id)
-                val listRatedMoviesSize = async {
-                    repository.getRatedMovies(user.id)?.totalResults ?: 0
+            val user = userRepository.getUserData()
+            user?.let {
+                userRepository.saveUserID(it.id)
+                val listRatedMovies = async {
+                    userRepository.getRatedMovies(it.id)
                 }
-                val listRatedTvShowsSize = async {
-                    repository.getRatedTvShows(user.id)?.totalResults ?: 0
+                val listRatedTvShows = async {
+                    userRepository.getRatedTvShows(it.id)
                 }
                 val listFavoriteMovies = async {
-                    repository.getFavoriteMovies(user.id)
+                    userRepository.getFavoriteMovies(it.id)
                 }
                 val listFavoriteTvShows = async {
-                    repository.getFavoriteTvShows(user.id)
+                    userRepository.getFavoriteTvShows(it.id)
                 }
-                val counter = CounterLikeFavorite(
-                    countLike = listRatedMoviesSize.await() + listRatedTvShowsSize.await(),
-                    countFavorite = (listFavoriteMovies.await()?.size ?: 0)
-                            + (listFavoriteTvShows.await()?.size ?: 0)
-                )
+                val ratedList = mutableListOf<Media>().apply {
+                    listRatedMovies.await()?.let { it -> addAll(it) }
+                    listRatedTvShows.await()?.let { it -> addAll(it) }
+                }
                 val favoriteList = mutableListOf<Media>().apply {
                     listFavoriteMovies.await()?.let { it -> addAll(it) }
                     listFavoriteTvShows.await()?.let { it -> addAll(it) }
                 }
                 _viewState.postValue(
                     ResultState.Success(
-                        user = user, counters = counter, favoriteList = favoriteList
+                        user = user, favoriteList = favoriteList, ratedList = ratedList
                     )
                 )
             }
         }
     }
+
+
+
+
+
 }

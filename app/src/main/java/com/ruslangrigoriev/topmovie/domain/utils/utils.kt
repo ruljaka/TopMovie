@@ -11,30 +11,21 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.google.gson.Gson
-import com.ruslangrigoriev.topmovie.App
 import com.ruslangrigoriev.topmovie.R
-import com.ruslangrigoriev.topmovie.domain.model.Genre
-import com.ruslangrigoriev.topmovie.domain.model.ResponseObject
-import com.ruslangrigoriev.topmovie.domain.model.auth.RequestToken
-import com.ruslangrigoriev.topmovie.domain.model.credits.Cast
-import com.ruslangrigoriev.topmovie.domain.model.media.Media
-import com.ruslangrigoriev.topmovie.domain.model.movies.Movie
-import com.ruslangrigoriev.topmovie.domain.model.tv.TvShow
+import com.ruslangrigoriev.topmovie.data.api.dto.Genre
+import com.ruslangrigoriev.topmovie.data.api.dto.favorite.FavoriteResponse
+import com.ruslangrigoriev.topmovie.data.api.dto.auth.RequestToken
+import com.ruslangrigoriev.topmovie.data.api.dto.credits.Cast
+import com.ruslangrigoriev.topmovie.domain.model.Media
+import com.ruslangrigoriev.topmovie.data.api.dto.movies.Movie
+import com.ruslangrigoriev.topmovie.data.api.dto.tv.TvShow
 import com.ruslangrigoriev.topmovie.domain.utils.mappers.MovieMapper
 import com.ruslangrigoriev.topmovie.domain.utils.mappers.TvMapper
 import retrofit2.Response
-import timber.log.Timber
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.*
 import kotlin.properties.ReadOnlyProperty
-
-
-//val Context.appComponent: AppComponent
-//    get() = when (this) {
-//        is App -> appComponent
-//        else -> applicationContext.appComponent
-//    }
 
 fun stringArgs(key: String): ReadOnlyProperty<Fragment, String> {
     return ReadOnlyProperty { thisRef, _ ->
@@ -120,7 +111,7 @@ fun List<Cast>.getTopCast(): List<Cast> {
     }
 }
 
-fun Context.saveToFavorites(moveID: Int) {
+/*fun Context.saveToFavoritesByID(moveID: Int) {
     val sharedPref = this.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE)
     val oldList = getFavorites()
     if (!oldList.contains(moveID)) {
@@ -131,20 +122,33 @@ fun Context.saveToFavorites(moveID: Int) {
         }
         Timber.d("saveToFavorite :: ${oldList.joinToString()}")
     }
-}
+}*/
 
-fun Context.removeFromFavorites(moveID: Int) {
+/*fun Context.saveToFavoritesByList(list: List<Media>) {
     val sharedPref = this.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE)
-    val oldList = getFavorites()
-    oldList.remove(moveID)
+    val oldIdList = getFavorites()
+    val newIdList = list.map { it -> it.id }
+    val resultIdList = oldIdList.union(newIdList)
     with(sharedPref.edit()) {
-        putString(FAVORITES, oldList.joinToString())
+        putString(FAVORITES, resultIdList.joinToString())
         apply()
     }
-    Timber.d("removeFromFavorites :: ${oldList.joinToString()}")
-}
+    Timber.d("saveToFavoritesByList :: ${resultIdList.joinToString()}")
+}*/
 
-fun Context.getFavorites(): MutableList<Int> {
+
+//fun Context.removeFromFavorites(moveID: Int) {
+//    val sharedPref = this.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE)
+//    val oldList = getFavorites()
+//    oldList.remove(moveID)
+//    with(sharedPref.edit()) {
+//        putString(FAVORITES, oldList.joinToString())
+//        apply()
+//    }
+//    Timber.d("removeFromFavorites :: ${oldList.joinToString()}")
+//}
+
+/*fun Context.getFavorites(): MutableList<Int> {
     val sharedPref = this.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE)
     val favoriteMovies = sharedPref.getString(FAVORITES, "") ?: ""
     val favoriteList = favoriteMovies.splitToSequence(", ")
@@ -153,7 +157,7 @@ fun Context.getFavorites(): MutableList<Int> {
         .toMutableList()
     Timber.d("getFavorites :: $favoriteList")
     return favoriteList
-}
+}*/
 
 
 fun Context.onBoardingFinished() {
@@ -175,7 +179,7 @@ fun <T : Any> getResultOrError(response: Response<T>): T? {
         try {
             val responseError = Gson().fromJson(
                 response.errorBody()?.string(),
-                ResponseObject::class.java
+                FavoriteResponse::class.java
             )
             throw Throwable(responseError.statusMessage)
         } catch (e: Exception) {

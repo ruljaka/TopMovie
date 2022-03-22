@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.ruslangrigoriev.topmovie.data.repository.Repository
+import com.ruslangrigoriev.topmovie.domain.repository.PersonRepository
 import com.ruslangrigoriev.topmovie.domain.utils.ResultState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
@@ -15,7 +15,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PersonViewModel @Inject constructor
-    (val repository: Repository) : ViewModel() {
+    (val personRepository: PersonRepository) : ViewModel() {
 
     private val _viewState = MutableLiveData<ResultState>()
     val viewState: LiveData<ResultState>
@@ -28,8 +28,8 @@ class PersonViewModel @Inject constructor
     fun fetchData(person_id: Int) = viewModelScope.launch(exceptionHandler) {
         Timber.d("getPerson -> Person ID: $person_id")
         _viewState.value = ResultState.Loading
-        val person = async { repository.getPerson(person_id) }
-        val personCastList = async { repository.getPersonCredits(person_id) }
+        val person = async { personRepository.getPerson(person_id) }
+        val personCastList = async { personRepository.getPersonCredits(person_id) }
         _viewState.postValue(
             ResultState.Success(
                 person = person.await(),

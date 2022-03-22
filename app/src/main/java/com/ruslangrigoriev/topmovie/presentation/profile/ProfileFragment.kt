@@ -17,7 +17,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.ruslangrigoriev.topmovie.R
 import com.ruslangrigoriev.topmovie.databinding.FragmentProfileBinding
-import com.ruslangrigoriev.topmovie.domain.model.media.Media
+import com.ruslangrigoriev.topmovie.domain.model.Media
 import com.ruslangrigoriev.topmovie.domain.utils.*
 import com.ruslangrigoriev.topmovie.domain.utils.ResultState.*
 import com.ruslangrigoriev.topmovie.presentation.MainActivity
@@ -89,8 +89,8 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                         .placeholder(R.drawable.placeholder)
                         .into(this.imageViewUserAvatar)
                 }
-                textViewProfileLikeCount.text = it.counters?.countLike.toString()
-                textViewProfileFavoriteCount.text = it.counters?.countFavorite.toString()
+                textViewProfileLikeCount.text = it.ratedList?.size.toString()
+                textViewProfileFavoriteCount.text = it.favoriteList?.size.toString()
                 textViewProfileCommentsCount.text = "0"
             }
         }
@@ -139,7 +139,6 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
             binding.progressBarProfile.visibility = View.GONE
         }
     }
-
 
     private fun onListItemClick(id: Int, mediaType: String) {
         val bundle = Bundle()

@@ -4,8 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.ruslangrigoriev.topmovie.data.repository.Repository
-import com.ruslangrigoriev.topmovie.domain.model.FavoriteCredentials
+import com.ruslangrigoriev.topmovie.domain.repository.MovieRepository
+import com.ruslangrigoriev.topmovie.domain.repository.TvShowRepository
+import com.ruslangrigoriev.topmovie.domain.repository.UserRepository
 import com.ruslangrigoriev.topmovie.domain.utils.MOVIE_TYPE
 import com.ruslangrigoriev.topmovie.domain.utils.ResultState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -17,12 +18,24 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DetailsViewModel
-@Inject constructor
-    (val repository: Repository) : ViewModel() {
+@Inject constructor(
+    private val movieRepository: MovieRepository,
+    private val tvShowRepository: TvShowRepository,
+    private val userRepository: UserRepository
+) : ViewModel() {
 
     private val _viewState = MutableLiveData<ResultState>()
     val viewState: LiveData<ResultState>
         get() = _viewState
+
+    private val _isFavorite = MutableLiveData<Boolean>()
+    val isFavorite: LiveData<Boolean>
+        get() = _isFavorite
+
+    private val _isRated = MutableLiveData<Boolean>()
+    val isRated: LiveData<Boolean>
+        get() = _isRated
+
 
     private val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
         _viewState.postValue(ResultState.Failure(throwable.message))
@@ -33,8 +46,8 @@ class DetailsViewModel
         viewModelScope.launch(exceptionHandler) {
             _viewState.value = ResultState.Loading
             if (mediaType == MOVIE_TYPE) {
-                val details = async { repository.getMovieDetails(mediaID) }
-                val listCast = async { repository.getMovieCredits(mediaID) }
+                val details = async { movieRepository.getMovieDetails(mediaID) }
+                val listCast = async { movieRepository.getMovieCredits(mediaID) }
                 _viewState.postValue(
                     ResultState.Success(
                         details = details.await(),
@@ -42,8 +55,8 @@ class DetailsViewModel
                     )
                 )
             } else {
-                val details = async { repository.getTvDetails(mediaID) }
-                val listCast = async { repository.getTvCredits(mediaID) }
+                val details = async { tvShowRepository.getTvDetails(mediaID) }
+                val listCast = async { tvShowRepository.getTvCredits(mediaID) }
                 _viewState.postValue(
                     ResultState.Success(
                         details = details.await(),
@@ -54,20 +67,28 @@ class DetailsViewModel
         }
     }
 
-    fun markFavorite(mediaType: String, media_id: Int) {
-        Timber.d("markFavorite ID: $media_id ")
+    fun markFavorite(mediaType: String, mediaID: Int) {
+        Timber.d("markFavorite ID: $mediaID ")
+        viewModelScope.launch(exceptionHandler) {
+            val response = userRepository.markFavorite(mediaType, mediaID)
+            checkIsFavoriteAndRated(mediaID)
+            Timber.d(response?.statusMessage)
+        }
+    }
+
+    fun markRated(mediaType: String, mediaID: Int, value: String) {
+        Timber.d("markRated ID: $mediaID ")
+        viewModelScope.launch(exceptionHandler) {
+            val response = userRepository.markRated(mediaType, mediaID,value)
+            _isRated.postValue(true)
+            Timber.d(response?.statusMessage)
+        }
+    }
+
+    fun checkIsFavoriteAndRated(mediaID :Int){
         viewModelScope.launch {
-            try {
-                val favoriteCredentials = FavoriteCredentials(
-                    mediaType = mediaType,
-                    mediaId = media_id,
-                    favorite = true
-                )
-                val response = repository.markFavorite(favoriteCredentials)
-                Timber.d(response?.statusMessage)
-            } catch (e: Throwable) {
-                _viewState.postValue(ResultState.Failure(e.message))
-            }
+            _isFavorite.postValue(userRepository.checkIsFavorite(mediaID))
+            _isRated.postValue(userRepository.checkIsRated(mediaID))
         }
     }
 }

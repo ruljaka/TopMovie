@@ -35,8 +35,10 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
     fun setupToolbar(toolBar: Toolbar){
         setSupportActionBar(toolBar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true);
-        supportActionBar?.setDisplayShowHomeEnabled(true);
+        //supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_arrow_back)
+        //supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_arrow_back);
+        //supportActionBar?.setDisplayHomeAsUpEnabled(true);
+        //supportActionBar?.setDisplayShowHomeEnabled(true);
         supportActionBar?.setDisplayShowTitleEnabled(false)
         appBarConfiguration = AppBarConfiguration(setOf(
             R.id.movies_fragment,
@@ -51,7 +53,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
     }
 
     private fun setUpNavigation() {
-        binding.bttmNav.itemIconTintList = null
+        //binding.bttmNav.itemIconTintList = null
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navController = navHostFragment.navController

@@ -124,6 +124,7 @@
                 tools:text="Action, Adventure, Fantasy" />
 
             <LinearLayout
+                android:id="@+id/linearLayout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layout_constraintBottom_toTopOf="@id/textView_details_vote_average"
@@ -164,8 +165,8 @@
                         android:id="@+id/imageButton_details_favorite"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
-                        android:src="@drawable/ic_favorite_unselected"
-                        android:contentDescription="button_mark_favorite" />
+                        android:contentDescription="button_mark_favorite"
+                        tools:src="@drawable/ic_favorite_unselected" />
 
                 </androidx.cardview.widget.CardView>
 
@@ -203,47 +204,20 @@
                 app:layout_constraintStart_toEndOf="@+id/cardView_details_poster"
                 tools:text="9.8" />
 
-            <androidx.appcompat.widget.LinearLayoutCompat
+            <com.ruslangrigoriev.topmovie.domain.utils.RatingBarFix
+                android:id="@+id/rating_bar"
+                style="@style/CustomRatingBar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-
-                android:orientation="horizontal"
+                android:numStars="5"
+                android:rating="3.0"
+                android:progressTint="@color/red"
+                android:stepSize="0.5"
                 app:layout_constraintBottom_toBottomOf="@+id/textView_details_vote_average"
+                app:layout_constraintEnd_toEndOf="@+id/linearLayout"
                 app:layout_constraintStart_toEndOf="@+id/textView_details_vote_average"
-                app:layout_constraintTop_toTopOf="@+id/textView_details_vote_average">
+                app:layout_constraintTop_toTopOf="@+id/textView_details_vote_average"/>
 
-                <ImageView
-                    android:id="@+id/details_rate1"
-                    android:layout_width="25dp"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_star_grey" />
-
-                <ImageView
-                    android:id="@+id/details_rate2"
-                    android:layout_width="25dp"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_star_grey" />
-
-                <ImageView
-                    android:id="@+id/details_rate3"
-                    android:layout_width="25dp"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_star_grey" />
-
-                <ImageView
-                    android:id="@+id/details_rate4"
-                    android:layout_width="25dp"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_star_grey" />
-
-                <ImageView
-                    android:id="@+id/details_rate5"
-                    android:layout_width="25dp"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_star_grey" />
-
-            </androidx.appcompat.widget.LinearLayoutCompat>
 
             <TextView
                 android:id="@+id/textView_details_overview"

@@ -8,6 +8,9 @@
         <entry key="app/src/main/res/drawable-night/ic_settings.xml" value="0.303515625" />
         <entry key="app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.2898148148148148" />
         <entry key="app/src/main/res/drawable/circular.xml" value="0.37538461538461537" />
+        <entry key="app/src/main/res/drawable/custom_ratingbar.xml" value="0.2875" />
+        <entry key="app/src/main/res/drawable/custom_ratingbar_empty.xml" value="0.2875" />
+        <entry key="app/src/main/res/drawable/custom_ratingbar_filled.xml" value="0.2875" />
         <entry key="app/src/main/res/drawable/darkCircle.xml" value="0.37538461538461537" />
         <entry key="app/src/main/res/drawable/dark_circle.xml" value="0.37538461538461537" />
         <entry key="app/src/main/res/drawable/gradient_first.xml" value="0.26296296296296295" />
@@ -33,6 +36,7 @@
         <entry key="app/src/main/res/drawable/ic_settings_night.xml" value="0.303515625" />
         <entry key="app/src/main/res/drawable/ic_share.xml" value="0.19446254071661237" />
         <entry key="app/src/main/res/drawable/ic_splash_screen.xml" value="0.26296296296296295" />
+        <entry key="app/src/main/res/drawable/ic_star_grey.xml" value="0.2875" />
         <entry key="app/src/main/res/drawable/ic_star_red.xml" value="0.19638157894736843" />
         <entry key="app/src/main/res/drawable/item_bottom_nav_back.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/item_gradient.xml" value="0.19638157894736843" />
@@ -68,12 +72,13 @@
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.3651041666666667" />
         <entry key="app/src/main/res/layout/fragment_login.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_main.xml" value="0.3885416666666667" />
+        <entry key="app/src/main/res/layout/fragment_more.xml" value="0.29140625" />
         <entry key="app/src/main/res/layout/fragment_movie.xml" value="0.2203125" />
         <entry key="app/src/main/res/layout/fragment_movies.xml" value="0.1912162162162162" />
         <entry key="app/src/main/res/layout/fragment_movies_new.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_person.xml" value="0.24421052631578946" />
         <entry key="app/src/main/res/layout/fragment_profile.xml" value="0.22" />
-        <entry key="app/src/main/res/layout/fragment_search.xml" value="0.18618421052631579" />
+        <entry key="app/src/main/res/layout/fragment_search.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_second.xml" value="0.18929765886287625" />
         <entry key="app/src/main/res/layout/fragment_settings.xml" value="0.275390625" />
         <entry key="app/src/main/res/layout/fragment_splash.xml" value="0.25" />
@@ -87,6 +92,7 @@
         <entry key="app/src/main/res/layout/home_fragment.xml" value="0.33" />
         <entry key="app/src/main/res/layout/item_cast.xml" value="0.335" />
         <entry key="app/src/main/res/layout/item_favorite.xml" value="0.3453703703703704" />
+        <entry key="app/src/main/res/layout/item_media.xml" value="0.20555555555555555" />
         <entry key="app/src/main/res/layout/item_more.xml" value="0.335" />
         <entry key="app/src/main/res/layout/item_movie.xml" value="0.20208676604138612" />
         <entry key="app/src/main/res/layout/item_movie_new.xml" value="0.25" />
@@ -112,6 +118,50 @@
         <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.4046875" />
         <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.4046875" />
       </map>
+    </option>
+  </component>
+  <component name="NullableNotNullManager">
+    <option name="myDefaultNullable" value="androidx.annotation.Nullable" />
+    <option name="myDefaultNotNull" value="androidx.annotation.NonNull" />
+    <option name="myNullables">
+      <value>
+        <list size="14">
+          <item index="0" class="java.lang.String" itemvalue="org.jetbrains.annotations.Nullable" />
+          <item index="1" class="java.lang.String" itemvalue="edu.umd.cs.findbugs.annotations.Nullable" />
+          <item index="2" class="java.lang.String" itemvalue="android.support.annotation.Nullable" />
+          <item index="3" class="java.lang.String" itemvalue="androidx.annotation.Nullable" />
+          <item index="4" class="java.lang.String" itemvalue="androidx.annotation.RecentlyNullable" />
+          <item index="5" class="java.lang.String" itemvalue="com.android.annotations.Nullable" />
+          <item index="6" class="java.lang.String" itemvalue="javax.annotation.Nullable" />
+          <item index="7" class="java.lang.String" itemvalue="javax.annotation.CheckForNull" />
+          <item index="8" class="java.lang.String" itemvalue="org.checkerframework.checker.nullness.qual.Nullable" />
+          <item index="9" class="java.lang.String" itemvalue="org.checkerframework.checker.nullness.compatqual.NullableDecl" />
+          <item index="10" class="java.lang.String" itemvalue="org.checkerframework.checker.nullness.compatqual.NullableType" />
+          <item index="11" class="java.lang.String" itemvalue="org.eclipse.jdt.annotation.Nullable" />
+          <item index="12" class="java.lang.String" itemvalue="io.reactivex.annotations.Nullable" />
+          <item index="13" class="java.lang.String" itemvalue="io.reactivex.rxjava3.annotations.Nullable" />
+        </list>
+      </value>
+    </option>
+    <option name="myNotNulls">
+      <value>
+        <list size="14">
+          <item index="0" class="java.lang.String" itemvalue="org.jetbrains.annotations.NotNull" />
+          <item index="1" class="java.lang.String" itemvalue="edu.umd.cs.findbugs.annotations.NonNull" />
+          <item index="2" class="java.lang.String" itemvalue="android.support.annotation.NonNull" />
+          <item index="3" class="java.lang.String" itemvalue="androidx.annotation.NonNull" />
+          <item index="4" class="java.lang.String" itemvalue="androidx.annotation.RecentlyNonNull" />
+          <item index="5" class="java.lang.String" itemvalue="com.android.annotations.NonNull" />
+          <item index="6" class="java.lang.String" itemvalue="javax.annotation.Nonnull" />
+          <item index="7" class="java.lang.String" itemvalue="org.checkerframework.checker.nullness.qual.NonNull" />
+          <item index="8" class="java.lang.String" itemvalue="org.checkerframework.checker.nullness.compatqual.NonNullDecl" />
+          <item index="9" class="java.lang.String" itemvalue="org.checkerframework.checker.nullness.compatqual.NonNullType" />
+          <item index="10" class="java.lang.String" itemvalue="org.eclipse.jdt.annotation.NonNull" />
+          <item index="11" class="java.lang.String" itemvalue="io.reactivex.annotations.NonNull" />
+          <item index="12" class="java.lang.String" itemvalue="io.reactivex.rxjava3.annotations.NonNull" />
+          <item index="13" class="java.lang.String" itemvalue="lombok.NonNull" />
+        </list>
+      </value>
     </option>
   </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_13" project-jdk-name="1.8" project-jdk-type="JavaSDK">

@@ -1,8 +1,7 @@
 package com.ruslangrigoriev.topmovie.presentation.profile.settings
 
 import androidx.lifecycle.ViewModel
-import com.ruslangrigoriev.topmovie.data.repository.AuthRepository
-import com.ruslangrigoriev.topmovie.data.repository.AuthRepositoryImpl
+import com.ruslangrigoriev.topmovie.domain.repository.AuthRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 @HiltViewModel

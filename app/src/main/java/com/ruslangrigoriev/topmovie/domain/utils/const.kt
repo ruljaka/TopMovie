@@ -12,31 +12,21 @@ const val IMAGE_URL_AVATAR: String = "https://www.themoviedb.org/t/p/w300_and_h3
 const val IMAGE_URL_GRAVATAR: String = "https://secure.gravatar.com/avatar/"
 
 const val PERSON_ID: String = "person_id"
-const val MOVIE_ID: String = "movie_id"
-const val TV_ID: String = "tv_id"
-
 const val MEDIA_ID: String = "media_id"
+
 const val MEDIA_TYPE: String = "media_type"
-const val MOVIE_TYPE: String = "movie"
-const val TV_TYPE: String = "tv"
+const val MOVIE_TYPE: String = "MOVIE"
+const val TV_TYPE: String = "TV"
 
-
-
-
-const val VIDEO_KEY: String = "video_key"
-const val VIDEO_PATH: String = "https://www.youtube.com/watch?v="
-const val YOUTUBE_API_KEY = "AIzaSyAXwVXAQQoSwXLB5GErbLkJPxml1Jf9Kpc"
-
+const val MORE_TYPE: String = "more_type"
+const val MORE_POPULAR_TYPE: String = "POPULAR"
+const val MORE_NOW_TYPE: String = "NOW"
 
 const val QUERY: String = "query"
-
-const val FAVORITES: String = "favorites"
 const val SHARED_PREF: String = "sharedPref"
 const val OB_FINISHED: String = "OnBoarding_finished"
-
 const val REQUEST_TOKEN = "user_token"
 const val SESSION = "session"
 const val USER_ID = "user_id"
-
-const val MOVIE = "movie"
-const val TV = "tv"
+const val REGULAR_VIEW_TYPE = 0
+const val FOOTER_VIEW_TYPE = 1

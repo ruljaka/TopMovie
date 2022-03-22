@@ -9,6 +9,7 @@ import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.ruslangrigoriev.topmovie.R
 import com.ruslangrigoriev.topmovie.databinding.FragmentSettingsBinding
+import com.ruslangrigoriev.topmovie.presentation.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -18,6 +19,8 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        (requireActivity() as MainActivity).setupToolbar(binding.toolbarSettings.toolbar)
+        binding.toolbarSettings.toolbarTitle.text = "Settings"
 
         binding.buttonSettingsLogout.setOnClickListener {
             viewModel.authRepositoryImpl.logout()

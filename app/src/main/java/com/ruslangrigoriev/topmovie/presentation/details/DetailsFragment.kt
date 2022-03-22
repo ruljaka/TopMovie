@@ -18,13 +18,13 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.appbar.AppBarLayout
-import com.ruslangrigoriev.topmovie.presentation.MainActivity
 import com.ruslangrigoriev.topmovie.R
 import com.ruslangrigoriev.topmovie.databinding.FragmentDetailsNewBinding
-import com.ruslangrigoriev.topmovie.domain.model.credits.Cast
-import com.ruslangrigoriev.topmovie.domain.model.media.Media
+import com.ruslangrigoriev.topmovie.data.api.dto.credits.Cast
+import com.ruslangrigoriev.topmovie.domain.model.Media
 import com.ruslangrigoriev.topmovie.domain.utils.*
 import com.ruslangrigoriev.topmovie.domain.utils.ResultState.*
+import com.ruslangrigoriev.topmovie.presentation.MainActivity
 import com.ruslangrigoriev.topmovie.presentation.adapters.BaseRecyclerAdapter
 import com.ruslangrigoriev.topmovie.presentation.adapters.BindingInterface
 import com.ruslangrigoriev.topmovie.presentation.video.VideoActivity
@@ -51,6 +51,7 @@ class DetailsFragment : Fragment(R.layout.fragment_details_new) {
     }
 
     private fun loadData() {
+        viewModel.checkIsFavoriteAndRated(mediaID)
         if (viewModel.viewState.value == null
             || viewModel.viewState.value is Failure
         ) {
@@ -72,6 +73,26 @@ class DetailsFragment : Fragment(R.layout.fragment_details_new) {
                     showLoading(false)
                     bindUI(it)
                 }
+            }
+        })
+        viewModel.isFavorite.observe(viewLifecycleOwner, {
+            when (it) {
+                true ->
+                    binding.imageButtonDetailsFavorite
+                        .setImageResource(R.drawable.ic_favorite_selected)
+                false ->
+                    binding.imageButtonDetailsFavorite
+                        .setImageResource(R.drawable.ic_favorite_unselected)
+            }
+        })
+        viewModel.isRated.observe(viewLifecycleOwner, {
+            when (it) {
+                true ->
+                    binding.imageButtonDetailsLike
+                        .setImageResource(R.drawable.ic_like_selected)
+                false ->
+                    binding.imageButtonDetailsLike
+                        .setImageResource(R.drawable.ic_like_unselected)
             }
         })
     }
@@ -113,21 +134,22 @@ class DetailsFragment : Fragment(R.layout.fragment_details_new) {
 
     private fun setupRate(media: Media) {
         val vote = media.voteAverage
-        if (vote > 0.0) {
-            binding.detailsRate1.setImageResource(R.drawable.ic_star_red)
-        }
-        if (vote > 3.0) {
-            binding.detailsRate2.setImageResource(R.drawable.ic_star_red)
-        }
-        if (vote > 6.0) {
-            binding.detailsRate3.setImageResource(R.drawable.ic_star_red)
-        }
-        if (vote > 7.0) {
-            binding.detailsRate4.setImageResource(R.drawable.ic_star_red)
-        }
-        if (vote > 9.0) {
-            binding.detailsRate5.setImageResource(R.drawable.ic_star_red)
-        }
+        binding.ratingBar.progress = vote.toInt()
+//        if (vote > 0.0) {
+//            binding.detailsRate1.setImageResource(R.drawable.ic_star_red)
+//        }
+//        if (vote > 3.0) {
+//            binding.detailsRate2.setImageResource(R.drawable.ic_star_red)
+//        }
+//        if (vote > 6.0) {
+//            binding.detailsRate3.setImageResource(R.drawable.ic_star_red)
+//        }
+//        if (vote > 7.0) {
+//            binding.detailsRate4.setImageResource(R.drawable.ic_star_red)
+//        }
+//        if (vote > 9.0) {
+//            binding.detailsRate5.setImageResource(R.drawable.ic_star_red)
+//        }
     }
 
     private fun setCastRecView() {
@@ -188,6 +210,13 @@ class DetailsFragment : Fragment(R.layout.fragment_details_new) {
             viewModel.markFavorite(mediaType, mediaID)
         }
     }
+
+    private fun setBtnRate() {
+        binding.imageButtonDetailsLike.setOnClickListener {
+            //TODO
+        }
+    }
+
 
     private fun setupPlayBtn() {
         binding.imageButtonDetailsPlay.setOnClickListener {

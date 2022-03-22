@@ -2,58 +2,49 @@ package com.ruslangrigoriev.topmovie.data.paging
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.ruslangrigoriev.topmovie.data.repository.Repository
-import com.ruslangrigoriev.topmovie.domain.model.media.Media
-import com.ruslangrigoriev.topmovie.domain.utils.MOVIE_TYPE
-import com.ruslangrigoriev.topmovie.domain.utils.TV_TYPE
+import com.ruslangrigoriev.topmovie.data.api.ApiService
+import com.ruslangrigoriev.topmovie.data.api.dto.movies.MovieResponse
+import com.ruslangrigoriev.topmovie.domain.model.Media
+import com.ruslangrigoriev.topmovie.domain.utils.MoreType
+import com.ruslangrigoriev.topmovie.domain.utils.mapMovieToMedia
+import retrofit2.Response
 import timber.log.Timber
 
 class MoviePagingSource(
-    private val query: String = "",
-    private val type: String,
-    private val repository: Repository,
+    private val apiService: ApiService,
+    private val type: MoreType
 ) : PagingSource<Int, Media>() {
 
-    private lateinit var responseData: MutableList<Media>
+    private lateinit var responseData: List<Media>
 
     override fun getRefreshKey(state: PagingState<Int, Media>): Int? {
-        return null
+        return state.anchorPosition?.let { anchorPosition ->
+            state.closestPageToPosition(anchorPosition)?.prevKey?.plus(1)
+                ?: state.closestPageToPosition(anchorPosition)?.nextKey?.minus(1)
+        }
     }
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Media> {
         return try {
             val currentPage = params.key ?: 1
-            when (type) {
-                (MOVIE_TYPE) -> {
-                    val data = repository.searchMoviesPaged(
-                        query = query, page = currentPage
-                    )
-                    responseData = data.toMutableList()
-                    Timber.d(" page $currentPage responseData = $responseData")
+            val response: Response<MovieResponse> = when (type) {
+                MoreType.NOW -> {
+                    apiService.getMoviesNow(currentPage)
                 }
-                (TV_TYPE) -> {
-                    val data = repository.searchTvPaged(
-                        query = query, page = currentPage
-                    )
-                    responseData = data.toMutableList()
+                MoreType.POPULAR -> {
+                    apiService.getMoviesPopular(currentPage)
                 }
-//                (PagingType.MOVIE_FLOW) -> {
-//                    val data = repository.getMoviesTrending(currentPage)
-//                    responseData = data.toMutableList()
-//                    Timber.d(TAG, " page $currentPage responseData = $responseData")
-//                }
-//                else -> {
-//                    //TODO
-//                }
             }
+            responseData = mapMovieToMedia(response.body()?.movies)
+            Timber.d(" page $currentPage responseData = $responseData")
             LoadResult.Page(
                 data = responseData,
-                prevKey = if (currentPage == 1) null else -1,
-                nextKey = currentPage.plus(1)
-                //nextKey = if (responseData.size < 20) null else currentPage.plus(1)
+                prevKey = if (currentPage == 1) null else currentPage.minus(1),
+                nextKey = if (responseData.isEmpty()) null else currentPage.plus(1)
             )
         } catch (e: Throwable) {
             LoadResult.Error(e)
         }
     }
+
 }

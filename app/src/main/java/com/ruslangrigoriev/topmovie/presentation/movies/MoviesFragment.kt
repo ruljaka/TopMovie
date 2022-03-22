@@ -13,10 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.ruslangrigoriev.topmovie.R
 import com.ruslangrigoriev.topmovie.databinding.FragmentMoviesBinding
-import com.ruslangrigoriev.topmovie.domain.utils.MEDIA_ID
-import com.ruslangrigoriev.topmovie.domain.utils.MEDIA_TYPE
-import com.ruslangrigoriev.topmovie.domain.utils.MOVIE_TYPE
-import com.ruslangrigoriev.topmovie.domain.utils.QUERY
+import com.ruslangrigoriev.topmovie.domain.utils.*
 import com.ruslangrigoriev.topmovie.domain.utils.ResultState.*
 import com.ruslangrigoriev.topmovie.presentation.MainActivity
 import com.ruslangrigoriev.topmovie.presentation.adapters.MainTabsRecyclerAdapter
@@ -72,7 +69,8 @@ class MoviesFragment : Fragment(R.layout.fragment_movies) {
 
     private fun bindUI(it: Success) {
         it.listNow?.let {
-            nowRecyclerAdapter = MainTabsRecyclerAdapter(it) { id -> onListItemClick(id) }
+            nowRecyclerAdapter =
+                MainTabsRecyclerAdapter(it) { id -> onListItemClick(id, MoreType.NOW) }
             binding.recyclerViewNow.layoutManager =
                 LinearLayoutManager(
                     activity,
@@ -82,7 +80,8 @@ class MoviesFragment : Fragment(R.layout.fragment_movies) {
             binding.recyclerViewNow.adapter = nowRecyclerAdapter
         }
         it.listPopular?.let {
-            popularRecyclerAdapter = MainTabsRecyclerAdapter(it) { id -> onListItemClick(id) }
+            popularRecyclerAdapter =
+                MainTabsRecyclerAdapter(it) { id -> onListItemClick(id, MoreType.POPULAR) }
             binding.recyclerViewPopular.layoutManager =
                 GridLayoutManager(
                     activity,
@@ -128,11 +127,18 @@ class MoviesFragment : Fragment(R.layout.fragment_movies) {
         }
     }
 
-    private fun onListItemClick(id: Int) {
-        val bundle = Bundle()
-        bundle.putInt(MEDIA_ID, id)
-        bundle.putString(MEDIA_TYPE, MOVIE_TYPE)
-        findNavController().navigate(R.id.action_movies_fragment_to_details, bundle)
+    private fun onListItemClick(id: Int, moreType: MoreType) {
+        if (id == 0) {
+            val bundle = Bundle()
+            bundle.putString(MEDIA_TYPE, MOVIE_TYPE)
+            bundle.putString(MORE_TYPE, moreType.name)
+            findNavController().navigate(R.id.action_movies_fragment_to_more, bundle)
+        } else {
+            val bundle = Bundle()
+            bundle.putInt(MEDIA_ID, id)
+            bundle.putString(MEDIA_TYPE, MOVIE_TYPE)
+            findNavController().navigate(R.id.action_movies_fragment_to_details, bundle)
+        }
     }
 
     private fun showToast(message: String?) {

@@ -10,11 +10,18 @@ const val IMAGE_URL_W780: String = "https://image.tmdb.org/t/p/w780"
 const val IMAGE_URL_ORIGINAL: String = "https://image.tmdb.org/t/p/original"
 const val IMAGE_URL_AVATAR: String = "https://www.themoviedb.org/t/p/w300_and_h300_face/"
 const val IMAGE_URL_GRAVATAR: String = "https://secure.gravatar.com/avatar/"
+
 const val PERSON_ID: String = "person_id"
 const val MEDIA_ID: String = "media_id"
+
 const val MEDIA_TYPE: String = "media_type"
-const val MOVIE_TYPE: String = "movie"
-const val TV_TYPE: String = "tv"
+const val MOVIE_TYPE: String = "MOVIE"
+const val TV_TYPE: String = "TV"
+
+const val MORE_TYPE: String = "more_type"
+const val MORE_POPULAR_TYPE: String = "POPULAR"
+const val MORE_NOW_TYPE: String = "NOW"
+
 const val QUERY: String = "query"
 const val SHARED_PREF: String = "sharedPref"
 const val OB_FINISHED: String = "OnBoarding_finished"

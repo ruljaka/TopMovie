@@ -14,11 +14,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.ruslangrigoriev.topmovie.R
 import com.ruslangrigoriev.topmovie.databinding.FragmentTvBinding
-import com.ruslangrigoriev.topmovie.domain.utils.MEDIA_ID
-import com.ruslangrigoriev.topmovie.domain.utils.MEDIA_TYPE
-import com.ruslangrigoriev.topmovie.domain.utils.QUERY
+import com.ruslangrigoriev.topmovie.domain.utils.*
 import com.ruslangrigoriev.topmovie.domain.utils.ResultState.*
-import com.ruslangrigoriev.topmovie.domain.utils.TV_TYPE
 import com.ruslangrigoriev.topmovie.presentation.MainActivity
 import com.ruslangrigoriev.topmovie.presentation.adapters.MainTabsRecyclerAdapter
 import dagger.hilt.android.AndroidEntryPoint
@@ -32,13 +29,13 @@ class TvFragment : Fragment(R.layout.fragment_tv) {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
+        (requireActivity() as MainActivity).setupToolbar(binding.toolbarTv.toolbar)
+        binding.toolbarTv.toolbarTitle.text = "TV"
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        (requireActivity() as MainActivity).setupToolbar(binding.toolbarTv.toolbar)
-        binding.toolbarTv.toolbarTitle.text = "TV"
+
         setupSearch()
         subscribeUi()
         loadData()
@@ -72,7 +69,8 @@ class TvFragment : Fragment(R.layout.fragment_tv) {
 
     private fun bindUI(it: Success) {
         it.listNow?.let {
-            nowRecyclerAdapter = MainTabsRecyclerAdapter(it) { id -> onListItemClick(id) }
+            nowRecyclerAdapter =
+                MainTabsRecyclerAdapter(it) { id -> onListItemClick(id, MoreType.NOW) }
             binding.recyclerViewTvNow.apply {
                 layoutManager =
                     LinearLayoutManager(
@@ -84,7 +82,8 @@ class TvFragment : Fragment(R.layout.fragment_tv) {
             }
         }
         it.listPopular?.let {
-            popularRecyclerAdapter = MainTabsRecyclerAdapter(it) { id -> onListItemClick(id) }
+            popularRecyclerAdapter =
+                MainTabsRecyclerAdapter(it) { id -> onListItemClick(id, MoreType.POPULAR) }
             binding.recyclerViewTvPopular.apply {
                 layoutManager =
                     GridLayoutManager(
@@ -133,11 +132,18 @@ class TvFragment : Fragment(R.layout.fragment_tv) {
         }
     }
 
-    private fun onListItemClick(id: Int) {
-        val bundle = Bundle()
-        bundle.putInt(MEDIA_ID, id)
-        bundle.putString(MEDIA_TYPE, TV_TYPE)
-        findNavController().navigate(R.id.action_tv_fragment_to_details, bundle)
+    private fun onListItemClick(id: Int, moreType: MoreType) {
+        if (id == 0) {
+            val bundle = Bundle()
+            bundle.putString(MEDIA_TYPE, TV_TYPE)
+            bundle.putString(MORE_TYPE, moreType.name)
+            findNavController().navigate(R.id.action_tv_fragment_to_more, bundle)
+        } else {
+            val bundle = Bundle()
+            bundle.putInt(MEDIA_ID, id)
+            bundle.putString(MEDIA_TYPE, TV_TYPE)
+            findNavController().navigate(R.id.action_tv_fragment_to_details, bundle)
+        }
     }
 
     private fun showToast(message: String?) {

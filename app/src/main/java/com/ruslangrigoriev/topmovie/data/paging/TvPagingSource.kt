@@ -4,13 +4,15 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.ruslangrigoriev.topmovie.data.api.ApiService
 import com.ruslangrigoriev.topmovie.data.api.dto.movies.MovieResponse
+import com.ruslangrigoriev.topmovie.data.api.dto.tv.TvResponse
 import com.ruslangrigoriev.topmovie.domain.model.Media
 import com.ruslangrigoriev.topmovie.domain.utils.MoreType
 import com.ruslangrigoriev.topmovie.domain.utils.mapMovieToMedia
+import com.ruslangrigoriev.topmovie.domain.utils.mapTvShowToMedia
 import retrofit2.Response
 import timber.log.Timber
 
-class MoviePagingSource(
+class TvPagingSource(
     private val apiService: ApiService,
     private val type: MoreType
 ) : PagingSource<Int, Media>() {
@@ -27,15 +29,15 @@ class MoviePagingSource(
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Media> {
         return try {
             val currentPage = params.key ?: 1
-            val response: Response<MovieResponse> = when (type) {
+            val response: Response<TvResponse> = when (type) {
                 MoreType.NOW -> {
-                    apiService.getMoviesNow(currentPage)
+                    apiService.getTVNow(currentPage)
                 }
                 MoreType.POPULAR -> {
-                    apiService.getMoviesPopular(currentPage)
+                    apiService.getTvPopular(currentPage)
                 }
             }
-            responseData = mapMovieToMedia(response.body()?.movies)
+            responseData = mapTvShowToMedia(response.body()?.tvShows)
             Timber.d(" page $currentPage responseData = $responseData")
             LoadResult.Page(
                 data = responseData,

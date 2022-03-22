@@ -49,10 +49,11 @@ class MainTabsRecyclerAdapter(
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind() {
-
+            binding.root.setOnClickListener{
+                onItemClicked(0)
+            }
         }
     }
-
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {

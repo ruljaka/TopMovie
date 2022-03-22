@@ -25,6 +25,13 @@
             app:exitAnim="@anim/fade_out"
             app:popEnterAnim="@anim/fade_in"
             app:popExitAnim="@anim/grow_fade_out_center" />
+        <action
+            android:id="@+id/action_movies_fragment_to_more"
+            app:destination="@id/more"
+            app:enterAnim="@anim/grow_fade_in_center"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/grow_fade_out_center" />
     </fragment>
     <fragment
         android:id="@+id/searchFragment"
@@ -40,4 +47,5 @@
             app:popExitAnim="@anim/grow_fade_out_center" />
     </fragment>
     <include app:graph="@navigation/details" />
+    <include app:graph="@navigation/more" />
 </navigation>

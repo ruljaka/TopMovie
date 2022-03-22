@@ -6,7 +6,7 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.ruslangrigoriev.topmovie.data.paging.MoviePagingSource
+import com.ruslangrigoriev.topmovie.data.paging.SearchPagingSource
 import com.ruslangrigoriev.topmovie.domain.repository.MovieRepository
 import com.ruslangrigoriev.topmovie.domain.repository.TvShowRepository
 import com.ruslangrigoriev.topmovie.domain.model.Media
@@ -34,7 +34,7 @@ class SearchViewModel
     fun getSearchMoviesFlowData(type: String): Flow<PagingData<Media>> =
         queryFlow.flatMapLatest { query ->
             Pager(PagingConfig(pageSize = 20)) {
-                MoviePagingSource(
+                SearchPagingSource(
                     query = query,
                     type = type,
                     movieRepository = movieRepository,

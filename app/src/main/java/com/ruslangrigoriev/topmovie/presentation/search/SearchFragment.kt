@@ -29,11 +29,14 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
     private val mediaType: String by stringArgs(MEDIA_TYPE)
     private lateinit var mediaPagingAdapter: MediaPagingAdapter
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
         (requireActivity() as MainActivity).setupToolbar(binding.toolbarSearch.toolbar)
         binding.toolbarSearch.toolbarTitle.text = "Search"
+    }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         setMovieRecView()
         setupSearch()
         subscribeQuerySearch()
@@ -83,21 +86,21 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         binding.toolbarSearch.searchView.visibility = View.VISIBLE
         binding.toolbarSearch.searchView.setOnQueryTextListener(
             object : SearchView.OnQueryTextListener,
-            OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String): Boolean {
-                binding.toolbarSearch.searchView.clearFocus()
-                if (TextUtils.isEmpty(query)) {
-                    Toast.makeText(activity, "Enter your request", Toast.LENGTH_SHORT).show()
-                } else {
-                    viewModel.setQuery(query)
+                OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String): Boolean {
+                    binding.toolbarSearch.searchView.clearFocus()
+                    if (TextUtils.isEmpty(query)) {
+                        Toast.makeText(activity, "Enter your request", Toast.LENGTH_SHORT).show()
+                    } else {
+                        viewModel.setQuery(query)
+                    }
+                    return false
                 }
-                return false
-            }
 
-            override fun onQueryTextChange(newText: String?): Boolean {
-                return false
-            }
-        })
+                override fun onQueryTextChange(newText: String?): Boolean {
+                    return false
+                }
+            })
     }
 
     private fun onListItemClick(id: Int) {

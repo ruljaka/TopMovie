@@ -20,10 +20,6 @@ import javax.inject.Inject
 class MovieViewModel @Inject constructor
     (private val movieRepository: MovieRepository) : ViewModel() {
 
-    private lateinit var _trendingFlowData: Flow<PagingData<Media>>
-    val trendingFlowData: Flow<PagingData<Media>>
-        get() = _trendingFlowData
-
     private val _viewState = MutableLiveData<ResultState>()
     val viewState: LiveData<ResultState>
         get() = _viewState
@@ -31,13 +27,6 @@ class MovieViewModel @Inject constructor
     private val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
         _viewState.postValue(ResultState.Failure(throwable.message))
     }
-
-//    private fun fetchMoviesTrending() {
-//        _trendingFlowData =
-//            Pager(PagingConfig(pageSize = 20)) {
-//                MoviePagingSource(repository = repository, type = PagingType.MOVIE_FLOW)
-//            }.flow.cachedIn(viewModelScope)
-//    }
 
     fun fetchMoviesData() {
         Timber.d("fetchMoviesData ")
@@ -51,7 +40,6 @@ class MovieViewModel @Inject constructor
                     listPopular = listPopular.await()
                 )
             )
-
         }
     }
 

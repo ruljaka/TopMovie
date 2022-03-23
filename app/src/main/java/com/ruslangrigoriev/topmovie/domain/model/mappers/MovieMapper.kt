@@ -1,7 +1,7 @@
-package com.ruslangrigoriev.topmovie.domain.utils.mappers
+package com.ruslangrigoriev.topmovie.domain.model.mappers
 
-import com.ruslangrigoriev.topmovie.domain.model.Media
 import com.ruslangrigoriev.topmovie.data.api.dto.movies.Movie
+import com.ruslangrigoriev.topmovie.domain.model.Media
 import com.ruslangrigoriev.topmovie.domain.utils.MOVIE_TYPE
 
 object MovieMapper : Mapper<Movie, Media> {
@@ -11,8 +11,8 @@ object MovieMapper : Mapper<Movie, Media> {
             title = input.title,
             originalTitle = input.originalTitle,
             posterPath = input.posterPath,
-            backdropPath = input.posterPath,
-            genres= input.genres,
+            backdropPath = input.backdropPath,
+            genres = input.genres,
             overview = input.overview,
             popularity = input.popularity,
             releaseDate = input.releaseDate,
@@ -21,5 +21,4 @@ object MovieMapper : Mapper<Movie, Media> {
             mediaType = MOVIE_TYPE
         )
     }
-
 }

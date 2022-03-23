@@ -18,6 +18,7 @@
         <entry key="app/src/main/res/drawable/ic_arrow_next.xml" value="0.1875" />
         <entry key="app/src/main/res/drawable/ic_comment_selected.xml" value="0.19446254071661237" />
         <entry key="app/src/main/res/drawable/ic_comment_unselected.xml" value="0.19446254071661237" />
+        <entry key="app/src/main/res/drawable/ic_favorite.xml" value="0.20390625" />
         <entry key="app/src/main/res/drawable/ic_favorite_selected.xml" value="0.19446254071661237" />
         <entry key="app/src/main/res/drawable/ic_favorite_unselected.xml" value="0.19446254071661237" />
         <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.4046875" />
@@ -42,6 +43,7 @@
         <entry key="app/src/main/res/drawable/item_gradient.xml" value="0.19638157894736843" />
         <entry key="app/src/main/res/drawable/item_gradient_poster.xml" value="0.19638157894736843" />
         <entry key="app/src/main/res/drawable/item_gradient_poster_back.xml" value="0.19638157894736843" />
+        <entry key="app/src/main/res/drawable/item_more_background.xml" value="0.303515625" />
         <entry key="app/src/main/res/drawable/item_rate_background.xml" value="0.19446254071661237" />
         <entry key="app/src/main/res/drawable/item_selector.xml" value="0.3109375" />
         <entry key="app/src/main/res/drawable/movie_selector.xml" value="0.19375" />
@@ -52,6 +54,7 @@
         <entry key="app/src/main/res/drawable/round_corner.xml" value="0.3109375" />
         <entry key="app/src/main/res/drawable/round_corner_start_button.xml" value="0.19375" />
         <entry key="app/src/main/res/drawable/selector.xml" value="0.37538461538461537" />
+        <entry key="app/src/main/res/drawable/splash_bg.xml" value="0.303515625" />
         <entry key="app/src/main/res/drawable/toolbar_bg.xml" value="0.3" />
         <entry key="app/src/main/res/drawable/tv_selector.xml" value="0.30615384615384617" />
         <entry key="app/src/main/res/drawable/white_circle.xml" value="0.37538461538461537" />
@@ -62,6 +65,7 @@
         <entry key="app/src/main/res/layout/cast_item.xml" value="0.75" />
         <entry key="app/src/main/res/layout/content_splash_screen.xml" value="0.18888888888888888" />
         <entry key="app/src/main/res/layout/content_video.xml" value="0.18436482084690553" />
+        <entry key="app/src/main/res/layout/details.xml" value="0.29140625" />
         <entry key="app/src/main/res/layout/details_fragment.xml" value="0.5" />
         <entry key="app/src/main/res/layout/fragment_details.xml" value="0.22" />
         <entry key="app/src/main/res/layout/fragment_details_new.xml" value="0.25" />
@@ -78,6 +82,7 @@
         <entry key="app/src/main/res/layout/fragment_movies_new.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_person.xml" value="0.24421052631578946" />
         <entry key="app/src/main/res/layout/fragment_profile.xml" value="0.22" />
+        <entry key="app/src/main/res/layout/fragment_register.xml" value="0.29140625" />
         <entry key="app/src/main/res/layout/fragment_search.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_second.xml" value="0.18929765886287625" />
         <entry key="app/src/main/res/layout/fragment_settings.xml" value="0.275390625" />
@@ -92,7 +97,7 @@
         <entry key="app/src/main/res/layout/home_fragment.xml" value="0.33" />
         <entry key="app/src/main/res/layout/item_cast.xml" value="0.335" />
         <entry key="app/src/main/res/layout/item_favorite.xml" value="0.3453703703703704" />
-        <entry key="app/src/main/res/layout/item_media.xml" value="0.20555555555555555" />
+        <entry key="app/src/main/res/layout/item_media.xml" value="0.25" />
         <entry key="app/src/main/res/layout/item_more.xml" value="0.335" />
         <entry key="app/src/main/res/layout/item_movie.xml" value="0.20208676604138612" />
         <entry key="app/src/main/res/layout/item_movie_new.xml" value="0.25" />
@@ -106,6 +111,7 @@
         <entry key="app/src/main/res/layout/movielist_fragment.xml" value="0.3651041666666667" />
         <entry key="app/src/main/res/layout/person_cast_item.xml" value="0.3651041666666667" />
         <entry key="app/src/main/res/layout/person_fragment.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/progressbar.xml" value="0.1" />
         <entry key="app/src/main/res/layout/search_fragment.xml" value="0.5" />
         <entry key="app/src/main/res/layout/toolbar_details.xml" value="0.27684964200477324" />
         <entry key="app/src/main/res/layout/toolbar_movie_tv.xml" value="0.29140625" />

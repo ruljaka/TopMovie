@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -210,13 +209,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:numStars="5"
-                android:rating="3.0"
                 android:progressTint="@color/red"
+                android:rating="3.0"
                 android:stepSize="0.5"
                 app:layout_constraintBottom_toBottomOf="@+id/textView_details_vote_average"
                 app:layout_constraintEnd_toEndOf="@+id/linearLayout"
                 app:layout_constraintStart_toEndOf="@+id/textView_details_vote_average"
-                app:layout_constraintTop_toTopOf="@+id/textView_details_vote_average"/>
+                app:layout_constraintTop_toTopOf="@+id/textView_details_vote_average" />
 
 
             <TextView
@@ -260,18 +259,12 @@
 
     </androidx.core.widget.NestedScrollView>
 
-
-    <ProgressBar
+    <include
         android:id="@+id/progress_bar_details"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:indeterminateTint="?colorPrimary"
-        android:visibility="gone"
+        layout="@layout/progressbar"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

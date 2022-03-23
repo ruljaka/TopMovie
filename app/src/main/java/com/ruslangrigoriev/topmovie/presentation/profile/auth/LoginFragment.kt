@@ -1,4 +1,4 @@
-package com.ruslangrigoriev.topmovie.presentation.profile.login
+package com.ruslangrigoriev.topmovie.presentation.profile.auth
 
 import android.os.Bundle
 import android.view.View
@@ -57,6 +57,9 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                 } else {
                     showToast("Incorrect login or password")
                 }
+            }
+            buttonLoginRegister.setOnClickListener {
+                findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
             }
         }
     }

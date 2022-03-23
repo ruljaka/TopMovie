@@ -7,6 +7,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -38,11 +39,14 @@ class DetailsFragment : Fragment(R.layout.fragment_details_new) {
     private val viewModel: DetailsViewModel by viewModels()
     private lateinit var castRecAdapter: BaseRecyclerAdapter<Cast>
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
         (requireActivity() as MainActivity).setupToolbar(binding.toolbar)
         setHasOptionsMenu(true)
+    }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         setCastRecView()
         setupPlayBtn()
         subscribeUI()
@@ -135,21 +139,6 @@ class DetailsFragment : Fragment(R.layout.fragment_details_new) {
     private fun setupRate(media: Media) {
         val vote = media.voteAverage
         binding.ratingBar.progress = vote.toInt()
-//        if (vote > 0.0) {
-//            binding.detailsRate1.setImageResource(R.drawable.ic_star_red)
-//        }
-//        if (vote > 3.0) {
-//            binding.detailsRate2.setImageResource(R.drawable.ic_star_red)
-//        }
-//        if (vote > 6.0) {
-//            binding.detailsRate3.setImageResource(R.drawable.ic_star_red)
-//        }
-//        if (vote > 7.0) {
-//            binding.detailsRate4.setImageResource(R.drawable.ic_star_red)
-//        }
-//        if (vote > 9.0) {
-//            binding.detailsRate5.setImageResource(R.drawable.ic_star_red)
-//        }
     }
 
     private fun setCastRecView() {
@@ -191,9 +180,9 @@ class DetailsFragment : Fragment(R.layout.fragment_details_new) {
 
     private fun showLoading(loading: Boolean) {
         if (loading) {
-            binding.progressBarDetails.visibility = View.VISIBLE
+            binding.progressBarDetails.root.visibility = View.VISIBLE
         } else {
-            binding.progressBarDetails.visibility = View.GONE
+            binding.progressBarDetails.root.visibility = View.GONE
         }
     }
 

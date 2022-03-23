@@ -5,7 +5,7 @@
     style="@style/OverviewStyle"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".presentation.profile.login.LoginFragment">
+    tools:context=".presentation.profile.auth.LoginFragment">
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/textInputLayout_username"
@@ -69,7 +69,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="180dp"
-        android:indeterminateTint="?colorPrimary"
+        android:indeterminateTint="?colorPrimaryVariant"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"

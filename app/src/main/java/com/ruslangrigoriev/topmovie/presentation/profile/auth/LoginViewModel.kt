@@ -1,4 +1,4 @@
-package com.ruslangrigoriev.topmovie.presentation.profile.login
+package com.ruslangrigoriev.topmovie.presentation.profile.auth
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

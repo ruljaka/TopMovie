@@ -24,7 +24,7 @@ class MoreViewModel
     var moreType: MoreType = POPULAR
     var mediaType: MediaType = MOVIE
 
-    fun moreMediaList() = when (moreType) {
+    fun moreMediaList() =  when (moreType) {
         NOW -> {
             when (mediaType) {
                 MOVIE -> {

@@ -22,23 +22,17 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setUpNavigation()
 
         this.window.apply {
             clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
             addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
             decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-            //statusBarColor = Color.TRANSPARENT
         }
     }
 
     fun setupToolbar(toolBar: Toolbar){
         setSupportActionBar(toolBar)
-        //supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_arrow_back)
-        //supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_arrow_back);
-        //supportActionBar?.setDisplayHomeAsUpEnabled(true);
-        //supportActionBar?.setDisplayShowHomeEnabled(true);
         supportActionBar?.setDisplayShowTitleEnabled(false)
         appBarConfiguration = AppBarConfiguration(setOf(
             R.id.movies_fragment,
@@ -53,7 +47,6 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
     }
 
     private fun setUpNavigation() {
-        //binding.bttmNav.itemIconTintList = null
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navController = navHostFragment.navController

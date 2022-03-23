@@ -32,20 +32,26 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
     private val viewModel: ProfileViewModel by viewModels()
     private lateinit var favoriteRecAdapter: BaseRecyclerAdapter<Media>
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
         (requireActivity() as MainActivity).setupToolbar(binding.toolbarProfile.toolbar)
         setHasOptionsMenu(true)
+    }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         setFavoriteRecView()
         subscribeUI()
+        checkAuth()
+    }
 
+    private fun checkAuth() {
         val isAuth = viewModel.checkIfUserIsAuthenticated()
         if (isAuth) {
             viewModel.fetchUserData()
         } else {
             findNavController().navigate(
-                R.id.action_profile_fragment_to_loginProfileFragment
+                R.id.action_profile_fragment_to_loginFragment
             )
         }
     }
@@ -134,9 +140,9 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
 
     private fun showLoading(loading: Boolean) {
         if (loading) {
-            binding.progressBarProfile.visibility = View.VISIBLE
+            binding.progressBarProfile.root.visibility = View.VISIBLE
         } else {
-            binding.progressBarProfile.visibility = View.GONE
+            binding.progressBarProfile.root.visibility = View.GONE
         }
     }
 
@@ -161,7 +167,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.settings -> {
-                findNavController().navigate(R.id.action_profile_fragment_to_settingsProfileFragment)
+                findNavController().navigate(R.id.action_profile_fragment_to_settingsFragment)
             }
         }
         return super.onOptionsItemSelected(item)

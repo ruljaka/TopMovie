@@ -11,6 +11,7 @@ import com.ruslangrigoriev.topmovie.data.database.entity.UserDataEntity
 import com.ruslangrigoriev.topmovie.domain.model.Media
 import com.ruslangrigoriev.topmovie.domain.repository.UserRepository
 import com.ruslangrigoriev.topmovie.domain.utils.*
+import java.util.*
 import javax.inject.Inject
 
 
@@ -165,7 +166,7 @@ class UserRepoImpl
         val userID = appContext.getUserID()
         val isFavorite = checkIsFavorite(mediaID)
         val favoriteCredentials = FavoriteCredentials(
-            mediaType = mediaType,
+            mediaType = mediaType.lowercase(Locale.getDefault()),
             mediaId = mediaID,
             favorite = !isFavorite
         )

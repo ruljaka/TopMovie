@@ -67,9 +67,9 @@ class VideoActivity : AppCompatActivity(R.layout.activity_video) {
 
     private fun showLoading(loading: Boolean) {
         if (loading) {
-            binding.progressBarVideo.visibility = View.VISIBLE
+            binding.progressBarVideo.root.visibility = View.VISIBLE
         } else {
-            binding.progressBarVideo.visibility = View.GONE
+            binding.progressBarVideo.root.visibility = View.GONE
         }
     }
 

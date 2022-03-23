@@ -19,8 +19,8 @@ import com.ruslangrigoriev.topmovie.data.api.dto.credits.Cast
 import com.ruslangrigoriev.topmovie.domain.model.Media
 import com.ruslangrigoriev.topmovie.data.api.dto.movies.Movie
 import com.ruslangrigoriev.topmovie.data.api.dto.tv.TvShow
-import com.ruslangrigoriev.topmovie.domain.utils.mappers.MovieMapper
-import com.ruslangrigoriev.topmovie.domain.utils.mappers.TvMapper
+import com.ruslangrigoriev.topmovie.domain.model.mappers.MovieMapper
+import com.ruslangrigoriev.topmovie.domain.model.mappers.TvMapper
 import retrofit2.Response
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -65,7 +65,6 @@ fun String.loadPosterLarge(imageView: ImageView) {
         .load(IMAGE_URL_W500 + this)
         .apply(RequestOptions().override(400, 600))
         .centerCrop()
-        .apply(RequestOptions.bitmapTransform(RoundedCorners(30)))
         .apply(RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL))
         .placeholder(R.drawable.placeholder)
         .thumbnail(0.25f)
@@ -75,21 +74,20 @@ fun String.loadPosterLarge(imageView: ImageView) {
 fun String.loadPosterSmall(imageView: ImageView) {
     Glide.with(imageView.context)
         .load(IMAGE_URL_W500 + this)
-        .thumbnail(0.25f)
         .apply(RequestOptions().override(300, 450))
-        .apply(RequestOptions.bitmapTransform(RoundedCorners(14)))
         .apply(RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL))
         .placeholder(R.drawable.placeholder)
+        .thumbnail(0.25f)
         .into(imageView)
 }
 
 fun String.loadBackDropImage(imageView: ImageView) {
     Glide.with(imageView.context)
         .load(IMAGE_URL_W1280 + this)
-        .thumbnail(0.25f)
         .apply(RequestOptions.bitmapTransform(RoundedCorners(30)))
         .apply(RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL))
         .placeholder(R.drawable.placeholder)
+        .thumbnail(0.25f)
         .into(imageView)
 }
 
@@ -110,55 +108,6 @@ fun List<Cast>.getTopCast(): List<Cast> {
         sortedList
     }
 }
-
-/*fun Context.saveToFavoritesByID(moveID: Int) {
-    val sharedPref = this.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE)
-    val oldList = getFavorites()
-    if (!oldList.contains(moveID)) {
-        oldList.add(moveID)
-        with(sharedPref.edit()) {
-            putString(FAVORITES, oldList.joinToString())
-            apply()
-        }
-        Timber.d("saveToFavorite :: ${oldList.joinToString()}")
-    }
-}*/
-
-/*fun Context.saveToFavoritesByList(list: List<Media>) {
-    val sharedPref = this.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE)
-    val oldIdList = getFavorites()
-    val newIdList = list.map { it -> it.id }
-    val resultIdList = oldIdList.union(newIdList)
-    with(sharedPref.edit()) {
-        putString(FAVORITES, resultIdList.joinToString())
-        apply()
-    }
-    Timber.d("saveToFavoritesByList :: ${resultIdList.joinToString()}")
-}*/
-
-
-//fun Context.removeFromFavorites(moveID: Int) {
-//    val sharedPref = this.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE)
-//    val oldList = getFavorites()
-//    oldList.remove(moveID)
-//    with(sharedPref.edit()) {
-//        putString(FAVORITES, oldList.joinToString())
-//        apply()
-//    }
-//    Timber.d("removeFromFavorites :: ${oldList.joinToString()}")
-//}
-
-/*fun Context.getFavorites(): MutableList<Int> {
-    val sharedPref = this.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE)
-    val favoriteMovies = sharedPref.getString(FAVORITES, "") ?: ""
-    val favoriteList = favoriteMovies.splitToSequence(", ")
-        .filter { it.isNotEmpty() }
-        .map { it.toInt() }
-        .toMutableList()
-    Timber.d("getFavorites :: $favoriteList")
-    return favoriteList
-}*/
-
 
 fun Context.onBoardingFinished() {
     val sharedPref = this.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE)
@@ -240,10 +189,6 @@ fun Context.getAuthToken(): RequestToken? {
         return Gson().fromJson(jsonString, RequestToken::class.java)
     }
     return null
-}
-
-fun checkFavorites(savedFavorites: List<Int>, movieID: Int): Boolean {
-    return savedFavorites.contains(movieID)
 }
 
 fun String.showToast(context: Context) {

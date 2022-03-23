@@ -121,9 +121,9 @@ class MoviesFragment : Fragment(R.layout.fragment_movies) {
 
     private fun showLoading(loading: Boolean) {
         if (loading) {
-            binding.progressBarMovies.visibility = View.VISIBLE
+            binding.progressBarMovies.root.visibility = View.VISIBLE
         } else {
-            binding.progressBarMovies.visibility = View.GONE
+            binding.progressBarMovies.root.visibility = View.GONE
         }
     }
 
@@ -149,15 +149,6 @@ class MoviesFragment : Fragment(R.layout.fragment_movies) {
 
 
     /*private fun setPagedRecView(view: View) {
-    val favoriteList = view.context.getFavorites()
-    pagingAdapter = MoviePagingAdapter({ id -> onListItemClick(id) }, favoriteList)
-    val gridLM = GridLayoutManager(
-        activity,
-        2, GridLayoutManager.VERTICAL, false
-    )
-    binding.recyclerView.layoutManager = gridLM
-    binding.recyclerView.adapter = pagingAdapter
-    binding.recyclerView.setHasFixedSize(true)
 
     pagingAdapter.addLoadStateListener {
         if (it.refresh is LoadState.Error) {
@@ -165,14 +156,5 @@ class MoviesFragment : Fragment(R.layout.fragment_movies) {
         }
     }
 }*/
-
-    /*private fun subscribeUI() {
-        lifecycleScope.launchWhenStarted {
-            viewModel.trendingFlowData.collect { pagingData ->
-                pagingAdapter.submitData(pagingData)
-            }
-        }
-    }*/
-
 
 }

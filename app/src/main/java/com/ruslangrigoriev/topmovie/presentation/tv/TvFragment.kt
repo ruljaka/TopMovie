@@ -35,7 +35,6 @@ class TvFragment : Fragment(R.layout.fragment_tv) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         setupSearch()
         subscribeUi()
         loadData()
@@ -126,9 +125,9 @@ class TvFragment : Fragment(R.layout.fragment_tv) {
 
     private fun showLoading(loading: Boolean) {
         if (loading) {
-            binding.progressBarTv.visibility = View.VISIBLE
+            binding.progressBarTv.root.visibility = View.VISIBLE
         } else {
-            binding.progressBarTv.visibility = View.GONE
+            binding.progressBarTv.root.visibility = View.GONE
         }
     }
 

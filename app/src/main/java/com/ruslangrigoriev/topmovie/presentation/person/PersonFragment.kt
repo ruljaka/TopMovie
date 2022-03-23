@@ -10,12 +10,12 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
-import com.ruslangrigoriev.topmovie.presentation.MainActivity
 import com.ruslangrigoriev.topmovie.R
 import com.ruslangrigoriev.topmovie.databinding.FragmentPersonBinding
 import com.ruslangrigoriev.topmovie.domain.model.Media
 import com.ruslangrigoriev.topmovie.domain.utils.*
 import com.ruslangrigoriev.topmovie.domain.utils.ResultState.*
+import com.ruslangrigoriev.topmovie.presentation.MainActivity
 import com.ruslangrigoriev.topmovie.presentation.adapters.BaseRecyclerAdapter
 import com.ruslangrigoriev.topmovie.presentation.adapters.BindingInterface
 import dagger.hilt.android.AndroidEntryPoint
@@ -27,10 +27,14 @@ class PersonFragment : Fragment(R.layout.fragment_person) {
     private val personID: Int by intArgs(PERSON_ID)
     private lateinit var castRecAdapter: BaseRecyclerAdapter<Media>
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
         (requireActivity() as MainActivity).setupToolbar(binding.toolbarPerson.toolbar)
         (requireActivity() as MainActivity).supportActionBar?.setDisplayShowTitleEnabled(false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         setCastRecView()
         subscribeUI()
         loadData()
@@ -108,9 +112,9 @@ class PersonFragment : Fragment(R.layout.fragment_person) {
 
     private fun showLoading(loading: Boolean) {
         if (loading) {
-            binding.progressBarPerson.visibility = View.VISIBLE
+            binding.progressBarPerson.root.visibility = View.VISIBLE
         } else {
-            binding.progressBarPerson.visibility = View.GONE
+            binding.progressBarPerson.root.visibility = View.GONE
         }
     }
 

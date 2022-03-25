@@ -7,9 +7,9 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.ruslangrigoriev.topmovie.data.paging.SearchPagingSource
+import com.ruslangrigoriev.topmovie.domain.model.Media
 import com.ruslangrigoriev.topmovie.domain.repository.MovieRepository
 import com.ruslangrigoriev.topmovie.domain.repository.TvShowRepository
-import com.ruslangrigoriev.topmovie.domain.model.Media
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
@@ -42,11 +42,4 @@ class SearchViewModel
                 )
             }.flow.cachedIn(viewModelScope)
         }
-
-//    @ExperimentalCoroutinesApi
-//    val searchTvFlowData = queryFlow.flatMapLatest { query ->
-//        Pager(PagingConfig(pageSize = 20)) {
-//            MoviePagingSource(query = query, type = TV_SEARCH, repository = repository)
-//        }.flow.cachedIn(viewModelScope)
-//    }
 }

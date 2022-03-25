@@ -77,7 +77,6 @@ class UserRepoImpl
     }
 
     override suspend fun getFavoriteMovies(accountID: Int): List<Media>? {
-        val id = getUserData()?.id
         val session = appContext.getSessionID()
         val listFavoriteMovies = session?.let {
             val movieList = getResultOrError(

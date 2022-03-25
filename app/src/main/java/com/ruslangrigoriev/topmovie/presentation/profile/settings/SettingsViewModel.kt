@@ -5,6 +5,4 @@ import com.ruslangrigoriev.topmovie.domain.repository.AuthRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 @HiltViewModel
-class SettingsViewModel @Inject constructor (val authRepositoryImpl: AuthRepository) : ViewModel() {
-
-}
+class SettingsViewModel @Inject constructor (val authRepositoryImpl: AuthRepository) : ViewModel()

@@ -9,6 +9,7 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -49,6 +50,7 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
         setupPlayBtn()
         subscribeUI()
         setBtnFavorite()
+        setBtnRate()
         loadData()
     }
 
@@ -201,7 +203,12 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
 
     private fun setBtnRate() {
         binding.imageButtonDetailsLike.setOnClickListener {
-            //TODO
+            setFragmentResultListener(RATE_DIALOG_REQUEST_KEY) { _, bundle ->
+                val value = bundle.getFloat(RATE_DIALOG_RESULT_VALUE)
+                viewModel.markRated(mediaType, mediaID, value.toString())
+            }
+            val rateFragment = RateDialogFragment()
+            rateFragment.show(parentFragmentManager, RATE_DIALOG_TAG)
         }
     }
 
@@ -229,4 +236,5 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
         }
         return super.onOptionsItemSelected(item)
     }
+
 }

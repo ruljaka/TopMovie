@@ -3,11 +3,9 @@ package com.ruslangrigoriev.topmovie.data.paging
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.ruslangrigoriev.topmovie.data.api.ApiService
-import com.ruslangrigoriev.topmovie.data.api.dto.movies.MovieResponse
 import com.ruslangrigoriev.topmovie.data.api.dto.tv.TvResponse
 import com.ruslangrigoriev.topmovie.domain.model.Media
 import com.ruslangrigoriev.topmovie.domain.utils.MoreType
-import com.ruslangrigoriev.topmovie.domain.utils.mapMovieToMedia
 import com.ruslangrigoriev.topmovie.domain.utils.mapTvShowToMedia
 import retrofit2.Response
 import timber.log.Timber

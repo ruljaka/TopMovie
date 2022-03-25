@@ -30,3 +30,7 @@ const val SESSION = "session"
 const val USER_ID = "user_id"
 const val REGULAR_VIEW_TYPE = 0
 const val FOOTER_VIEW_TYPE = 1
+
+const val RATE_DIALOG_REQUEST_KEY = "rateDialog"
+const val RATE_DIALOG_RESULT_VALUE = "result_value"
+const val RATE_DIALOG_TAG = "rate_dialog_tag"

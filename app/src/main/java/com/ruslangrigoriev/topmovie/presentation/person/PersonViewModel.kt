@@ -15,7 +15,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PersonViewModel @Inject constructor
-    (val personRepository: PersonRepository) : ViewModel() {
+    (private val personRepository: PersonRepository) : ViewModel() {
 
     private val _viewState = MutableLiveData<ResultState>()
     val viewState: LiveData<ResultState>
@@ -25,7 +25,7 @@ class PersonViewModel @Inject constructor
         _viewState.postValue(ResultState.Failure(throwable.message))
     }
 
-    fun fetchData(person_id: Int) = viewModelScope.launch() {
+    fun fetchData(person_id: Int) = viewModelScope.launch(exceptionHandler) {
         Timber.d("getPerson -> Person ID: $person_id")
         _viewState.value = ResultState.Loading
         val person = async { personRepository.getPerson(person_id) }

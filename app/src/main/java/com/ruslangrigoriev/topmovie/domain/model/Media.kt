@@ -2,7 +2,6 @@ package com.ruslangrigoriev.topmovie.domain.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.ruslangrigoriev.topmovie.data.api.dto.Genre
 
 @Entity
 

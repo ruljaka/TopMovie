@@ -7,7 +7,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.*
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.NavigationUI
+import androidx.navigation.ui.navigateUp
+import androidx.navigation.ui.setupActionBarWithNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.ruslangrigoriev.topmovie.R
 import com.ruslangrigoriev.topmovie.databinding.ActivityMainBinding
@@ -31,14 +34,16 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         }
     }
 
-    fun setupToolbar(toolBar: Toolbar){
+    fun setupToolbar(toolBar: Toolbar) {
         setSupportActionBar(toolBar)
         supportActionBar?.setDisplayShowTitleEnabled(false)
-        appBarConfiguration = AppBarConfiguration(setOf(
-            R.id.movies_fragment,
-            R.id.tv_fragment,
-            R.id.profile_fragment
-        ))
+        appBarConfiguration = AppBarConfiguration(
+            setOf(
+                R.id.movies_fragment,
+                R.id.tv_fragment,
+                R.id.profile_fragment
+            )
+        )
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navController = navHostFragment.navController

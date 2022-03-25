@@ -10,8 +10,7 @@ import com.ruslangrigoriev.topmovie.domain.utils.mapMovieToMedia
 import javax.inject.Inject
 
 class PersonRepoImpl
-@Inject
-constructor(
+@Inject constructor(
     private val apiService: ApiService,
 ) : PersonRepository {
 

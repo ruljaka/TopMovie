@@ -12,8 +12,7 @@ class ItemOffsetDecoration(private val mItemOffset: Int) : RecyclerView.ItemDeco
     constructor(
         @NonNull context: Context,
         @DimenRes itemOffsetId: Int
-    ) : this(context.resources.getDimensionPixelSize(itemOffsetId)) {
-    }
+    ) : this(context.resources.getDimensionPixelSize(itemOffsetId))
 
     override fun getItemOffsets(
         outRect: Rect, view: View, parent: RecyclerView,

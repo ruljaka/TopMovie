@@ -10,6 +10,7 @@
         <entry key="app/src/main/res/drawable/background_details.xml" value="0.303515625" />
         <entry key="app/src/main/res/drawable/background_more.xml" value="0.303515625" />
         <entry key="app/src/main/res/drawable/background_rate.xml" value="0.303515625" />
+        <entry key="app/src/main/res/drawable/background_rate_dialog.xml" value="0.303515625" />
         <entry key="app/src/main/res/drawable/circular.xml" value="0.37538461538461537" />
         <entry key="app/src/main/res/drawable/custom_ratingbar.xml" value="0.2875" />
         <entry key="app/src/main/res/drawable/custom_ratingbar_empty.xml" value="0.2875" />
@@ -87,6 +88,7 @@
         <entry key="app/src/main/res/layout/fragment_movies_new.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_person.xml" value="0.24421052631578946" />
         <entry key="app/src/main/res/layout/fragment_profile.xml" value="0.22" />
+        <entry key="app/src/main/res/layout/fragment_rate_dialog.xml" value="0.29140625" />
         <entry key="app/src/main/res/layout/fragment_register.xml" value="0.29140625" />
         <entry key="app/src/main/res/layout/fragment_search.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_second.xml" value="0.18929765886287625" />

@@ -107,7 +107,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
     private fun setFavoriteRecView() {
         val bindingInterface = object : BindingInterface<Media> {
             override fun bindData(item: Media, view: View) {
-                val poster = view.findViewById<ImageView>(R.id.imageView_favorite_poster)
+                val poster = view.findViewById<ImageView>(R.id.imageView_favorite_media_poster)
                 item.posterPath?.loadPosterSmall(poster)
                 view.setOnClickListener {
                     onListItemClick(item.id, item.mediaType)
@@ -116,7 +116,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         }
         favoriteRecAdapter = BaseRecyclerAdapter(
             emptyList(),
-            R.layout.item_favorite,
+            R.layout.item_favorite_media,
             bindingInterface,
         )
         binding.apply {

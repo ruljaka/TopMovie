@@ -13,11 +13,11 @@ data class Media(
     val originalTitle: String,
     val posterPath: String?,
     val backdropPath: String?,
-    val genres: List<Genre>?,
+    val genres: String?,
     val overview: String,
     val popularity: Double,
     val releaseDate: String?,
     val voteAverage: Double,
-    val voteCount: Int,
+    val voteCount: String,
     val mediaType: String
 )

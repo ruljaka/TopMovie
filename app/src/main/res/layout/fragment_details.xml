@@ -3,31 +3,30 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    tools:context=".presentation.details.DetailsFragment">
+    android:layout_height="match_parent">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar_details"
         android:layout_width="match_parent"
         android:layout_height="300dp"
-        android:fitsSystemWindows="true">
+        android:fitsSystemWindows="true"
+        android:theme="@style/Theme.TopMovie">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
-            android:id="@+id/main.collapsing"
+            android:id="@+id/collapsing_toolbar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
-            android:theme="@style/Theme.TopMovie.AppBarOverlay"
-            app:contentScrim="?attr/colorOnPrimary"
-            app:expandedTitleGravity="bottom|center_horizontal"
-            app:expandedTitleMarginEnd="16dp"
-            app:expandedTitleMarginStart="16dp"
-            app:expandedTitleTextAppearance="@style/TitleTextStyle"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:expandedTitleTextColor="@color/white"
+            app:expandedTitleMarginBottom="40dp"
+            app:collapsedTitleTextColor="?attr/colorOnSecondary"
+            app:contentScrim="?attr/colorSecondary"
+            app:layout_scrollFlags="scroll|snap|exitUntilCollapsed"
             app:maxLines="3"
             app:scrimAnimationDuration="100"
-            app:titleCollapseMode="scale">
+            app:statusBarScrim="@android:color/transparent"
+            app:titleCollapseMode="scale"
+            tools:title="">
 
             <ImageView
                 android:id="@+id/imageView_details_back_poster"
@@ -48,29 +47,32 @@
                 android:src="@drawable/item_gradient_poster_back"
                 tools:contentDescription="@string/details_back_poster_desc" />
 
-            <ImageButton
-                android:id="@+id/imageButton_details_play"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:backgroundTint="@android:color/transparent"
-                android:contentDescription="@string/imageButton_details_play"
-                android:src="@drawable/ic_play" />
+            <ImageView
+                android:id="@+id/imageView_details_header"
+                android:layout_width="match_parent"
+                android:layout_height="25dp"
+                android:layout_gravity="bottom"
+                android:adjustViewBounds="true"
+                android:scaleType="centerCrop"
+                android:src="@drawable/background_details"
+                tools:contentDescription="@string/details_back_poster_desc" />
 
-            <androidx.appcompat.widget.Toolbar
+            <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/toolbar"
                 style="@style/Base_ToolbarStyle"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 app:layout_collapseMode="pin"
                 tools:title="TitleTitle" />
+
         </com.google.android.material.appbar.CollapsingToolbarLayout>
+
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView
-        style="@style/OverviewStyle"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="?attr/colorSecondary"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -81,8 +83,7 @@
                 android:id="@+id/cardView_details_poster"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginStart="24dp"
                 app:cardCornerRadius="8dp"
                 app:cardElevation="8dp"
                 app:layout_constraintStart_toStartOf="parent"
@@ -144,11 +145,10 @@
                         android:id="@+id/imageButton_details_like"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
-                        android:src="@drawable/ic_like_unselected"
-                        android:contentDescription="imageButton_details_like" />
+                        android:contentDescription="imageButton_details_like"
+                        android:src="@drawable/ic_like_unselected" />
 
                 </androidx.cardview.widget.CardView>
-
 
 
                 <androidx.cardview.widget.CardView
@@ -258,8 +258,21 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-
     </androidx.core.widget.NestedScrollView>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/imageButton_details_play"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="24dp"
+        android:clickable="true"
+        android:src="@drawable/ic_play"
+        android:translationY="-25dp"
+        app:layout_anchor="@id/appbar_details"
+        app:layout_anchorGravity="end|bottom"
+        app:maxImageSize="56dp"
+        app:tint="@null"
+        android:contentDescription="FAB" />
 
     <include
         android:id="@+id/progress_bar_details"

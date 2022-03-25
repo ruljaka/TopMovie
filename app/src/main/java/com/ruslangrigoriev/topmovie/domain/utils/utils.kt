@@ -43,9 +43,9 @@ fun intArgs(key: String): ReadOnlyProperty<Fragment, Int> {
     }
 }
 
-fun getNamesFromGenre(genres: List<Genre>): String {
-    val listGenreNames: List<String> = genres.map { it.name }
-    return listGenreNames.joinToString(", ")
+fun getNamesFromGenre(genres: List<Genre>?): String? {
+    val listGenreNames: List<String>? = genres?.map { it.name }
+    return listGenreNames?.joinToString(", ")
 }
 
 

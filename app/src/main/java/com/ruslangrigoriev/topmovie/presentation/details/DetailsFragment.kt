@@ -7,9 +7,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
-import android.widget.ProgressBar
 import android.widget.TextView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -20,8 +18,8 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.appbar.AppBarLayout
 import com.ruslangrigoriev.topmovie.R
-import com.ruslangrigoriev.topmovie.databinding.FragmentDetailsNewBinding
 import com.ruslangrigoriev.topmovie.data.api.dto.credits.Cast
+import com.ruslangrigoriev.topmovie.databinding.FragmentDetailsBinding
 import com.ruslangrigoriev.topmovie.domain.model.Media
 import com.ruslangrigoriev.topmovie.domain.utils.*
 import com.ruslangrigoriev.topmovie.domain.utils.ResultState.*
@@ -32,8 +30,8 @@ import com.ruslangrigoriev.topmovie.presentation.video.VideoActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class DetailsFragment : Fragment(R.layout.fragment_details_new) {
-    private val binding by viewBinding(FragmentDetailsNewBinding::bind)
+class DetailsFragment : Fragment(R.layout.fragment_details) {
+    private val binding by viewBinding(FragmentDetailsBinding::bind)
     private val mediaID: Int by intArgs(MEDIA_ID)
     private val mediaType: String by stringArgs(MEDIA_TYPE)
     private val viewModel: DetailsViewModel by viewModels()
@@ -70,7 +68,7 @@ class DetailsFragment : Fragment(R.layout.fragment_details_new) {
                     showLoading(true)
                 }
                 is Failure -> {
-                    showToast(it.errorMessage)
+                    it.errorMessage?.showToast(requireContext())
                     showLoading(false)
                 }
                 is Success -> {
@@ -108,9 +106,10 @@ class DetailsFragment : Fragment(R.layout.fragment_details_new) {
         success.details?.let { media ->
             binding.apply {
                 toolbar.title = media.title
-                textViewDetailsGenre.text = media.genres?.let { getNamesFromGenre(it) }
+                textViewDetailsGenre.text = media.genres
                 textViewDetailsOverview.text = media.overview
-                textViewDetailsVoteCount.text = "${media.voteCount}  People watched"
+                textViewDetailsVoteCount.text =
+                    getString(R.string.details_vote_count, media.voteCount)
                 textViewDetailsVoteAverage.text = media.voteAverage.toString()
                 media.posterPath?.loadPosterSmall(imageViewDetailsPoster)
                 media.backdropPath?.loadBackDropImage(imageViewDetailsBackPoster)
@@ -144,12 +143,12 @@ class DetailsFragment : Fragment(R.layout.fragment_details_new) {
     private fun setCastRecView() {
         val bindingInterface = object : BindingInterface<Cast> {
             override fun bindData(item: Cast, view: View) {
-                val name: TextView = view.findViewById(R.id.textView_cast_name)
+                val name: TextView = view.findViewById(R.id.textView_media_cast_name)
                 name.text = item.originalName
-                val character: TextView = view.findViewById(R.id.textView_cast_character)
+                val character: TextView = view.findViewById(R.id.textView_media_cast_character)
                 character.text = item.character
                 val requestOptions = RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL)
-                val castPhoto: ImageView = view.findViewById(R.id.imageView_cast)
+                val castPhoto: ImageView = view.findViewById(R.id.imageView_media_cast_poster)
                 Glide.with(requireContext())
                     .load(IMAGE_URL_W500 + (item.profilePath))
                     .apply(requestOptions)
@@ -164,7 +163,7 @@ class DetailsFragment : Fragment(R.layout.fragment_details_new) {
         }
         castRecAdapter = BaseRecyclerAdapter(
             emptyList(),
-            R.layout.item_cast,
+            R.layout.item_media_cast,
             bindingInterface
         )
         binding.recyclerViewDetails.apply {
@@ -226,14 +225,8 @@ class DetailsFragment : Fragment(R.layout.fragment_details_new) {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.share ->
-                showToast("share this media")
+                "share this media".showToast(requireContext())
         }
         return super.onOptionsItemSelected(item)
-    }
-
-    private fun showToast(message: String?) {
-        Toast.makeText(
-            activity, message ?: "Unknown Error", Toast.LENGTH_SHORT
-        ).show()
     }
 }

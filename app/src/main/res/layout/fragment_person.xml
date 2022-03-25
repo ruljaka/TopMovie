@@ -9,11 +9,11 @@
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_person">
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -25,7 +25,7 @@
                 android:layout_width="150dp"
                 android:layout_height="225dp"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="88dp"
+                android:layout_marginTop="16dp"
                 android:elevation="10dp"
                 app:cardCornerRadius="12dp"
                 app:layout_constraintStart_toStartOf="parent"
@@ -43,27 +43,15 @@
             </androidx.cardview.widget.CardView>
 
             <TextView
-                android:id="@+id/textView_person_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:textSize="24sp"
-                android:textStyle="bold"
-                app:layout_constraintStart_toEndOf="@+id/cardView_person_poster"
-                app:layout_constraintTop_toTopOf="@+id/cardView_person_poster"
-                tools:text="Tom Holland" />
-
-            <TextView
                 android:id="@+id/textView_person_info_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
                 android:text="@string/personal_info_label"
                 android:textSize="14sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toEndOf="@+id/cardView_person_poster"
-                app:layout_constraintTop_toBottomOf="@+id/textView_person_name" />
+                app:layout_constraintTop_toTopOf="@+id/cardView_person_poster" />
 
             <TextView
                 android:id="@+id/textView_person_known_for_label"
@@ -163,6 +151,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
                 android:text="@string/biography_label"
                 android:textSize="16sp"
                 android:textStyle="bold"
@@ -187,7 +176,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="16dp"
                 android:orientation="horizontal"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"

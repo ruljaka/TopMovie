@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
 import android.widget.SearchView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -17,21 +16,19 @@ import com.ruslangrigoriev.topmovie.domain.utils.*
 import com.ruslangrigoriev.topmovie.domain.utils.ResultState.*
 import com.ruslangrigoriev.topmovie.presentation.MainActivity
 import com.ruslangrigoriev.topmovie.presentation.adapters.MainTabsRecyclerAdapter
-import com.ruslangrigoriev.topmovie.presentation.adapters.MediaPagingAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MoviesFragment : Fragment(R.layout.fragment_movies) {
     private val binding by viewBinding(FragmentMoviesBinding::bind)
     private val viewModel: MovieViewModel by viewModels()
-    private lateinit var pagingAdapter: MediaPagingAdapter
     private lateinit var nowRecyclerAdapter: MainTabsRecyclerAdapter
     private lateinit var popularRecyclerAdapter: MainTabsRecyclerAdapter
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         (requireActivity() as MainActivity).setupToolbar(binding.toolbarMovies.toolbar)
-        binding.toolbarMovies.toolbarTitle.text = "MOVIES"
+        binding.toolbarMovies.toolbarTitle.text = getString(R.string.tab_label_movies)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -56,7 +53,7 @@ class MoviesFragment : Fragment(R.layout.fragment_movies) {
                     showLoading(true)
                 }
                 is Failure -> {
-                    showToast(it.errorMessage)
+                    it.errorMessage?.showToast(requireContext())
                     showLoading(false)
                 }
                 is Success -> {
@@ -101,7 +98,7 @@ class MoviesFragment : Fragment(R.layout.fragment_movies) {
             androidx.appcompat.widget.SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 if (TextUtils.isEmpty(query)) {
-                    showToast("Enter your request")
+                    getString(R.string.enter_your_request).showToast(requireContext())
                 } else {
                     val bundle = Bundle()
                     bundle.putString(QUERY, query)
@@ -140,21 +137,5 @@ class MoviesFragment : Fragment(R.layout.fragment_movies) {
             findNavController().navigate(R.id.action_movies_fragment_to_details, bundle)
         }
     }
-
-    private fun showToast(message: String?) {
-        Toast.makeText(
-            activity, message ?: "Unknown Error", Toast.LENGTH_SHORT
-        ).show()
-    }
-
-
-    /*private fun setPagedRecView(view: View) {
-
-    pagingAdapter.addLoadStateListener {
-        if (it.refresh is LoadState.Error) {
-            showToast((it.refresh as? LoadState.Error)?.error?.message)
-        }
-    }
-}*/
 
 }

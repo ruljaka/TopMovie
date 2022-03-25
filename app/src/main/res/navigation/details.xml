@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/detailsFragment"
         android:name="com.ruslangrigoriev.topmovie.presentation.details.DetailsFragment"
-        tools:layout="@layout/fragment_details_new">
+        tools:layout="@layout/fragment_details">
         <action
             android:id="@+id/action_detailsFragment_to_personFragment"
             app:destination="@id/personFragment"

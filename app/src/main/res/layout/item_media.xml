@@ -33,7 +33,7 @@
             app:layout_constraintBottom_toBottomOf="@id/imageView_media_poster"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:srcCompat="@drawable/item_gradient" />
+            app:srcCompat="@drawable/gradient_shadow" />
 
 
         <TextView
@@ -70,7 +70,7 @@
             android:contentDescription="@string/item_popular_rate_background"
             app:layout_constraintEnd_toEndOf="@+id/imageView_media_poster"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/item_rate_background" />
+            app:srcCompat="@drawable/background_rate" />
 
         <TextView
             android:id="@+id/textView_media_score"

@@ -5,6 +5,7 @@ import com.ruslangrigoriev.topmovie.data.api.dto.person.Person
 import com.ruslangrigoriev.topmovie.domain.model.Media
 import com.ruslangrigoriev.topmovie.domain.repository.PersonRepository
 import com.ruslangrigoriev.topmovie.domain.utils.getResultOrError
+import com.ruslangrigoriev.topmovie.domain.utils.getTopPersonCasts
 import com.ruslangrigoriev.topmovie.domain.utils.mapMovieToMedia
 import javax.inject.Inject
 
@@ -22,6 +23,6 @@ constructor(
     override suspend fun getPersonCredits(person_id: Int): List<Media> {
         val response = apiService.getPersonCredits(person_id)
         val movieCastList = getResultOrError(response)?.cast
-        return mapMovieToMedia(movieCastList)
+        return mapMovieToMedia(movieCastList).getTopPersonCasts()
     }
 }

@@ -77,7 +77,7 @@ class MoreFragment : Fragment(R.layout.fragment_more) {
                 loadState.refresh is LoadState.Error -> loadState.refresh as LoadState.Error
                 else -> null
             }
-            errorState?.let { showToast(errorState.error.message) }
+            errorState?.error?.message?.showToast(requireContext())
         }
     }
 
@@ -95,11 +95,4 @@ class MoreFragment : Fragment(R.layout.fragment_more) {
             binding.progressBarMore.root.visibility = View.GONE
         }
     }
-
-    private fun showToast(message: String?) {
-        Toast.makeText(
-            activity, message ?: "Unknown Error", Toast.LENGTH_SHORT
-        ).show()
-    }
-
 }

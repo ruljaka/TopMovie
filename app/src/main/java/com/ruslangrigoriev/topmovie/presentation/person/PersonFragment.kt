@@ -3,7 +3,6 @@ package com.ruslangrigoriev.topmovie.presentation.person
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
-import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -67,7 +66,7 @@ class PersonFragment : Fragment(R.layout.fragment_person) {
     private fun bindUI(it: Success) {
         it.person?.let {
             binding.apply {
-                textViewPersonName.text = it.name
+                toolbarPerson.toolbarTitle.text = it.name
                 textViewPersonKnownFor.text = it.knownForDepartment
                 textViewPersonGender.text = when (it.gender) {
                     1 -> "Female"
@@ -80,14 +79,16 @@ class PersonFragment : Fragment(R.layout.fragment_person) {
                 it.profilePath?.loadPosterLarge(imageviewPersonPoster)
             }
         }
-        it.personCastList?.let { castList -> castRecAdapter.updateList(castList.getTopPersonCasts()) }
+        it.personCastList?.let { castList ->
+            castRecAdapter.updateList(castList)
+        }
     }
 
     private fun setCastRecView() {
         val bindingInterface = object : BindingInterface<Media> {
             override fun bindData(item: Media, view: View) {
-                val title: TextView = view.findViewById(R.id.textView_person_cast_movie_name)
-                title.text = item.originalTitle
+//                val title: TextView = view.findViewById(R.id.textView_person_cast_movie_name)
+//                title.text = item.originalTitle
                 val poster: ImageView = view.findViewById(R.id.imageView_person_cast_poster)
                 item.posterPath?.loadPosterSmall(poster)
                 view.setOnClickListener {

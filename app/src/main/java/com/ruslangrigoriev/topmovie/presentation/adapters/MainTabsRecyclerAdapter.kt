@@ -2,16 +2,12 @@ package com.ruslangrigoriev.topmovie.presentation.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.ruslangrigoriev.topmovie.R
 import com.ruslangrigoriev.topmovie.databinding.ItemMediaBinding
 import com.ruslangrigoriev.topmovie.databinding.ItemMoreBinding
 import com.ruslangrigoriev.topmovie.domain.model.Media
 import com.ruslangrigoriev.topmovie.domain.utils.FOOTER_VIEW_TYPE
 import com.ruslangrigoriev.topmovie.domain.utils.REGULAR_VIEW_TYPE
-import com.ruslangrigoriev.topmovie.domain.utils.formatDate
 import com.ruslangrigoriev.topmovie.domain.utils.loadPosterLarge
 
 
@@ -27,16 +23,16 @@ class MainTabsRecyclerAdapter(
     ) : RecyclerView.ViewHolder(binding.root) {
 
         init {
-            binding.root.setOnClickListener{
+            binding.root.setOnClickListener {
                 onItemClicked(dataList[absoluteAdapterPosition].id)
             }
         }
 
         fun bind(position: Int) {
             val item = dataList[position]
-            with(binding){
+            with(binding) {
                 textViewMediaTitle.text = item.title
-                textViewMediaDate.text = item.releaseDate?.formatDate()
+                textViewMediaDate.text = item.releaseDate
                 textViewMediaScore.text = item.voteAverage.toString()
                 item.posterPath?.loadPosterLarge(imageViewMediaPoster)
             }
@@ -49,7 +45,7 @@ class MainTabsRecyclerAdapter(
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind() {
-            binding.root.setOnClickListener{
+            binding.root.setOnClickListener {
                 onItemClicked(0)
             }
         }
@@ -60,13 +56,15 @@ class MainTabsRecyclerAdapter(
             REGULAR_VIEW_TYPE -> {
                 val binding = ItemMediaBinding.inflate(
                     LayoutInflater.from(parent.context),
-                    parent, false)
+                    parent, false
+                )
                 ViewHolder(binding, onItemClicked)
             }
             else -> {
                 val binding = ItemMoreBinding.inflate(
                     LayoutInflater.from(parent.context),
-                    parent, false)
+                    parent, false
+                )
                 FooterHolder(binding, onItemClicked)
             }
         }
@@ -78,11 +76,6 @@ class MainTabsRecyclerAdapter(
     }
 
     override fun getItemCount(): Int = dataList.size
-
-    fun updateList(list: List<Media>) {
-        this.dataList = list
-        notifyDataSetChanged()
-    }
 
     override fun getItemViewType(position: Int): Int {
         return if (position == dataList.size - 1) FOOTER_VIEW_TYPE else REGULAR_VIEW_TYPE

@@ -25,7 +25,7 @@ class PersonViewModel @Inject constructor
         _viewState.postValue(ResultState.Failure(throwable.message))
     }
 
-    fun fetchData(person_id: Int) = viewModelScope.launch(exceptionHandler) {
+    fun fetchData(person_id: Int) = viewModelScope.launch() {
         Timber.d("getPerson -> Person ID: $person_id")
         _viewState.value = ResultState.Loading
         val person = async { personRepository.getPerson(person_id) }

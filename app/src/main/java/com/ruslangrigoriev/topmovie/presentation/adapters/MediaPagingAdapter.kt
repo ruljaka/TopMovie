@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.ruslangrigoriev.topmovie.databinding.ItemMediaBinding
 import com.ruslangrigoriev.topmovie.domain.model.Media
-import com.ruslangrigoriev.topmovie.domain.utils.formatDate
 import com.ruslangrigoriev.topmovie.domain.utils.loadPosterLarge
 
 class MediaPagingAdapter(
@@ -37,7 +36,7 @@ class MediaPagingAdapter(
         fun bindView(item: Media) {
             with(binding) {
                 textViewMediaTitle.text = item.title
-                textViewMediaDate.text = item.releaseDate?.formatDate()
+                textViewMediaDate.text = item.releaseDate
                 textViewMediaScore.text = item.voteAverage.toString()
                 item.posterPath?.loadPosterLarge(imageViewMediaPoster)
                 root.setOnClickListener {

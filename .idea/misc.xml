@@ -15,6 +15,7 @@
         <entry key="app/src/main/res/drawable/custom_ratingbar.xml" value="0.2875" />
         <entry key="app/src/main/res/drawable/custom_ratingbar_empty.xml" value="0.2875" />
         <entry key="app/src/main/res/drawable/custom_ratingbar_filled.xml" value="0.2875" />
+        <entry key="app/src/main/res/drawable/custom_ratingbar_filled_details.xml" value="0.303515625" />
         <entry key="app/src/main/res/drawable/darkCircle.xml" value="0.37538461538461537" />
         <entry key="app/src/main/res/drawable/dark_circle.xml" value="0.37538461538461537" />
         <entry key="app/src/main/res/drawable/gradient_first.xml" value="0.26296296296296295" />
@@ -44,7 +45,10 @@
         <entry key="app/src/main/res/drawable/ic_share.xml" value="0.19446254071661237" />
         <entry key="app/src/main/res/drawable/ic_splash_screen.xml" value="0.26296296296296295" />
         <entry key="app/src/main/res/drawable/ic_star_grey.xml" value="0.2875" />
+        <entry key="app/src/main/res/drawable/ic_star_grey_dialog.xml" value="0.303515625" />
         <entry key="app/src/main/res/drawable/ic_star_red.xml" value="0.19638157894736843" />
+        <entry key="app/src/main/res/drawable/ic_star_red_details.xml" value="0.303515625" />
+        <entry key="app/src/main/res/drawable/ic_star_red_dialog.xml" value="0.303515625" />
         <entry key="app/src/main/res/drawable/item_bottom_nav_back.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/item_gradient.xml" value="0.19638157894736843" />
         <entry key="app/src/main/res/drawable/item_gradient_poster.xml" value="0.19638157894736843" />
@@ -57,6 +61,10 @@
         <entry key="app/src/main/res/drawable/placeholder.xml" value="0.38125" />
         <entry key="app/src/main/res/drawable/profile_bg.xml" value="0.2361111111111111" />
         <entry key="app/src/main/res/drawable/profile_selector.xml" value="0.30615384615384617" />
+        <entry key="app/src/main/res/drawable/ratingbar_details_dialog.xml" value="0.303515625" />
+        <entry key="app/src/main/res/drawable/ratingbar_dialog.xml" value="0.303515625" />
+        <entry key="app/src/main/res/drawable/ratingbar_dialog_empty.xml" value="0.303515625" />
+        <entry key="app/src/main/res/drawable/ratingbar_dialog_filled.xml" value="0.303515625" />
         <entry key="app/src/main/res/drawable/round_corner.xml" value="0.3109375" />
         <entry key="app/src/main/res/drawable/round_corner_start_button.xml" value="0.19375" />
         <entry key="app/src/main/res/drawable/selector.xml" value="0.37538461538461537" />
@@ -68,6 +76,7 @@
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.165" />
         <entry key="app/src/main/res/layout/activity_splash_screen.xml" value="0.1912162162162162" />
         <entry key="app/src/main/res/layout/activity_video.xml" value="0.18436482084690553" />
+        <entry key="app/src/main/res/layout/button_logout.xml" value="0.29140625" />
         <entry key="app/src/main/res/layout/cast_item.xml" value="0.75" />
         <entry key="app/src/main/res/layout/content_splash_screen.xml" value="0.18888888888888888" />
         <entry key="app/src/main/res/layout/content_video.xml" value="0.18436482084690553" />
@@ -123,6 +132,7 @@
         <entry key="app/src/main/res/layout/progressbar.xml" value="0.1" />
         <entry key="app/src/main/res/layout/search_fragment.xml" value="0.5" />
         <entry key="app/src/main/res/layout/toolbar_details.xml" value="0.27684964200477324" />
+        <entry key="app/src/main/res/layout/toolbar_main.xml" value="0.144140625" />
         <entry key="app/src/main/res/layout/toolbar_movie_tv.xml" value="0.29140625" />
         <entry key="app/src/main/res/layout/toolbar_profile.xml" value="0.28803088803088805" />
         <entry key="app/src/main/res/layout/trending_fragment.xml" value="0.3651041666666667" />
@@ -132,6 +142,7 @@
         <entry key="app/src/main/res/menu/menu_profile.xml" value="0.29140625" />
         <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.4046875" />
         <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.4046875" />
+        <entry key="app/src/main/res/xml/root_preferences.xml" value="0.29140625" />
       </map>
     </option>
   </component>

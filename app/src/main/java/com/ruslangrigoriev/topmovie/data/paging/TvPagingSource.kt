@@ -6,7 +6,7 @@ import com.ruslangrigoriev.topmovie.data.api.ApiService
 import com.ruslangrigoriev.topmovie.data.api.dto.tv.TvResponse
 import com.ruslangrigoriev.topmovie.domain.model.Media
 import com.ruslangrigoriev.topmovie.domain.utils.MoreType
-import com.ruslangrigoriev.topmovie.domain.utils.mapTvShowToMedia
+import com.ruslangrigoriev.topmovie.domain.utils.extensions.mapTvToMedia
 import retrofit2.Response
 import timber.log.Timber
 
@@ -35,7 +35,7 @@ class TvPagingSource(
                     apiService.getTvPopular(currentPage)
                 }
             }
-            responseData = mapTvShowToMedia(response.body()?.tvShows)
+            responseData = (response.body()?.tvShows).mapTvToMedia()
             Timber.d(" page $currentPage responseData = $responseData")
             LoadResult.Page(
                 data = responseData,

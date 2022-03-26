@@ -5,10 +5,10 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import by.kirich1409.viewbindingdelegate.viewBinding
-import com.ruslangrigoriev.topmovie.presentation.MainActivity
 import com.ruslangrigoriev.topmovie.R
 import com.ruslangrigoriev.topmovie.databinding.FragmentThirdBinding
-import com.ruslangrigoriev.topmovie.domain.utils.onBoardingFinished
+import com.ruslangrigoriev.topmovie.domain.utils.extensions.onBoardingFinished
+import com.ruslangrigoriev.topmovie.presentation.MainActivity
 
 class ThirdFragment : Fragment(R.layout.fragment_third) {
     private val binding by viewBinding(FragmentThirdBinding::bind)

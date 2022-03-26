@@ -11,8 +11,8 @@ import com.ruslangrigoriev.topmovie.domain.model.Media
 import com.ruslangrigoriev.topmovie.domain.model.mappers.TvMapper
 import com.ruslangrigoriev.topmovie.domain.repository.TvShowRepository
 import com.ruslangrigoriev.topmovie.domain.utils.MoreType
-import com.ruslangrigoriev.topmovie.domain.utils.getResultOrError
-import com.ruslangrigoriev.topmovie.domain.utils.mapTvShowToMedia
+import com.ruslangrigoriev.topmovie.domain.utils.extensions.mapTvToMedia
+import com.ruslangrigoriev.topmovie.domain.utils.extensions.processResult
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -30,8 +30,8 @@ class TvShowRepoImpl
     override suspend fun getTvNow(): List<Media> {
         return withContext(ioDispatcher) {
             val response = apiService.getTVNow()
-            val nowList = getResultOrError(response)?.tvShows
-            mapTvShowToMedia(nowList)
+            val nowList = response.processResult()?.tvShows
+            nowList.mapTvToMedia()
         }
     }
 
@@ -45,8 +45,8 @@ class TvShowRepoImpl
     override suspend fun getTvPopular(): List<Media> {
         return withContext(ioDispatcher) {
             val response = apiService.getTvPopular()
-            val popularList = getResultOrError(response)?.tvShows
-            mapTvShowToMedia(popularList)
+            val popularList = response.processResult()?.tvShows
+            popularList.mapTvToMedia()
         }
     }
 
@@ -60,7 +60,7 @@ class TvShowRepoImpl
     override suspend fun getTvDetails(id: Int): Media? {
         return withContext(ioDispatcher) {
             val response = apiService.getTvDetails(id)
-            getResultOrError(response)?.let {
+            response.processResult()?.let {
                 TvMapper.map(it)
             }
         }
@@ -69,22 +69,22 @@ class TvShowRepoImpl
     override suspend fun getTvCredits(id: Int): List<Cast> {
         return withContext(ioDispatcher) {
             val response = apiService.getTvCredits(id)
-            getResultOrError(response)?.cast ?: emptyList()
+            response.processResult()?.cast ?: emptyList()
         }
     }
 
     override suspend fun getTvVideo(tv_id: Int): List<Video> {
         return withContext(ioDispatcher) {
             val response = apiService.getTvVideos(tv_id)
-            getResultOrError(response)?.videos ?: emptyList()
+            response.processResult()?.videos ?: emptyList()
         }
     }
 
     override suspend fun searchTvPaged(query: String, page: Int): List<Media> {
         return withContext(ioDispatcher) {
             val response = apiService.searchPagedTvShow(query = query, page = page)
-            val searchList = getResultOrError(response)?.tvShows
-            mapTvShowToMedia(searchList)
+            val searchList = response.processResult()?.tvShows
+            searchList.mapTvToMedia()
         }
     }
 }

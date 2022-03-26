@@ -8,7 +8,7 @@ import com.ruslangrigoriev.topmovie.databinding.ItemMoreBinding
 import com.ruslangrigoriev.topmovie.domain.model.Media
 import com.ruslangrigoriev.topmovie.domain.utils.FOOTER_VIEW_TYPE
 import com.ruslangrigoriev.topmovie.domain.utils.REGULAR_VIEW_TYPE
-import com.ruslangrigoriev.topmovie.domain.utils.loadPosterLarge
+import com.ruslangrigoriev.topmovie.domain.utils.extensions.loadPosterLarge
 
 
 class MainTabsRecyclerAdapter(

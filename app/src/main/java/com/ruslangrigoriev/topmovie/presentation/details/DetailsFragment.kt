@@ -24,6 +24,7 @@ import com.ruslangrigoriev.topmovie.databinding.FragmentDetailsBinding
 import com.ruslangrigoriev.topmovie.domain.model.Media
 import com.ruslangrigoriev.topmovie.domain.utils.*
 import com.ruslangrigoriev.topmovie.domain.utils.ResultState.*
+import com.ruslangrigoriev.topmovie.domain.utils.extensions.*
 import com.ruslangrigoriev.topmovie.presentation.MainActivity
 import com.ruslangrigoriev.topmovie.presentation.adapters.BaseRecyclerAdapter
 import com.ruslangrigoriev.topmovie.presentation.adapters.BindingInterface

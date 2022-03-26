@@ -10,6 +10,7 @@
     <color name="grey_light">#BCBCBC</color>
     <color name="red">#D6182A</color>
     <color name="dark_grey">#111111</color>
+    <color name="settings_bg">#F8F8F8</color>
 
 
 </resources>

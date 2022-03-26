@@ -14,7 +14,11 @@ import androidx.recyclerview.widget.GridLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.ruslangrigoriev.topmovie.R
 import com.ruslangrigoriev.topmovie.databinding.FragmentSearchBinding
-import com.ruslangrigoriev.topmovie.domain.utils.*
+import com.ruslangrigoriev.topmovie.domain.utils.MEDIA_ID
+import com.ruslangrigoriev.topmovie.domain.utils.MEDIA_TYPE
+import com.ruslangrigoriev.topmovie.domain.utils.MOVIE_TYPE
+import com.ruslangrigoriev.topmovie.domain.utils.QUERY
+import com.ruslangrigoriev.topmovie.domain.utils.extensions.stringArgs
 import com.ruslangrigoriev.topmovie.presentation.MainActivity
 import com.ruslangrigoriev.topmovie.presentation.adapters.MediaPagingAdapter
 import dagger.hilt.android.AndroidEntryPoint

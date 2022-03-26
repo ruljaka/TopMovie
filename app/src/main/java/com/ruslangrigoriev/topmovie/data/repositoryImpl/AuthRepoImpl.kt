@@ -2,9 +2,14 @@ package com.ruslangrigoriev.topmovie.data.repositoryImpl
 
 import android.content.Context
 import com.ruslangrigoriev.topmovie.data.api.ApiService
-import com.ruslangrigoriev.topmovie.data.api.dto.auth.*
+import com.ruslangrigoriev.topmovie.data.api.dto.auth.AuthCredentials
+import com.ruslangrigoriev.topmovie.data.api.dto.auth.RequestToken
+import com.ruslangrigoriev.topmovie.data.api.dto.auth.Session
+import com.ruslangrigoriev.topmovie.data.api.dto.auth.Token
 import com.ruslangrigoriev.topmovie.domain.repository.AuthRepository
-import com.ruslangrigoriev.topmovie.domain.utils.*
+import com.ruslangrigoriev.topmovie.domain.utils.extensions.getSessionID
+import com.ruslangrigoriev.topmovie.domain.utils.extensions.processResult
+import com.ruslangrigoriev.topmovie.domain.utils.extensions.saveSessionID
 
 class AuthRepoImpl(
     private val appContext: Context,
@@ -12,34 +17,25 @@ class AuthRepoImpl(
 ) : AuthRepository {
 
     override suspend fun getRequestToken(): RequestToken? {
-        return getResultOrError(
-            apiService.createRequestToken()
-        )
+        return apiService.createRequestToken()
+            .processResult()
     }
 
     override suspend fun validateRequestToken(authCredentials: AuthCredentials): RequestToken? {
-        return getResultOrError(
-            apiService.validateRequestToken(
-                authCredentials = authCredentials
-            )
-        )
+        return apiService.validateRequestToken(
+            authCredentials = authCredentials
+        ).processResult()
     }
 
     override suspend fun createSession(token: Token): Session? {
-        return getResultOrError(
-            apiService.createSession(
-                token = token
-            )
-        )
+        return apiService.createSession(
+            token = token
+        ).processResult()
     }
 
     override fun checkIsUserIsAuthenticated(): Boolean {
         val session = appContext.getSessionID()
-
-        if (!session.isNullOrEmpty()) {
-            return true
-        }
-        return false
+        return !session.isNullOrEmpty()
     }
 
     override fun saveSession(sessionID: String) {

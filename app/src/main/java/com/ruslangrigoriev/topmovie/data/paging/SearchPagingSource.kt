@@ -39,14 +39,6 @@ class SearchPagingSource(
                     )
                     responseData = data.toMutableList()
                 }
-//                (PagingType.MOVIE_FLOW) -> {
-//                    val data = repository.getMoviesTrending(currentPage)
-//                    responseData = data.toMutableList()
-//                    Timber.d(TAG, " page $currentPage responseData = $responseData")
-//                }
-//                else -> {
-//                    //TODO
-//                }
             }
             LoadResult.Page(
                 data = responseData,

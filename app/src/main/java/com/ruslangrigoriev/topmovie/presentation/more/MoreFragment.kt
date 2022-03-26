@@ -2,7 +2,6 @@ package com.ruslangrigoriev.topmovie.presentation.more
 
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -13,6 +12,8 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.ruslangrigoriev.topmovie.R
 import com.ruslangrigoriev.topmovie.databinding.FragmentMoreBinding
 import com.ruslangrigoriev.topmovie.domain.utils.*
+import com.ruslangrigoriev.topmovie.domain.utils.extensions.showToast
+import com.ruslangrigoriev.topmovie.domain.utils.extensions.stringArgs
 import com.ruslangrigoriev.topmovie.presentation.MainActivity
 import com.ruslangrigoriev.topmovie.presentation.adapters.ItemOffsetDecoration
 import com.ruslangrigoriev.topmovie.presentation.adapters.MediaPagingAdapter

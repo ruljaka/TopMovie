@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.ruslangrigoriev.topmovie.databinding.ItemMediaBinding
 import com.ruslangrigoriev.topmovie.domain.model.Media
-import com.ruslangrigoriev.topmovie.domain.utils.loadPosterLarge
+import com.ruslangrigoriev.topmovie.domain.utils.extensions.loadPosterLarge
 
 class MediaPagingAdapter(
     private val onItemClicked: (id: Int) -> Unit,

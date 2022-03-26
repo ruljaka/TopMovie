@@ -18,8 +18,12 @@ import com.bumptech.glide.request.RequestOptions
 import com.ruslangrigoriev.topmovie.R
 import com.ruslangrigoriev.topmovie.databinding.FragmentProfileBinding
 import com.ruslangrigoriev.topmovie.domain.model.Media
-import com.ruslangrigoriev.topmovie.domain.utils.*
+import com.ruslangrigoriev.topmovie.domain.utils.IMAGE_URL_AVATAR
+import com.ruslangrigoriev.topmovie.domain.utils.IMAGE_URL_GRAVATAR
+import com.ruslangrigoriev.topmovie.domain.utils.MEDIA_ID
+import com.ruslangrigoriev.topmovie.domain.utils.MEDIA_TYPE
 import com.ruslangrigoriev.topmovie.domain.utils.ResultState.*
+import com.ruslangrigoriev.topmovie.domain.utils.extensions.loadPosterSmall
 import com.ruslangrigoriev.topmovie.presentation.MainActivity
 import com.ruslangrigoriev.topmovie.presentation.adapters.BaseRecyclerAdapter
 import com.ruslangrigoriev.topmovie.presentation.adapters.BindingInterface
@@ -35,6 +39,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         (requireActivity() as MainActivity).setupToolbar(binding.toolbarProfile.toolbar)
+        binding.toolbarProfile.toolbarTitle.text = getString(R.string.Profile_toolbar_label)
         setHasOptionsMenu(true)
     }
 

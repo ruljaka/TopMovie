@@ -7,7 +7,6 @@ import com.ruslangrigoriev.topmovie.domain.model.Media
 import kotlinx.coroutines.flow.Flow
 
 interface MovieRepository {
-    suspend fun getMoviesTrending(page: Int): List<Media>
     suspend fun getMoviesNow(): List<Media>
     fun getMoreMoviesNow(): Flow<PagingData<Media>>
     suspend fun getMoviesPopular(): List<Media>

@@ -11,8 +11,8 @@ import com.ruslangrigoriev.topmovie.domain.model.Media
 import com.ruslangrigoriev.topmovie.domain.model.mappers.MovieMapper
 import com.ruslangrigoriev.topmovie.domain.repository.MovieRepository
 import com.ruslangrigoriev.topmovie.domain.utils.MoreType
-import com.ruslangrigoriev.topmovie.domain.utils.getResultOrError
-import com.ruslangrigoriev.topmovie.domain.utils.mapMovieToMedia
+import com.ruslangrigoriev.topmovie.domain.utils.extensions.mapMovieToMedia
+import com.ruslangrigoriev.topmovie.domain.utils.extensions.processResult
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -27,17 +27,11 @@ class MovieRepoImpl
 
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 
-    override suspend fun getMoviesTrending(page: Int): List<Media> {
-        val response = apiService.getTrending(page = page)
-        val trendingList = getResultOrError(response)?.movies
-        return mapMovieToMedia(trendingList)
-    }
-
     override suspend fun getMoviesNow(): List<Media> {
         return withContext(ioDispatcher) {
             val response = apiService.getMoviesNow()
-            val nowList = getResultOrError(response)?.movies
-            mapMovieToMedia(nowList)
+            val nowList = response.processResult()?.movies
+            nowList.mapMovieToMedia()
         }
     }
 
@@ -51,8 +45,8 @@ class MovieRepoImpl
     override suspend fun getMoviesPopular(): List<Media> {
         return withContext(ioDispatcher) {
             val response = apiService.getMoviesPopular()
-            val popularList = getResultOrError(response)?.movies
-            mapMovieToMedia(popularList)
+            val popularList = response.processResult()?.movies
+            popularList.mapMovieToMedia()
         }
     }
 
@@ -66,7 +60,7 @@ class MovieRepoImpl
     override suspend fun getMovieDetails(id: Int): Media? {
         return withContext(ioDispatcher) {
             val response = apiService.getMovieDetails(id)
-            getResultOrError(response)?.let {
+            response.processResult()?.let {
                 MovieMapper.map(it)
             }
         }
@@ -75,22 +69,22 @@ class MovieRepoImpl
     override suspend fun getMovieCredits(id: Int): List<Cast> {
         return withContext(ioDispatcher) {
             val response = apiService.getMovieCredits(id)
-            getResultOrError(response)?.cast ?: emptyList()
+            response.processResult()?.cast ?: emptyList()
         }
     }
 
     override suspend fun getMovieVideo(movie_id: Int): List<Video> {
         return withContext(ioDispatcher) {
             val response = apiService.getMovieVideos(movie_id)
-            getResultOrError(response)?.videos ?: emptyList()
+            response.processResult()?.videos ?: emptyList()
         }
     }
 
     override suspend fun searchMoviesPaged(query: String, page: Int): List<Media> {
         return withContext(ioDispatcher) {
             val response = apiService.searchPagedMovie(query = query, page = page)
-            val searchList = getResultOrError(response)?.movies
-            mapMovieToMedia(searchList)
+            val searchList = response.processResult()?.movies
+            searchList.mapMovieToMedia()
         }
     }
 }

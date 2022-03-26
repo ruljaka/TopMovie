@@ -2,15 +2,16 @@ package com.ruslangrigoriev.topmovie.data.repositoryImpl
 
 import android.content.Context
 import com.google.gson.JsonObject
-import com.ruslangrigoriev.topmovie.data.database.UserDataDAO
 import com.ruslangrigoriev.topmovie.data.api.ApiService
-import com.ruslangrigoriev.topmovie.data.api.dto.profile.User
 import com.ruslangrigoriev.topmovie.data.api.dto.favorite.FavoriteCredentials
 import com.ruslangrigoriev.topmovie.data.api.dto.favorite.FavoriteResponse
+import com.ruslangrigoriev.topmovie.data.api.dto.profile.User
+import com.ruslangrigoriev.topmovie.data.database.UserDataDAO
 import com.ruslangrigoriev.topmovie.data.database.entity.UserDataEntity
 import com.ruslangrigoriev.topmovie.domain.model.Media
 import com.ruslangrigoriev.topmovie.domain.repository.UserRepository
-import com.ruslangrigoriev.topmovie.domain.utils.*
+import com.ruslangrigoriev.topmovie.domain.utils.MOVIE_TYPE
+import com.ruslangrigoriev.topmovie.domain.utils.extensions.*
 import java.util.*
 import javax.inject.Inject
 
@@ -25,24 +26,20 @@ class UserRepoImpl
     override suspend fun getUserData(): User? {
         val session = appContext.getSessionID()
         return session?.let {
-            getResultOrError(
-                apiService.getUser(
-                    session_id = it
-                )
-            )
+            apiService.getUser(session_id = it)
+                .processResult()
         }
     }
 
     override suspend fun getRatedMovies(accountID: Int): List<Media>? {
         val session = appContext.getSessionID()
         val listRatedMovies = session?.let {
-            val listMovies = getResultOrError(
-                apiService.getRatedMovies(
-                    account_id = accountID,
-                    session_id = it
-                )
-            )?.movies
-            mapMovieToMedia(listMovies)
+            val listMovies = apiService.getRatedMovies(
+                account_id = accountID,
+                session_id = it
+            )
+                .processResult()?.movies
+            listMovies.mapMovieToMedia()
         }
         saveRatedToDB(listRatedMovies)
         return listRatedMovies
@@ -51,13 +48,12 @@ class UserRepoImpl
     override suspend fun getRatedTvShows(accountID: Int): List<Media>? {
         val session = appContext.getSessionID()
         val listRatedTvShows = session?.let {
-            val tvList = getResultOrError(
-                apiService.getRatedTvShow(
-                    account_id = accountID,
-                    session_id = it
-                )
-            )?.tvShows
-            mapTvShowToMedia(tvList)
+            val tvList = apiService.getRatedTvShow(
+                account_id = accountID,
+                session_id = it
+            )
+                .processResult()?.tvShows
+            tvList.mapTvToMedia()
         }
         saveRatedToDB(listRatedTvShows)
         return listRatedTvShows
@@ -79,13 +75,12 @@ class UserRepoImpl
     override suspend fun getFavoriteMovies(accountID: Int): List<Media>? {
         val session = appContext.getSessionID()
         val listFavoriteMovies = session?.let {
-            val movieList = getResultOrError(
-                apiService.getFavoriteMovies(
-                    account_id = accountID,
-                    session_id = it
-                )
-            )?.movies
-            mapMovieToMedia(movieList)
+            val movieList = apiService.getFavoriteMovies(
+                account_id = accountID,
+                session_id = it
+            )
+                .processResult()?.movies
+            movieList.mapMovieToMedia()
         }
         saveFavoriteToDB(listFavoriteMovies)
         return listFavoriteMovies
@@ -94,13 +89,12 @@ class UserRepoImpl
     override suspend fun getFavoriteTvShows(accountID: Int): List<Media>? {
         val session = appContext.getSessionID()
         val listFavoriteTvShows = session?.let {
-            val tvShowList = getResultOrError(
-                apiService.getFavoriteTvShow(
-                    account_id = accountID,
-                    session_id = it
-                )
-            )?.tvShows
-            mapTvShowToMedia(tvShowList)
+            val tvShowList = apiService.getFavoriteTvShow(
+                account_id = accountID,
+                session_id = it
+            )
+                .processResult()?.tvShows
+            tvShowList.mapTvToMedia()
         }
         saveFavoriteToDB(listFavoriteTvShows)
         return listFavoriteTvShows
@@ -129,21 +123,17 @@ class UserRepoImpl
         requestBody.addProperty("value", value)
         val response = session?.let {
             if (mediaType == MOVIE_TYPE) {
-                getResultOrError(
-                    apiService.markAsRatedMovie(
-                        movie_id = mediaID,
-                        session_id = it,
-                        body = requestBody
-                    )
-                )
+                apiService.markAsRatedMovie(
+                    movie_id = mediaID,
+                    session_id = it,
+                    body = requestBody
+                ).processResult()
             } else {
-                getResultOrError(
-                    apiService.markAsRatedTvShow(
-                        tv_id = mediaID,
-                        session_id = it,
-                        body = requestBody
-                    )
-                )
+                apiService.markAsRatedTvShow(
+                    tv_id = mediaID,
+                    session_id = it,
+                    body = requestBody
+                ).processResult()
             }
         }
         updateRatedDB(mediaID)
@@ -170,13 +160,11 @@ class UserRepoImpl
             favorite = !isFavorite
         )
         val response = session?.let {
-            getResultOrError(
-                apiService.markAsFavorite(
-                    account_id = userID,
-                    session_id = it,
-                    favoriteCredentials = favoriteCredentials
-                )
-            )
+            apiService.markAsFavorite(
+                account_id = userID,
+                session_id = it,
+                favoriteCredentials = favoriteCredentials
+            ).processResult()
         }
         updateFavoriteDB(isFavorite, mediaID)
         return response
@@ -208,6 +196,5 @@ class UserRepoImpl
         val listRatedIds = userDataDAO.getRatedList().map { it.id }
         return listRatedIds.contains(mediaID)
     }
-
 
 }

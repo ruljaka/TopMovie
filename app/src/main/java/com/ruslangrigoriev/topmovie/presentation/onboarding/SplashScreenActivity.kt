@@ -5,17 +5,15 @@ import android.os.Bundle
 import android.view.View
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
+import by.kirich1409.viewbindingdelegate.viewBinding
+import com.ruslangrigoriev.topmovie.R
 import com.ruslangrigoriev.topmovie.databinding.ActivitySplashScreenBinding
 
-class SplashScreenActivity : AppCompatActivity() {
-
-    private lateinit var binding: ActivitySplashScreenBinding
+class SplashScreenActivity : AppCompatActivity(R.layout.activity_splash_screen) {
+    private val binding by viewBinding(ActivitySplashScreenBinding::bind)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        binding = ActivitySplashScreenBinding.inflate(layoutInflater)
-        setContentView(binding.root)
 
         this.window.apply {
             clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
@@ -23,6 +21,5 @@ class SplashScreenActivity : AppCompatActivity() {
             decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
             statusBarColor = Color.TRANSPARENT
         }
-
     }
 }

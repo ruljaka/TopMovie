@@ -12,8 +12,14 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.ruslangrigoriev.topmovie.R
 import com.ruslangrigoriev.topmovie.databinding.FragmentPersonBinding
 import com.ruslangrigoriev.topmovie.domain.model.Media
-import com.ruslangrigoriev.topmovie.domain.utils.*
+import com.ruslangrigoriev.topmovie.domain.utils.MEDIA_ID
+import com.ruslangrigoriev.topmovie.domain.utils.MEDIA_TYPE
+import com.ruslangrigoriev.topmovie.domain.utils.MOVIE_TYPE
+import com.ruslangrigoriev.topmovie.domain.utils.PERSON_ID
 import com.ruslangrigoriev.topmovie.domain.utils.ResultState.*
+import com.ruslangrigoriev.topmovie.domain.utils.extensions.intArgs
+import com.ruslangrigoriev.topmovie.domain.utils.extensions.loadPosterLarge
+import com.ruslangrigoriev.topmovie.domain.utils.extensions.loadPosterSmall
 import com.ruslangrigoriev.topmovie.presentation.MainActivity
 import com.ruslangrigoriev.topmovie.presentation.adapters.BaseRecyclerAdapter
 import com.ruslangrigoriev.topmovie.presentation.adapters.BindingInterface

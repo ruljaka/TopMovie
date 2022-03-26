@@ -14,6 +14,7 @@ import com.ruslangrigoriev.topmovie.R
 import com.ruslangrigoriev.topmovie.databinding.FragmentMoviesBinding
 import com.ruslangrigoriev.topmovie.domain.utils.*
 import com.ruslangrigoriev.topmovie.domain.utils.ResultState.*
+import com.ruslangrigoriev.topmovie.domain.utils.extensions.showToast
 import com.ruslangrigoriev.topmovie.presentation.MainActivity
 import com.ruslangrigoriev.topmovie.presentation.adapters.MainTabsRecyclerAdapter
 import dagger.hilt.android.AndroidEntryPoint

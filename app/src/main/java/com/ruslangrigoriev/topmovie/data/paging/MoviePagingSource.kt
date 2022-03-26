@@ -6,7 +6,7 @@ import com.ruslangrigoriev.topmovie.data.api.ApiService
 import com.ruslangrigoriev.topmovie.data.api.dto.movies.MovieResponse
 import com.ruslangrigoriev.topmovie.domain.model.Media
 import com.ruslangrigoriev.topmovie.domain.utils.MoreType
-import com.ruslangrigoriev.topmovie.domain.utils.mapMovieToMedia
+import com.ruslangrigoriev.topmovie.domain.utils.extensions.mapMovieToMedia
 import retrofit2.Response
 import timber.log.Timber
 
@@ -35,7 +35,7 @@ class MoviePagingSource(
                     apiService.getMoviesPopular(currentPage)
                 }
             }
-            responseData = mapMovieToMedia(response.body()?.movies)
+            responseData = response.body()?.movies.mapMovieToMedia()
             Timber.d(" page $currentPage responseData = $responseData")
             LoadResult.Page(
                 data = responseData,

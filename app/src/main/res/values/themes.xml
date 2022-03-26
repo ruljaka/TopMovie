@@ -14,6 +14,7 @@
         <item name="android:textColor">@color/black</item>
         <item name="android:button">@color/white</item>
         <item name="colorControlNormal">?attr/colorOnSecondary</item>
+        <item name="preferenceTheme">@style/PreferenceTheme</item>
         <!-- Customize your theme here. -->
 
 
@@ -63,9 +64,15 @@
 
 
     <style name="CustomRatingBar" parent="Widget.AppCompat.RatingBar.Small">
-        <item name="android:progressDrawable">@drawable/custom_ratingbar</item>
+        <item name="android:progressDrawable">@drawable/ratingbar_details</item>
         <item name="android:minHeight">15dip</item>
         <item name="android:maxHeight">47dip</item>
+    </style>
+
+    <style name="PreferenceTheme" parent="@style/PreferenceThemeOverlay">
+        <item name="colorSecondary">?attr/colorPrimary</item>
+        <item name="colorOnSecondary">?attr/colorPrimary</item>
+
     </style>
 
 </resources>

@@ -15,7 +15,7 @@ import com.ruslangrigoriev.topmovie.data.api.dto.tv.TvResponse
 import com.ruslangrigoriev.topmovie.data.api.dto.tv.TvShow
 import com.ruslangrigoriev.topmovie.data.api.dto.video.VideoResponse
 import com.ruslangrigoriev.topmovie.data.api.dto.favorite.FavoriteCredentials
-import com.ruslangrigoriev.topmovie.data.api.dto.favorite.FavoriteResponse
+import com.ruslangrigoriev.topmovie.data.api.dto.StatusResponse
 import retrofit2.Response
 import retrofit2.http.*
 
@@ -150,21 +150,21 @@ interface ApiService {
         @Path("account_id") account_id: Int,
         @Query("session_id") session_id: String,
         @Body favoriteCredentials: FavoriteCredentials
-    ): Response<FavoriteResponse>
+    ): Response<StatusResponse>
 
     @POST("movie/{movie_id}/rating")
     suspend fun markAsRatedMovie(
         @Path("movie_id") movie_id: Int,
         @Query("session_id") session_id: String,
         @Body body: JsonObject
-    ): Response<FavoriteResponse>
+    ): Response<StatusResponse>
 
     @POST("tv/{tv_id}/rating")
     suspend fun markAsRatedTvShow(
         @Path("tv_id") tv_id: Int,
         @Query("session_id") session_id: String,
         @Body body: JsonObject
-    ): Response<FavoriteResponse>
+    ): Response<StatusResponse>
 
 
 }

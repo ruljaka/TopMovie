@@ -1,7 +1,7 @@
 package com.ruslangrigoriev.topmovie.domain.utils.extensions
 
 import com.google.gson.Gson
-import com.ruslangrigoriev.topmovie.data.api.dto.favorite.FavoriteResponse
+import com.ruslangrigoriev.topmovie.data.api.dto.StatusResponse
 import retrofit2.Response
 
 fun <T> Response<T>.processResult(): T? {
@@ -11,7 +11,7 @@ fun <T> Response<T>.processResult(): T? {
         try {
             val responseError = Gson().fromJson(
                 this.errorBody()?.string(),
-                FavoriteResponse::class.java
+                StatusResponse::class.java
             )
             throw Throwable(responseError.statusMessage)
         } catch (e: Exception) {

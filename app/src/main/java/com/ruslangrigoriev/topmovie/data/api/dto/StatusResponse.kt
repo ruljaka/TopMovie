@@ -1,9 +1,9 @@
-package com.ruslangrigoriev.topmovie.data.api.dto.favorite
+package com.ruslangrigoriev.topmovie.data.api.dto
 
 
 import com.google.gson.annotations.SerializedName
 
-data class FavoriteResponse(
+data class StatusResponse(
     @SerializedName("status_code")
     val statusCode: Int,
     @SerializedName("status_message")

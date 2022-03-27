@@ -2,6 +2,7 @@ package com.ruslangrigoriev.topmovie.presentation.more
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -71,7 +72,7 @@ class MoreFragment : Fragment(R.layout.fragment_more) {
         pagingAdapter.addLoadStateListener { loadState ->
             val isLoading = loadState.refresh is LoadState.Loading
                     || loadState.append is LoadState.Loading
-            showLoading(isLoading)
+            binding.progressBarMore.root.isVisible = isLoading
             val errorState = when {
                 loadState.append is LoadState.Error -> loadState.append as LoadState.Error
                 loadState.prepend is LoadState.Error -> loadState.prepend as LoadState.Error
@@ -87,13 +88,5 @@ class MoreFragment : Fragment(R.layout.fragment_more) {
         bundle.putInt(MEDIA_ID, id)
         bundle.putString(MEDIA_TYPE, mediaType)
         findNavController().navigate(R.id.action_moreFragment_to_details, bundle)
-    }
-
-    private fun showLoading(loading: Boolean) {
-        if (loading) {
-            binding.progressBarMore.root.visibility = View.VISIBLE
-        } else {
-            binding.progressBarMore.root.visibility = View.GONE
-        }
     }
 }

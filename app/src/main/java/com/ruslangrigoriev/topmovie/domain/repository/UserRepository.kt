@@ -1,7 +1,7 @@
 package com.ruslangrigoriev.topmovie.domain.repository
 
 import com.ruslangrigoriev.topmovie.data.api.dto.profile.User
-import com.ruslangrigoriev.topmovie.data.api.dto.favorite.FavoriteResponse
+import com.ruslangrigoriev.topmovie.data.api.dto.StatusResponse
 import com.ruslangrigoriev.topmovie.domain.model.Media
 
 interface UserRepository {
@@ -12,8 +12,8 @@ interface UserRepository {
     suspend fun getFavoriteTvShows(accountID: Int): List<Media>?
 
     fun saveUserID(userID: Int)
-    suspend fun markFavorite(mediaType: String, mediaID: Int): FavoriteResponse?
-    suspend fun markRated(mediaType: String, mediaID: Int, value: String): FavoriteResponse?
+    suspend fun markFavorite(mediaType: String, mediaID: Int): StatusResponse?
+    suspend fun markRated(mediaType: String, mediaID: Int, value: String): StatusResponse?
     suspend fun checkIsFavorite(mediaID: Int): Boolean
     suspend fun checkIsRated(mediaID: Int): Boolean
 

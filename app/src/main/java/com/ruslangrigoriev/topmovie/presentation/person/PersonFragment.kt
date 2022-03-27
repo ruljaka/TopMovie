@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -55,15 +56,15 @@ class PersonFragment : Fragment(R.layout.fragment_person) {
         viewModel.viewState.observe(viewLifecycleOwner, {
             when (it) {
                 Loading -> {
-                    showLoading(true)
+                    binding.progressBarPerson.root.isVisible = true
                 }
                 is Failure -> {
                     showToast(it.errorMessage)
-                    showLoading(false)
+                    binding.progressBarPerson.root.isVisible = false
                 }
                 is Success -> {
-                    showLoading(false)
                     bindUI(it)
+                    binding.progressBarPerson.root.isVisible = false
                 }
             }
         })
@@ -115,14 +116,6 @@ class PersonFragment : Fragment(R.layout.fragment_person) {
                 false
             )
         binding.recyclerViewPerson.adapter = castRecAdapter
-    }
-
-    private fun showLoading(loading: Boolean) {
-        if (loading) {
-            binding.progressBarPerson.root.visibility = View.VISIBLE
-        } else {
-            binding.progressBarPerson.root.visibility = View.GONE
-        }
     }
 
     private fun onListItemClick(movieID: Int) {

@@ -4,7 +4,7 @@ import android.content.Context
 import com.google.gson.JsonObject
 import com.ruslangrigoriev.topmovie.data.api.ApiService
 import com.ruslangrigoriev.topmovie.data.api.dto.favorite.FavoriteCredentials
-import com.ruslangrigoriev.topmovie.data.api.dto.favorite.FavoriteResponse
+import com.ruslangrigoriev.topmovie.data.api.dto.StatusResponse
 import com.ruslangrigoriev.topmovie.data.api.dto.profile.User
 import com.ruslangrigoriev.topmovie.data.database.UserDataDAO
 import com.ruslangrigoriev.topmovie.data.database.entity.UserDataEntity
@@ -117,7 +117,7 @@ class UserRepoImpl
         mediaType: String,
         mediaID: Int,
         value: String
-    ): FavoriteResponse? {
+    ): StatusResponse? {
         val session = appContext.getSessionID()
         val requestBody = JsonObject()
         requestBody.addProperty("value", value)
@@ -150,7 +150,7 @@ class UserRepoImpl
 
     override suspend fun markFavorite(
         mediaType: String, mediaID: Int
-    ): FavoriteResponse? {
+    ): StatusResponse? {
         val session = appContext.getSessionID()
         val userID = appContext.getUserID()
         val isFavorite = checkIsFavorite(mediaID)

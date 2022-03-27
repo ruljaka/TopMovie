@@ -3,6 +3,7 @@ package com.ruslangrigoriev.topmovie.presentation.profile.auth
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -31,14 +32,14 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         viewModel.viewState.observe(viewLifecycleOwner, {
             when (it) {
                 Loading -> {
-                    showLoading(true)
+                    binding.progressBarLogin.isVisible = true
                 }
                 is Failure -> {
                     showToast(it.errorMessage)
-                    showLoading(false)
+                    binding.progressBarLogin.isVisible = false
                 }
                 is Success -> {
-                    showLoading(false)
+                    binding.progressBarLogin.isVisible = false
                     showToast("Login successful")
                     findNavController().popBackStack()
                 }
@@ -61,14 +62,6 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
             buttonLoginRegister.setOnClickListener {
                 findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
             }
-        }
-    }
-
-    private fun showLoading(loading: Boolean) {
-        if (loading) {
-            binding.progressBarLogin.visibility = View.VISIBLE
-        } else {
-            binding.progressBarLogin.visibility = View.GONE
         }
     }
 

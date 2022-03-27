@@ -30,19 +30,16 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
-
         binding.buttonSettingsLogout.setOnClickListener {
             viewModel.authRepositoryImpl.logout()
             showToast("Logged out")
             findNavController().popBackStack()
         }
-
     }
 
     override fun onResume() {
         super.onResume()
-        setDarkModeSettings()
+        setupDarkModeSettings()
     }
 
     private fun showToast(message: String?) {
@@ -51,15 +48,13 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         ).show()
     }
 
-    private fun setDarkModeSettings() {
+    private fun setupDarkModeSettings() {
         val colorModeList = resources.getStringArray(R.array.dark_mode_entries)
         val savedColorMode = requireContext().getColorMode()
-        binding.autocompleteTextviewDarkMode.setText(colorModeList[savedColorMode])
-
         val adapter = ArrayAdapter(requireContext(), R.layout.item_dropdown, colorModeList)
+        binding.autocompleteTextviewDarkMode.setText(colorModeList[savedColorMode])
         binding.autocompleteTextviewDarkMode.setAdapter(adapter)
-
-        binding.autocompleteTextviewDarkMode.setOnItemClickListener { parent, view, position, id ->
+        binding.autocompleteTextviewDarkMode.setOnItemClickListener { _, _, position, _ ->
             requireContext().saveColorMode(position)
             changeColorMode(position)
         }

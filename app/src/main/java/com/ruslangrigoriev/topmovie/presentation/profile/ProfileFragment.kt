@@ -7,6 +7,7 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -65,14 +66,14 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         viewModel.viewState.observe(viewLifecycleOwner, {
             when (it) {
                 Loading -> {
-                    showLoading(true)
+                    binding.progressBarProfile.root.isVisible = true
                 }
                 is Failure -> {
                     showToast(it.errorMessage)
-                    showLoading(false)
+                    binding.progressBarProfile.root.isVisible = false
                 }
                 is Success -> {
-                    showLoading(false)
+                    binding.progressBarProfile.root.isVisible = false
                     bindUI(it)
                 }
             }
@@ -140,14 +141,6 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                     R.dimen.item_offset
                 )
             )
-        }
-    }
-
-    private fun showLoading(loading: Boolean) {
-        if (loading) {
-            binding.progressBarProfile.root.visibility = View.VISIBLE
-        } else {
-            binding.progressBarProfile.root.visibility = View.GONE
         }
     }
 

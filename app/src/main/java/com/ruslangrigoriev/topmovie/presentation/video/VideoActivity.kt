@@ -1,10 +1,10 @@
 package com.ruslangrigoriev.topmovie.presentation.video
 
 import android.os.Bundle
-import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.ruslangrigoriev.topmovie.R
 import com.ruslangrigoriev.topmovie.databinding.ActivityVideoBinding
@@ -12,7 +12,6 @@ import com.ruslangrigoriev.topmovie.domain.utils.MEDIA_ID
 import com.ruslangrigoriev.topmovie.domain.utils.MEDIA_TYPE
 import com.ruslangrigoriev.topmovie.domain.utils.ResultState.*
 import dagger.hilt.android.AndroidEntryPoint
-import kr.co.prnd.YouTubePlayerView
 
 @AndroidEntryPoint
 class VideoActivity : AppCompatActivity(R.layout.activity_video) {
@@ -38,14 +37,14 @@ class VideoActivity : AppCompatActivity(R.layout.activity_video) {
         viewModel.viewState.observe(this, {
             when (it) {
                 Loading -> {
-                    showLoading(true)
+                    binding.progressBarVideo.root.isVisible = true
                 }
                 is Failure -> {
                     showToast(it.errorMessage)
-                    showLoading(false)
+                    binding.progressBarVideo.root.isVisible = false
                 }
                 is Success -> {
-                    showLoading(false)
+                    binding.progressBarVideo.root.isVisible = false
                     bindUI(it)
                 }
             }
@@ -62,14 +61,6 @@ class VideoActivity : AppCompatActivity(R.layout.activity_video) {
             } else {
                 showToast("No videos")
             }
-        }
-    }
-
-    private fun showLoading(loading: Boolean) {
-        if (loading) {
-            binding.progressBarVideo.root.visibility = View.VISIBLE
-        } else {
-            binding.progressBarVideo.root.visibility = View.GONE
         }
     }
 

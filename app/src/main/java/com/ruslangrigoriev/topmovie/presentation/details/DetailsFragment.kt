@@ -8,6 +8,7 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
@@ -68,14 +69,14 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
         viewModel.viewState.observe(viewLifecycleOwner, {
             when (it) {
                 Loading -> {
-                    showLoading(true)
+                    binding.progressBarDetails.root.isVisible = true
                 }
                 is Failure -> {
                     it.errorMessage?.showToast(requireContext())
-                    showLoading(false)
+                    binding.progressBarDetails.root.isVisible = false
                 }
                 is Success -> {
-                    showLoading(false)
+                    binding.progressBarDetails.root.isVisible = false
                     bindUI(it)
                 }
             }
@@ -177,14 +178,6 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
             )
             adapter = castRecAdapter
             setHasFixedSize(true)
-        }
-    }
-
-    private fun showLoading(loading: Boolean) {
-        if (loading) {
-            binding.progressBarDetails.root.visibility = View.VISIBLE
-        } else {
-            binding.progressBarDetails.root.visibility = View.GONE
         }
     }
 

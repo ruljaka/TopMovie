@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
 import android.widget.SearchView
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -51,15 +52,15 @@ class MoviesFragment : Fragment(R.layout.fragment_movies) {
         viewModel.viewState.observe(viewLifecycleOwner, {
             when (it) {
                 Loading -> {
-                    showLoading(true)
+                    binding.progressBarMovies.root.isVisible = true
                 }
                 is Failure -> {
                     it.errorMessage?.showToast(requireContext())
-                    showLoading(false)
+                    binding.progressBarMovies.root.isVisible = false
                 }
                 is Success -> {
-                    showLoading(false)
                     bindUI(it)
+                    binding.progressBarMovies.root.isVisible = false
                 }
             }
         })
@@ -115,14 +116,6 @@ class MoviesFragment : Fragment(R.layout.fragment_movies) {
                 return false
             }
         })
-    }
-
-    private fun showLoading(loading: Boolean) {
-        if (loading) {
-            binding.progressBarMovies.root.visibility = View.VISIBLE
-        } else {
-            binding.progressBarMovies.root.visibility = View.GONE
-        }
     }
 
     private fun onListItemClick(id: Int, moreType: MoreType) {

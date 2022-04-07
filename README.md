@@ -2,11 +2,12 @@
 <p align="center">Application for searching information about movies and series</p>
 
 ## About Project
-![product-screenshot](https://imagizer.imageshack.com/v2/640x480q90/922/QT2AUx.jpg)
-![product-screenshot](https://imagizer.imageshack.com/v2/640x480q90/924/JHn4Di.jpg)
-![product-screenshot](https://imagizer.imageshack.com/v2/640x480q90/924/szvRcN.jpg)
-![product-screenshot](https://imagizer.imageshack.com/v2/640x480q90/922/vduDQk.jpg)
-![product-screenshot](https://imagizer.imageshack.com/v2/640x480q90/922/3i4Ixj.jpg)
+![product-screenshot](https://user-images.githubusercontent.com/60775844/162313874-25f6f100-b58f-4a34-a310-64edd7a63fef.jpg)
+![product-screenshot](https://user-images.githubusercontent.com/60775844/162313894-f7dbca53-68d3-4529-bfba-5a15f2b4c0a9.jpg)
+![product-screenshot](https://user-images.githubusercontent.com/60775844/162313904-364ea5a8-8663-4ca9-ba13-e46d70192cfc.jpg)
+![product-screenshot](https://user-images.githubusercontent.com/60775844/162316153-153d7772-a776-4319-bee6-b818e1e572b2.jpeg)
+![product-screenshot](https://user-images.githubusercontent.com/60775844/162313912-bf1840a1-da4c-499f-adb2-2b5127ad031b.jpg)
+
 
 I present to you Top Movie. This application is intended for those who want to follow the latest movies, seialov.
 This application allows you to find out what's on TV and in cinemas.

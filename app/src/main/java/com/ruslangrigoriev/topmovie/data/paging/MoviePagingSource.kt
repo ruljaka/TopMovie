@@ -28,8 +28,8 @@ class MoviePagingSource(
         return try {
             val currentPage = params.key ?: 1
             val response: Response<MovieResponse> = when (type) {
-                MoreType.NOW -> {
-                    apiService.getMoviesNow(currentPage)
+                MoreType.TOP -> {
+                    apiService.getMoviesTop(currentPage)
                 }
                 MoreType.POPULAR -> {
                     apiService.getMoviesPopular(currentPage)

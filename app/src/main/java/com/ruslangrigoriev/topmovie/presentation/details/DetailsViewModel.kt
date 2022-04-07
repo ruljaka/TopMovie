@@ -68,7 +68,7 @@ class DetailsViewModel
     }
 
     fun markFavorite(mediaType: String, mediaID: Int) {
-        Timber.d("markFavorite ID: $mediaID ")
+        Timber.d("markFavorite ID: $mediaID  $mediaType")
         viewModelScope.launch(exceptionHandler) {
             val response = userRepository.markFavorite(mediaType, mediaID)
             checkIsFavoriteAndRated(mediaID)

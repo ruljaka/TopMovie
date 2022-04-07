@@ -24,7 +24,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class MoviesFragment : Fragment(R.layout.fragment_movies) {
     private val binding by viewBinding(FragmentMoviesBinding::bind)
     private val viewModel: MovieViewModel by viewModels()
-    private lateinit var nowRecyclerAdapter: MainTabsRecyclerAdapter
+    private lateinit var topRecyclerAdapter: MainTabsRecyclerAdapter
     private lateinit var popularRecyclerAdapter: MainTabsRecyclerAdapter
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -67,16 +67,16 @@ class MoviesFragment : Fragment(R.layout.fragment_movies) {
     }
 
     private fun bindUI(it: Success) {
-        it.listNow?.let {
-            nowRecyclerAdapter =
-                MainTabsRecyclerAdapter(it) { id -> onListItemClick(id, MoreType.NOW) }
-            binding.recyclerViewNow.layoutManager =
+        it.listTop?.let {
+            topRecyclerAdapter =
+                MainTabsRecyclerAdapter(it) { id -> onListItemClick(id, MoreType.TOP) }
+            binding.recyclerViewTop.layoutManager =
                 LinearLayoutManager(
                     activity,
                     LinearLayoutManager.HORIZONTAL,
                     false
                 )
-            binding.recyclerViewNow.adapter = nowRecyclerAdapter
+            binding.recyclerViewTop.adapter = topRecyclerAdapter
         }
         it.listPopular?.let {
             popularRecyclerAdapter =

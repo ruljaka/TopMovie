@@ -7,8 +7,8 @@ import com.ruslangrigoriev.topmovie.domain.model.Media
 import kotlinx.coroutines.flow.Flow
 
 interface TvShowRepository {
-    suspend fun getTvNow(): List<Media>
-    fun getMoreTvNow(): Flow<PagingData<Media>>
+    suspend fun getTvTop(): List<Media>
+    fun getMoreTvTop(): Flow<PagingData<Media>>
     suspend fun getTvPopular(): List<Media>
     fun getMoreTvPopular(): Flow<PagingData<Media>>
     suspend fun getTvDetails(id: Int): Media?

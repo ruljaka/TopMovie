@@ -27,18 +27,18 @@ class MovieRepoImpl
 
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 
-    override suspend fun getMoviesNow(): List<Media> {
+    override suspend fun getMoviesTop(): List<Media> {
         return withContext(ioDispatcher) {
-            val response = apiService.getMoviesNow()
-            val nowList = response.processResult()?.movies
-            nowList.mapMovieToMedia()
+            val response = apiService.getMoviesTop()
+            val topList = response.processResult()?.movies
+            topList.mapMovieToMedia()
         }
     }
 
-    override fun getMoreMoviesNow(): Flow<PagingData<Media>> {
+    override fun getMoreMoviesTop(): Flow<PagingData<Media>> {
         return Pager(
             config = PagingConfig(pageSize = 20),
-            pagingSourceFactory = { MoviePagingSource(apiService, MoreType.NOW) }
+            pagingSourceFactory = { MoviePagingSource(apiService, MoreType.TOP) }
         ).flow.flowOn(ioDispatcher)
     }
 

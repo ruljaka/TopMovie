@@ -25,7 +25,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class TvFragment : Fragment(R.layout.fragment_tv) {
     private val binding by viewBinding(FragmentTvBinding::bind)
     private val viewModel: TvViewModel by viewModels()
-    private lateinit var nowRecyclerAdapter: MainTabsRecyclerAdapter
+    private lateinit var topRecyclerAdapter: MainTabsRecyclerAdapter
     private lateinit var popularRecyclerAdapter: MainTabsRecyclerAdapter
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -68,17 +68,17 @@ class TvFragment : Fragment(R.layout.fragment_tv) {
     }
 
     private fun bindUI(it: Success) {
-        it.listNow?.let {
-            nowRecyclerAdapter =
-                MainTabsRecyclerAdapter(it) { id -> onListItemClick(id, MoreType.NOW) }
-            binding.recyclerViewTvNow.apply {
+        it.listTop?.let {
+            topRecyclerAdapter =
+                MainTabsRecyclerAdapter(it) { id -> onListItemClick(id, MoreType.TOP) }
+            binding.recyclerViewTvTop.apply {
                 layoutManager =
                     LinearLayoutManager(
                         activity,
                         LinearLayoutManager.HORIZONTAL,
                         false
                     )
-                adapter = nowRecyclerAdapter
+                adapter = topRecyclerAdapter
             }
         }
         it.listPopular?.let {

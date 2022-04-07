@@ -28,8 +28,8 @@ class TvPagingSource(
         return try {
             val currentPage = params.key ?: 1
             val response: Response<TvResponse> = when (type) {
-                MoreType.NOW -> {
-                    apiService.getTVNow(currentPage)
+                MoreType.TOP -> {
+                    apiService.getTvTop(currentPage)
                 }
                 MoreType.POPULAR -> {
                     apiService.getTvPopular(currentPage)

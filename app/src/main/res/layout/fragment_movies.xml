@@ -37,13 +37,13 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
-            android:text="@string/now_label"
+            android:text="@string/top_label"
             android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/toolbar_movies" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler_view_now"
+            android:id="@+id/recycler_view_top"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -62,7 +62,7 @@
             android:text="@string/popular_label"
             android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/recycler_view_now" />
+            app:layout_constraintTop_toBottomOf="@+id/recycler_view_top" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view_popular"

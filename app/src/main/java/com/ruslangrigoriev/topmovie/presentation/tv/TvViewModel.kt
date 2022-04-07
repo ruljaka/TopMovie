@@ -31,11 +31,11 @@ class TvViewModel
         viewModelScope.launch(exceptionHandler) {
             Timber.d("fetchData")
             _viewState.value = ResultState.Loading
-            val listNow = async { tvShowRepository.getTvNow() }
+            val listNow = async { tvShowRepository.getTvTop() }
             val listPopular = async { tvShowRepository.getTvPopular() }
             _viewState.postValue(
                 ResultState.Success(
-                    listNow = listNow.await(),
+                    listTop = listNow.await(),
                     listPopular = listPopular.await()
                 )
             )

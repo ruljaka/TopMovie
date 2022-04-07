@@ -10,7 +10,7 @@ sealed class ResultState {
     object Loading : ResultState()
     class Failure(val errorMessage: String?) : ResultState()
     class Success(
-        val listNow: List<Media>? = null,
+        val listTop: List<Media>? = null,
         val listPopular: List<Media>? = null,
         val details: Media? = null,
         val listCast: List<Cast>? = null,

@@ -27,18 +27,18 @@ class TvShowRepoImpl
 
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 
-    override suspend fun getTvNow(): List<Media> {
+    override suspend fun getTvTop(): List<Media> {
         return withContext(ioDispatcher) {
-            val response = apiService.getTVNow()
-            val nowList = response.processResult()?.tvShows
-            nowList.mapTvToMedia()
+            val response = apiService.getTvTop()
+            val topList = response.processResult()?.tvShows
+            topList.mapTvToMedia()
         }
     }
 
-    override fun getMoreTvNow(): Flow<PagingData<Media>> {
+    override fun getMoreTvTop(): Flow<PagingData<Media>> {
         return Pager(
             config = PagingConfig(pageSize = 20),
-            pagingSourceFactory = { TvPagingSource(apiService, MoreType.NOW) }
+            pagingSourceFactory = { TvPagingSource(apiService, MoreType.TOP) }
         ).flow.flowOn(ioDispatcher)
     }
 

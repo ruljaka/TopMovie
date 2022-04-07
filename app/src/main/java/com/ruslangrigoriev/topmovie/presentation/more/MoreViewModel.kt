@@ -9,7 +9,7 @@ import com.ruslangrigoriev.topmovie.domain.utils.MediaType
 import com.ruslangrigoriev.topmovie.domain.utils.MediaType.MOVIE
 import com.ruslangrigoriev.topmovie.domain.utils.MediaType.TV
 import com.ruslangrigoriev.topmovie.domain.utils.MoreType
-import com.ruslangrigoriev.topmovie.domain.utils.MoreType.NOW
+import com.ruslangrigoriev.topmovie.domain.utils.MoreType.TOP
 import com.ruslangrigoriev.topmovie.domain.utils.MoreType.POPULAR
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -25,14 +25,14 @@ class MoreViewModel
     var mediaType: MediaType = MOVIE
 
     fun moreMediaList() =  when (moreType) {
-        NOW -> {
+        TOP -> {
             when (mediaType) {
                 MOVIE -> {
-                    movieRepository.getMoreMoviesNow()
+                    movieRepository.getMoreMoviesTop()
                         .cachedIn(viewModelScope)
                 }
                 TV -> {
-                    tvShowRepository.getMoreTvNow()
+                    tvShowRepository.getMoreTvTop()
                         .cachedIn(viewModelScope)
                 }
             }

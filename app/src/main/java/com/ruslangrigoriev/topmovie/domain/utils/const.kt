@@ -6,8 +6,6 @@ const val BASE_URL = "https://api.themoviedb.org/3/"
 const val API_KEY: String = "1603980df157259731880a618734bcba"
 const val IMAGE_URL_W500: String = "https://image.tmdb.org/t/p/w500/"
 const val IMAGE_URL_W1280: String = "https://image.tmdb.org/t/p/w1280"
-const val IMAGE_URL_W780: String = "https://image.tmdb.org/t/p/w780"
-const val IMAGE_URL_ORIGINAL: String = "https://image.tmdb.org/t/p/original"
 const val IMAGE_URL_AVATAR: String = "https://www.themoviedb.org/t/p/w300_and_h300_face/"
 const val IMAGE_URL_GRAVATAR: String = "https://secure.gravatar.com/avatar/"
 
@@ -19,8 +17,6 @@ const val MOVIE_TYPE: String = "MOVIE"
 const val TV_TYPE: String = "TV"
 
 const val MORE_TYPE: String = "more_type"
-const val MORE_POPULAR_TYPE: String = "POPULAR"
-const val MORE_NOW_TYPE: String = "NOW"
 
 const val QUERY: String = "query"
 const val SHARED_PREF: String = "sharedPref"

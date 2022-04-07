@@ -29,11 +29,11 @@ class MovieViewModel @Inject constructor
         Timber.d("fetchMoviesData ")
         viewModelScope.launch(exceptionHandler) {
             _viewState.value = ResultState.Loading
-            val listNow = async { movieRepository.getMoviesNow() }
+            val listNow = async { movieRepository.getMoviesTop() }
             val listPopular = async { movieRepository.getMoviesPopular() }
             _viewState.postValue(
                 ResultState.Success(
-                    listNow = listNow.await(),
+                    listTop = listNow.await(),
                     listPopular = listPopular.await()
                 )
             )

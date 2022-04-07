@@ -19,7 +19,13 @@
     <string name="birthday_label">Birthday</string>
     <string name="place_of_birth_label">Place of Birth</string>
     <string name="biography_label">Biography</string>
-    <string name="person_bio_tools">Thomas Stanley Holland is an English actor and dancer. He is best known for playing the title role in Billy Elliot the Musical at the Victoria Palace Theatre, London, as well as for starring in the 2012 film The Impossible. In 2015, Holland was cast as Peter Parker / Spider-Man in the Marvel Cinematic Universe and has appeared as the character in five films: Captain America: Civil War (2016), Spider-Man: Homecoming (2017), Avengers: Infinity War (2018), Avengers: Endgame (2019), and Spider-Man: Far From Home (2019).</string>
+    <string name="person_bio_tools">Thomas Stanley Holland is an English actor and dancer.
+        He is best known for playing the title role in Billy Elliot the Musical at the Victoria
+        Palace Theatre, London, as well as for starring in the 2012 film The Impossible. In 2015,
+        Holland was cast as Peter Parker / Spider-Man in the Marvel Cinematic Universe and has
+        appeared as the character in five films: Captain America: Civil War (2016), Spider-Man:
+        Homecoming (2017), Avengers: Infinity War (2018), Avengers: Endgame (2019), and Spider-Man:
+        Far From Home (2019).</string>
     <string name="search_header_label">Search Results</string>
     <string name="add_to_favorite_btn">Favorite</string>
 
@@ -33,19 +39,28 @@
     <string name="next">Next</string>
     <string name="previous">Previous</string>
     <string name="movies_header">Movies</string>
-    <string name="item_gradient">item_graient</string>
+    <string name="item_gradient">item_gradient</string>
     <string name="item_popular_rate_background">item_popular_rate_background</string>
     <string name="back">Back</string>
     <string name="imageButton_details_share">imageButton_details_share</string>
     <string name="tv_header">TV</string>
     <string name="popular_label">Popular</string>
     <string name="now_label">Now</string>
+    <string name="top_label">Top</string>
     <string name="imageButton_details_play">imageButton_details_play</string>
     <string name="title_activity_video">VideoActivity</string>
 
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
-    <string name="tools_overview">"Алексей Карпушин — обычный молодой советский парень, пожарный в Припяти, который впервые начинает строить планы длиннее, чем на выходные или отпуск — он влюбляется в парикмахера Олю. В прошлом у них уже были отношения, но тогда Алексей упустил свой шанс. Теперь у Оли есть маленький сын Леша, но Алексей намерен никогда больше не повторять прежних ошибок: он признается Оле в своих чувствах, и все вместе они планируют переехать к морю. Авария на Чернобыльской АЭС ставит под угрозу мечту Алексея и жизни всех тех, кто ему дорог. Взрыв реактора грозит смертью не только тысячам людей, оказавшихся в зоне радиационного поражения: возможен второй взрыв, катастрофические последствия которого могут быть несоизмеримо больше"</string>
+    <string name="tools_overview">"Алексей Карпушин — обычный молодой советский парень,
+        пожарный в Припяти, который впервые начинает строить планы длиннее, чем на выходные
+        или отпуск — он влюбляется в парикмахера Олю. В прошлом у них уже были отношения,
+        но тогда Алексей упустил свой шанс. Теперь у Оли есть маленький сын Леша, но Алексей
+        намерен никогда больше не повторять прежних ошибок: он признается Оле в своих чувствах,
+        и все вместе они планируют переехать к морю. Авария на Чернобыльской АЭС ставит под угрозу
+        мечту Алексея и жизни всех тех, кто ему дорог. Взрыв реактора грозит смертью не только
+        тысячам людей, оказавшихся в зоне радиационного поражения: возможен второй взрыв,
+        катастрофические последствия которого могут быть несоизмеримо больше"</string>
     <string name="profile_avatar">profile_avatar</string>
     <string name="profile_background">profile_background</string>
     <string name="enter_your_request">Enter your request</string>
@@ -66,5 +81,6 @@
     <string name="attachment_summary_on">Automatically download attachments for incoming emails
     </string>
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
+
 
 </resources>

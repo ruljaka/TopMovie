@@ -21,13 +21,8 @@ import retrofit2.http.*
 
 interface ApiService {
 
-    @GET("trending/movie/day?")
-    suspend fun getTrending(
-        @Query("page") page: Int,
-    ): Response<MovieResponse>
-
-    @GET("movie/now_playing?")
-    suspend fun getMoviesNow(
+    @GET("movie/top_rated")
+    suspend fun getMoviesTop(
         @Query("page") page: Int = 1,
     ): Response<MovieResponse>
 
@@ -52,8 +47,8 @@ interface ApiService {
         @Query("page") page: Int,
     ): Response<MovieResponse>
 
-    @GET("tv/on_the_air?")
-    suspend fun getTVNow(
+    @GET("tv/top_rated")
+    suspend fun getTvTop(
         @Query("page") page: Int = 1,
     ): Response<TvResponse>
 

@@ -31,6 +31,8 @@ class UserRepoImpl
         }
     }
 
+
+
     override suspend fun getRatedMovies(accountID: Int): List<Media>? {
         val session = appContext.getSessionID()
         val listRatedMovies = session?.let {
@@ -195,6 +197,10 @@ class UserRepoImpl
     override suspend fun checkIsRated(mediaID: Int): Boolean {
         val listRatedIds = userDataDAO.getRatedList().map { it.id }
         return listRatedIds.contains(mediaID)
+    }
+
+    override suspend fun clearDB() {
+        userDataDAO.removeAll()
     }
 
 }

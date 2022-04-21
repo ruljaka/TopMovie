@@ -31,7 +31,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         super.onViewCreated(view, savedInstanceState)
 
         binding.buttonSettingsLogout.setOnClickListener {
-            viewModel.authRepositoryImpl.logout()
+            viewModel.logout()
             showToast("Logged out")
             findNavController().popBackStack()
         }

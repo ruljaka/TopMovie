@@ -17,4 +17,5 @@ interface UserRepository {
     suspend fun checkIsFavorite(mediaID: Int): Boolean
     suspend fun checkIsRated(mediaID: Int): Boolean
 
+    suspend fun clearDB()
 }

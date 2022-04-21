@@ -32,10 +32,10 @@ interface UserDataDAO {
     @Query("UPDATE UserDataEntity SET isRated= 1 WHERE id = :media_id")
     suspend fun markRated(media_id: Int)
 
-    /*@Query("UPDATE UserDataEntity SET isRated= 0 WHERE id = :media_id")
-    suspend fun unmarkRated(media_id: Int)*/
-
     @Query("DELETE FROM UserDataEntity WHERE id = :media_id")
     suspend fun removeEntity(media_id: Int)
+
+    @Query("DELETE FROM UserDataEntity")
+    suspend fun removeAll()
 
 }

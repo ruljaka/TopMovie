@@ -32,6 +32,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
             addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
             decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
         }
+
     }
 
     fun setupToolbar(toolBar: Toolbar) {
@@ -52,6 +53,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
     }
 
     private fun setUpNavigation() {
+        binding.bttmNav.itemIconTintList = null
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navController = navHostFragment.navController

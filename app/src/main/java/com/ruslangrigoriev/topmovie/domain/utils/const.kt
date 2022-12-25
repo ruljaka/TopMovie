@@ -32,3 +32,6 @@ const val RATE_DIALOG_RESULT_VALUE = "result_value"
 const val RATE_DIALOG_TAG = "rate_dialog_tag"
 
 const val MODE_NIGHT = "mode_night"
+
+
+

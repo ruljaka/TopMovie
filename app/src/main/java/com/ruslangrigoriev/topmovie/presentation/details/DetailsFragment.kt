@@ -66,41 +66,45 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
     }
 
     private fun subscribeUI() {
-        viewModel.viewState.observe(viewLifecycleOwner, {
+        viewModel.viewState.observe(viewLifecycleOwner) {
             when (it) {
                 Loading -> {
                     binding.progressBarDetails.root.isVisible = true
                 }
+
                 is Failure -> {
                     it.errorMessage?.showToast(requireContext())
                     binding.progressBarDetails.root.isVisible = false
                 }
+
                 is Success -> {
                     binding.progressBarDetails.root.isVisible = false
                     bindUI(it)
                 }
             }
-        })
-        viewModel.isFavorite.observe(viewLifecycleOwner, {
+        }
+        viewModel.isFavorite.observe(viewLifecycleOwner) {
             when (it) {
                 true ->
                     binding.imageButtonDetailsFavorite
                         .setImageResource(R.drawable.ic_favorite_selected)
+
                 false ->
                     binding.imageButtonDetailsFavorite
                         .setImageResource(R.drawable.ic_favorite_unselected)
             }
-        })
-        viewModel.isRated.observe(viewLifecycleOwner, {
+        }
+        viewModel.isRated.observe(viewLifecycleOwner) {
             when (it) {
                 true ->
                     binding.imageButtonDetailsLike
                         .setImageResource(R.drawable.ic_like_selected)
+
                 false ->
                     binding.imageButtonDetailsLike
                         .setImageResource(R.drawable.ic_like_unselected)
             }
-        })
+        }
     }
 
     private fun bindUI(success: Success) {
@@ -131,6 +135,8 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
                             State.IDLE -> {
 
                             }
+
+                            else -> {}
                         }
                     }
 

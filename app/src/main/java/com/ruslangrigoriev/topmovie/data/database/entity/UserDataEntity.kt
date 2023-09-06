@@ -8,9 +8,9 @@ import androidx.room.PrimaryKey
 data class UserDataEntity(
     @PrimaryKey
     @ColumnInfo(name = "id")
-    val id: Int = 0,
+    var id: Int = 0,
     @ColumnInfo(name = "isFavorite")
-    val isFavorite: Boolean = false,
+    var isFavorite: Boolean = false,
     @ColumnInfo(name = "isRated")
-    val isRated: Boolean = false
+    var isRated: Boolean = false
 )

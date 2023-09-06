@@ -2,6 +2,7 @@ package com.ruslangrigoriev.topmovie.presentation.movies
 
 import android.os.Bundle
 import android.text.TextUtils
+import android.util.Log
 import android.view.View
 import android.widget.SearchView
 import androidx.core.view.isVisible
@@ -19,6 +20,7 @@ import com.ruslangrigoriev.topmovie.domain.utils.extensions.showToast
 import com.ruslangrigoriev.topmovie.presentation.MainActivity
 import com.ruslangrigoriev.topmovie.presentation.adapters.MainTabsRecyclerAdapter
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 
 @AndroidEntryPoint
 class MoviesFragment : Fragment(R.layout.fragment_movies) {
@@ -27,6 +29,7 @@ class MoviesFragment : Fragment(R.layout.fragment_movies) {
     private lateinit var topRecyclerAdapter: MainTabsRecyclerAdapter
     private lateinit var popularRecyclerAdapter: MainTabsRecyclerAdapter
 
+    @Deprecated("Deprecated in Java")
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         (requireActivity() as MainActivity).setupToolbar(binding.toolbarMovies.toolbar)
@@ -35,6 +38,7 @@ class MoviesFragment : Fragment(R.layout.fragment_movies) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        Timber.tag("TAG").d("onViewCreated")
         setupSearch()
         subscribeUi()
         loadData()
@@ -49,21 +53,23 @@ class MoviesFragment : Fragment(R.layout.fragment_movies) {
     }
 
     private fun subscribeUi() {
-        viewModel.viewState.observe(viewLifecycleOwner, {
+        viewModel.viewState.observe(viewLifecycleOwner) {
             when (it) {
                 Loading -> {
                     binding.progressBarMovies.root.isVisible = true
                 }
+
                 is Failure -> {
                     it.errorMessage?.showToast(requireContext())
                     binding.progressBarMovies.root.isVisible = false
                 }
+
                 is Success -> {
                     bindUI(it)
                     binding.progressBarMovies.root.isVisible = false
                 }
             }
-        })
+        }
     }
 
     private fun bindUI(it: Success) {
